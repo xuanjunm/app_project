@@ -1,0 +1,10 @@
+.field_wrapper input, .field_wrapper select, .field_wrapper textarea{
+    margin-left: 10em;
+    vertical-align: top;
+    display: block;
+}
+
+.field_wrapper label {
+    font-weight: bold;
+}
+

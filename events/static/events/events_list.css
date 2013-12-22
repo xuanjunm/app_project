@@ -1,0 +1,19 @@
+body {
+    margin: 0em;
+    font-family: Calibri, sans-serif;
+}
+
+h1 {
+    margin: 0em;
+    padding: 10px;
+    background-color: #666;
+    width: 100%;
+    height: 1.5em;
+    color: #fff;
+    font-weight: normal;
+}
+
+#main {
+    margin: 0em;
+    padding: 10px;
+}

@@ -1,0 +1,17 @@
+#detail_type {
+    list-style: none;
+    display: inline-block;
+    font-weight: bold;
+    color: #888;
+    padding-left: 0px;
+}
+
+#details {
+    list-style: none;
+    display: inline-block;
+    vertical-align: top;
+}
+
+#details li, #detail_type li {
+    margin-bottom: 5px;
+}

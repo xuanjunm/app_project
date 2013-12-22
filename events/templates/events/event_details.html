@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Events Details{% endblock %}
+{% block more_header %}
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static "events/event_details.css" %}" />
+{% endblock %}
+    
+{% block h1_pre %}Event{% endblock %}
+{% block h1 %}{{ event.event_name }}{% endblock %}
+
+{% block content %}
+<div>
+<ul id="detail_type">
+    <li>Type :</li>
+    <li>Location :</li>
+    <li>Status :</li>
+    <li>Time :</li>
+    <li>Organizer ID :</li>
+    <li>Create Time :</li>
+    <li>Detail :<li>
+</ul>
+<ul id="details">
+    <li>{{ event.event_type }}</li>
+    <li>{{ event.event_location }}</li>
+    <li>{{ event.event_status }}</li>
+    <li>{{ event.event_time }}</li>
+    <li>{{ event.event_organizer_id.account_user_name }}</li>
+    <li>{{ event.event_create_time }}</li>
+    <li>{{ event.event_details }}</li>
+</ul>
+</div>
+<p><a href="{% url 'events:events_list' %}">back to list</a></p>
+<p><a href="{% url 'events:update_event' event.id %}">update event</a></p>
+<p><a href="{% url 'events:delete_event' event.id %}">delete event</a></p>
+{% endblock %}
