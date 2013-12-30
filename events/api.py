@@ -2,8 +2,8 @@ from tastypie.resources import ModelResource, ALL, ALL_WITH_RELATIONS
 from tastypie.authorization import Authorization
 
 from tastypie import fields
-from models import Event
-from accounts.api import AccountResource
+from .models import Event
+from patio.api import AccountResource
 
 class EventResource(ModelResource):
     event_organizer_id = fields.ForeignKey(AccountResource,

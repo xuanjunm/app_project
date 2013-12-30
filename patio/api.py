@@ -3,7 +3,7 @@ from tastypie.resources import ModelResource
 from tastypie import fields
 from tastypie.constants import ALL
 
-from models import Account
+from .models import Account
 
 class AccountResource(ModelResource):
     class Meta:

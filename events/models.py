@@ -1,5 +1,5 @@
 from django.db import models
-from accounts.models import Account
+from patio.models import Account
 
 class Event(models.Model):
     EVENT_TYPE_CHOICES = (

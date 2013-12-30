@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.views.generic import TemplateView
 
 from events.api import EventResource
-from accounts.api import AccountResource
+from patio.api import AccountResource
 from tastypie.api import Api
 
 v01_api = Api(api_name='v01')
