@@ -1,0 +1,6 @@
+This is the website/web-service for app_project.
+
+* please create global gitignore so that all os related files are not track
+* all files/directories starting with "_" are for reference purposes
+  these files/directories will serve its purposes in the future
+  leave the in the repo
