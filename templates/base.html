@@ -22,7 +22,8 @@
                 <a href='{% url "patio:logout" %}?next={% url "patio:main" %}'>
                     logout</a></li>
                 {% else %}
-                <li><a href='{% url "patio:login" %}'>login</a></li>
+                <li><a href='{% url "patio:login" %}'>sign in</a></li>
+                <li><a href='{% url "patio:create_user" %}'>join us</a></li>
                 {% endif %}
 
             </ul>
