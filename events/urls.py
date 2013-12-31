@@ -1,6 +1,9 @@
 from django.conf.urls import patterns, url, include
-#from api import EventResource, AccountResource
 from events import views
+
+# for tastypie web service
+#from .api import EventResource
+#event_resource = EventResource()
 
 urlpatterns = patterns('',
     url(r'^$', views.EventsList.as_view(), name='events_list'),
@@ -12,4 +15,5 @@ urlpatterns = patterns('',
         name='update_event'),
     url(r'^delete_event/(?P<pk>\d+)/$', views.DeleteEventView.as_view(), 
         name='delete_event'),
+#    url(r'^api/', include(event_resource.urls)),
 )

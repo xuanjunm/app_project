@@ -7,7 +7,7 @@ class UserProfile(models.Model):
         ('female', 'female'),
     )
 
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, related_name='profile')
     user_gender = models.CharField(max_length=10,
                                    choices=USER_GENDER_CHOICES)
     user_description = models.TextField(blank=True)
