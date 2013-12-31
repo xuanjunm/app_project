@@ -1,13 +1,22 @@
 from tastypie.resources import ModelResource
 from tastypie import fields
 from tastypie.constants import ALL
-from django.contrib.auth.models import User
-from .models import UserProfile
 
-#class UserResource(ModelResource):
-#    class Meta:
-#        queryset = User.objects.all()
-#        resource_name = 'user'
-#        excludes = ['user_password', 'user_type',
-#                    'user_register_date', 'user_image']
-#        filtering = { 'user_user_name': ALL }
+from django.contrib.auth.models import User
+
+class UserResource(ModelResource):
+    nickname = fields.CharField(attribute='profile__user_nickname')
+    gender = fields.CharField(attribute='profile__user_gender')
+    description = fields.CharField(attribute='profile__user_description')
+
+    class Meta:
+        queryset = User.objects.all()
+        # not exactly necessary, leaving it here to keep readable
+        resource_name = 'user'
+
+        excludes = ['password', 'is_staff', 'is_active', 'is_superuser']
+        allowed_methos = ['get']
+        #        filtering = { 'user_user_name': ALL }
+
+
+

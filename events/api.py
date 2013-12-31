@@ -1,23 +1,26 @@
 from tastypie.resources import ModelResource, ALL, ALL_WITH_RELATIONS
 from tastypie.authorization import Authorization
-
 from tastypie import fields
-from .models import Event
-#from patio.api import AccountResource
+
+from .models import *
+from patio.api import *
 
 class EventResource(ModelResource):
-#    event_organizer_id = fields.ForeignKey(AccountResource,
-#                                           'event_organizer_id',
-#                                           full=True)
+    fk_event_poster_user = fields.ForeignKey(UserResource,
+                                           'fk_event_poster_user',
+                                           full=True)
 
     class Meta:
         queryset = Event.objects.all()
+        # not exactly necessary, leaving it here to keep readable
         resource_name = 'event'
+
         authorization = Authorization()
-        filtering = { 'event_time': ALL,
-                      'event_create_time': ALL,
-                      'event_location': ALL,
-                      'event_name': 'contains',
-                      'event_status': ALL,
+        allowed_methods = ['get']
+     #   filtering = { 'event_time': ALL,
+    #                  'event_create_time': ALL,
+     #                 'event_location': ALL,
+     #                 'event_name': 'contains',
+     #                 'event_status': ALL,
 #                      'event_organizer_id': ALL_WITH_RELATIONS,
-                      'event_type': ALL}
+     #                 'event_type': ALL}
