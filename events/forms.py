@@ -6,3 +6,9 @@ class EventCreateForm(ModelForm):
         model = Event
         exclude = ['fk_event_poster_user', 'event_like', 'event_rsvp', 
                    'event_view_count', 'event_status']
+
+class EventUpdateForm(ModelForm):
+    class Meta:
+        model = Event
+        exclude = ['fk_event_poster_user', 'event_like', 'event_rsvp', 
+                   'event_view_count']

@@ -29,7 +29,6 @@ class EventDetailsView(generic.DetailView):
     template_name = 'events/event_details.html'
 
 class EventCreateView(generic.CreateView):
-    model = Event
     form_class = EventCreateForm
     template_name = 'events/event_create.html'
 
@@ -52,15 +51,15 @@ class EventCreateView(generic.CreateView):
     def dispatch(self, *args, **kwargs):
         return super(EventCreateView, self).dispatch(*args, **kwargs)
 
-class UpdateEventView(generic.UpdateView):
+class EventUpdateView(generic.UpdateView):
     model = Event
-#    form_class = EventForm
-    template_name = 'events/update_event.html'
+    form_class = EventUpdateForm
+    template_name = 'events/event_update.html'
 
     def get_success_url(self):
         return reverse('events:event_details', args=(self.get_object().id,))
 
-class DeleteEventView(generic.DeleteView):
+class EventDeleteView(generic.DeleteView):
     model = Event
     template_name = 'events/delete_event.html'
 

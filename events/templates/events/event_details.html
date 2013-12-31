@@ -38,6 +38,6 @@
 </ul>
 </div>
 <p><a href="{% url 'events:events_list' %}">back to list</a></p>
-<p><a href="{% url 'events:update_event' event.id %}">update event</a></p>
-<p><a href="{% url 'events:delete_event' event.id %}">delete event</a></p>
+<p><a href="{% url 'events:event_update' event.id %}">update event</a></p>
+<p><a href="{% url 'events:event_delete' event.id %}">delete event</a></p>
 {% endblock %}

@@ -2,13 +2,13 @@
 
 {% block more_header %}
 {% load staticfiles %}
-<link rel="stylesheet" type="text/css" href="{% static "events/create_event.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "events/event_update.css" %}" />
 {% endblock %}
 
 {% block h1 %}Update Event{% endblock %}
 
-{% block content %}
-<form action="{% url 'events:update_event' event.id %}" method="post">
+{% block body %}
+<form action="{% url 'events:event_update' event.id %}" method="post">
     {% csrf_token %}
     {% for field in form %}
         <div class="field_wrapper">
