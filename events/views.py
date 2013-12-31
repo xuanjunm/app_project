@@ -6,7 +6,10 @@ from events.models import *
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.core.urlresolvers import reverse
-#from events.mixins import *
+
+# Handles view authorizations
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 
 # for CreateEventView
 from .forms import *
@@ -44,6 +47,10 @@ class CreateEventView(generic.CreateView):
 
     def get_success_url(self):
         return reverse('events:events_list')
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(CreateEventView, self).dispatch(*args, **kwargs)
 
 class UpdateEventView(generic.UpdateView):
     model = Event
