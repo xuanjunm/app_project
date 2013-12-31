@@ -11,7 +11,7 @@ from django.core.urlresolvers import reverse
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 
-# for CreateEventView
+# for EventCreateView
 from .forms import *
 
 class EventsList(generic.ListView):
@@ -28,10 +28,10 @@ class EventDetailsView(generic.DetailView):
     model = Event
     template_name = 'events/event_details.html'
 
-class CreateEventView(generic.CreateView):
+class EventCreateView(generic.CreateView):
     model = Event
     form_class = EventCreateForm
-    template_name = 'events/create_event.html'
+    template_name = 'events/event_create.html'
 
     def post(self, request, *args, **kwargs):
         self.object = None
@@ -50,7 +50,7 @@ class CreateEventView(generic.CreateView):
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
-        return super(CreateEventView, self).dispatch(*args, **kwargs)
+        return super(EventCreateView, self).dispatch(*args, **kwargs)
 
 class UpdateEventView(generic.UpdateView):
     model = Event

@@ -28,8 +28,8 @@ class DashboardView(generic.TemplateView):
     def dispatch(self, *args, **kwargs):
         return super(DashboardView, self).dispatch(*args, **kwargs)
 
-class CreateUser(generic.FormView):
-    template_name = 'patio/create_user.html'
+class UserCreate(generic.FormView):
+    template_name = 'patio/user_create.html'
     form_class = UserCreationForm
 
     def form_valid(self, form):

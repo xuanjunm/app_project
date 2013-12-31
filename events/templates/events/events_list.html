@@ -18,10 +18,10 @@
 {% endif %}
 
 {% if user.username %}
-<p><a href='{% url "events:create_event" %}' title='create event link'>
+<p><a href='{% url "events:event_create" %}' title='create event link'>
     Create a new event</a></p>
 {% else %}
-<p><a href='{% url "patio:login" %}'>Sign in</a> to create a new event. Or 
-    <a href='{% url "patio:login" %}'>Join us</a> today!</p>
+<p><a href='{% url "patio:user_login" %}'>Sign in</a> to create a new event. Or 
+    <a href='{% url "patio:user_create" %}'>Join us</a> today!</p>
 {% endif %}
 {% endblock %}
