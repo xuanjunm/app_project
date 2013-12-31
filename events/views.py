@@ -20,7 +20,7 @@ class EventDetailsView(generic.DetailView):
 
 class CreateEventView(MessageMixin, generic.CreateView):
     model = Event
-    form_class = EventForm
+#    form_class = EventForm
     template_name = 'events/create_event.html'
     success_message = 'Event has been created.'
 
@@ -29,7 +29,7 @@ class CreateEventView(MessageMixin, generic.CreateView):
 
 class UpdateEventView(MessageMixin, generic.UpdateView):
     model = Event
-    form_class = EventForm
+#    form_class = EventForm
     template_name = 'events/update_event.html'
     success_message = 'Event has been updated.'
 

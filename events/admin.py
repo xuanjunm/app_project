@@ -1,19 +1,24 @@
 from django.contrib import admin
-from events.models import *
+from .models import *
+
+class AddressInline(admin.StackedInline):
+    model = Address
+    can_delete = False
 
 class EventAdmin(admin.ModelAdmin):
 #    fields = ['event_name', 'date', 'organizer', 'no_of_rsvp']
-    list_display = ['event_name', 'event_type', 'event_location',
-                    'event_time', 'event_organizer_id', 'event_status']
+    list_display = ['event_title', 'event_type', 'event_time', 
+                    'fk_event_poster_user', 'event_status']
     list_filter = ['event_time']
     date_hierarchy = 'event_time'
+    inlines = (AddressInline, )
 
 class EventSubscriptionAdmin(admin.ModelAdmin):
-    list_display = ['subscriber_account_id', 'event_id']
+    list_display = ['fk_subscriber_user', 'fk_subscribed_event']
 
-class EventMessageAdmin(admin.ModelAdmin):
-    list_display = ['poster_account_id', 'event_id']
+class EventCommentAdmin(admin.ModelAdmin):
+    list_display = ['fk_comment_poster_user', 'fk_event']
 
 admin.site.register(Event, EventAdmin)
 admin.site.register(EventSubscription, EventSubscriptionAdmin)
-admin.site.register(EventMessage, EventMessageAdmin)
+admin.site.register(EventComment, EventCommentAdmin)

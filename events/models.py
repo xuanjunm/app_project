@@ -1,5 +1,5 @@
 from django.db import models
-from patio.models import Account
+from django.contrib.auth.models import User
 
 class Event(models.Model):
     EVENT_TYPE_CHOICES = (
@@ -11,32 +11,61 @@ class Event(models.Model):
         ('active', 'active'),
         ('inactive', 'inactive'),
     )
-    event_name = models.CharField(max_length=255)
+
+    event_title = models.CharField(max_length=255)
     event_type = models.CharField(max_length=10,
-                                  choices=EVENT_TYPE_CHOICES)
-    event_location = models.CharField(max_length=255)
+                            choices=EVENT_TYPE_CHOICES)
     event_status = models.CharField(max_length=10,
                                     choices=EVENT_STATUS_CHOICES,
                                     default='active')
     event_time = models.DateTimeField('event time')
     event_create_time = models.DateTimeField(auto_now_add=True)
-    event_details = models.TextField(blank=True)
-    event_organizer_id = models.ForeignKey(Account)
+    event_detail = models.TextField(blank=True)
+    event_view_count = models.PositiveSmallIntegerField(default=0)
+    event_capacity = models.PositiveSmallIntegerField(default=0)
+    event_rsvp = models.PositiveSmallIntegerField(default=0)
+    event_like = models.PositiveSmallIntegerField(default=0)
+    event_recent_update = models.DateTimeField(auto_now_add=True)
+    fk_event_poster_user = models.ForeignKey(User, 
+                                             verbose_name='Event Poster')
 
     def __unicode__(self):
-        return self.event_name
+        return self.event_title
+
+class Address(models.Model):
+    address_detail = models.TextField()
+    address_postal_code = models.CharField(max_length=255)
+    address_city = models.CharField(max_length=255)
+    address_region = models.CharField(max_length=255)
+    address_country = models.CharField(max_length=255, default='Canada')
+    fk_event = models.OneToOneField(Event)
+
 
 class EventSubscription(models.Model):
-    subscriber_account_id = models.ForeignKey(Account)
-    event_id = models.ForeignKey(Event)
+    fk_subscriber_user = models.ForeignKey(User)
+    fk_subscribed_event = models.ForeignKey(Event)
 
     def __unicode__(self):
-        return self.subscriber_account_id.account_name
+        return self.fk_subscriber_user
 
-class EventMessage(models.Model):
-    event_message_detail = models.CharField(max_length=255)
-    poster_account_id = models.ForeignKey(Account)
-    event_id = models.ForeignKey(Event)
+class EventComment(models.Model):
+    comment_detail = models.TextField()
+    comment_post_time = models.DateTimeField(auto_now_add=True)
+    fk_event = models.ForeignKey(Event)
+    fk_comment_poster_user = models.ForeignKey(User)
 
     def __unicode__(self):
-        return self.poster_account_id.account_name
+        return self.fk_comment_poster_event
+
+class Tag(models.Model):
+    tag_name = models.CharField(max_length=255)
+
+    def __unicode__(self):
+        return self.tag_name
+
+class TagEventAttribute(models.Model):
+    fk_tag = models.ForeignKey(Tag)
+    fk_event = models.ForeignKey(Event)
+
+    def __unicode__(self):
+        return self.fk_tag
