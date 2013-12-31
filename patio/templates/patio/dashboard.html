@@ -7,14 +7,15 @@
 
 {% block body %}
 <ul>
-    <li>{{ user.username }}</li>
-    <li>{{ user.last_name }}</li>
-    <li>{{ user.first_name }}</li>
-    <li>{{ user.email }}</li>
-    <li>{{ user.last_login }}</li>
-    <li>{{ user.date_joined }}</li>
-    <li>{{ user_profile.user_nickname }}</li>
-    <li>{{ user_profile.user_gender }}</li>
-    <li>{{ user_profile.user_description }}</li>
+    <li><p>username: {{ user.username }}</p></li>
+    <li><p>last name:{{ user.last_name }}</p></li>
+    <li><p>first name: {{ user.first_name }}</p></li>
+    <li><p>email: {{ user.email }}</p></li>
+    <li><p>last login: {{ user.last_login }}</p></li>
+    <li><p>date joined: {{ user.date_joined }}</p></li>
+    <li><p>nick name: {{ user_profile.user_nickname }}</p></li>
+    <li><p>gender: {{ user_profile.user_gender }}</p></li>
+    <li><p>description: {{ user_profile.user_description }}</p></li>
 </ul>
+
 {% endblock %}
