@@ -5,17 +5,23 @@
 {% block h1 %}Events List{% endblock %}
 
 {% block body %}
-    <p>These are 10 latest events</p>
-    {% if events_list %}
-    <ul>
-        {% for event in events_list %}
-        <li><a href='{% url "events:event_details" event.id %}'>
-            {{ event.event_title }}</a></li>
-        {% endfor %}
-    </ul>
-    {% else %}
-    <p>No events are available.</p>
-    {% endif %}
-    <p><a href='{% url "events:create_event" %}' title='create event link'>
-        Create a new event</a></p>
+<p>These are 10 latest events</p>
+{% if events_list %}
+<ul>
+    {% for event in events_list %}
+    <li><a href='{% url "events:event_details" event.id %}'>
+        {{ event.event_title }}</a></li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No events are available.</p>
+{% endif %}
+
+{% if user.username %}
+<p><a href='{% url "events:create_event" %}' title='create event link'>
+    Create a new event</a></p>
+{% else %}
+<p><a href='{% url "patio:login" %}'>Sign in</a> to create a new event. Or 
+    <a href='{% url "patio:login" %}'>Join us</a> today!</p>
+{% endif %}
 {% endblock %}
