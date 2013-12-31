@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+{% block more_header %}
+{% endblock %}
+{% block h1 %}Dashboard of {{ user.username }}{% endblock %}
+
+{% block body %}
+<ul>
+    <li>{{ user.username }}</li>
+    <li>{{ user.last_name }}</li>
+    <li>{{ user.first_name }}</li>
+    <li>{{ user.email }}</li>
+    <li>{{ user.last_login }}</li>
+    <li>{{ user.date_joined }}</li>
+    <li>{{ user_profile.user_nickname }}</li>
+    <li>{{ user_profile.user_gender }}</li>
+    <li>{{ user_profile.user_description }}</li>
+</ul>
+{% endblock %}

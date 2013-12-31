@@ -14,8 +14,17 @@
             <nav id='main_nav'>
             <ul>
                 <li><a href='{% url "patio:main" %}'>main</a></li>
-                <li><a href='{% url "events:events_list" %}'>events list
-                </a></li>
+                <li><a href='{% url "events:events_list" %}'>events list</a></li>
+
+                {% if user.username %}
+                <li>Hi {{ user.username }}</li>
+                <li>
+                <a href='{% url "patio:logout" %}?next={% url "patio:main" %}'>
+                    logout</a></li>
+                {% else %}
+                <li><a href='{% url "patio:login" %}'>login</a></li>
+                {% endif %}
+
             </ul>
             </nav>
         </div>
