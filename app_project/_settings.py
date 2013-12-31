@@ -134,7 +134,7 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'events',
-    'accounts',
+    'patio',
     'tastypie',
 )
 
@@ -166,3 +166,6 @@ LOGGING = {
         },
     }
 }
+
+LOGIN_REDIRECT_URL = 'patio:dashboard'
+LOGIN_URL = 'patio:user_login'
