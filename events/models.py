@@ -22,7 +22,7 @@ class Event(models.Model):
     event_create_time = models.DateTimeField(auto_now_add=True)
     event_detail = models.TextField(blank=True)
     event_view_count = models.PositiveSmallIntegerField(default=0)
-    event_capacity = models.PositiveSmallIntegerField(default=0)
+    event_capacity = models.PositiveSmallIntegerField(blank=True, null=True)
     event_rsvp = models.PositiveSmallIntegerField(default=0)
     event_like = models.PositiveSmallIntegerField(default=0)
     event_recent_update = models.DateTimeField(auto_now_add=True)

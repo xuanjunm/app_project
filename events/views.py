@@ -30,14 +30,17 @@ class CreateEventView(generic.CreateView):
     form_class = EventCreateForm
     template_name = 'events/create_event.html'
 
-    def get_initial(self):
-        # get the initial dict from the superclass method
-        initial = super(CreateEventView, self).get_initial()
-        # copy the dict so we don't accidentally change a mutable dict
-        initial = initial.copy()
-        initial['fk_event_poster_user'] = self.request.user
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
 
-        return initial
+        form.instance.fk_event_poster_user = request.user
+
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
 
     def get_success_url(self):
         return reverse('events:events_list')
