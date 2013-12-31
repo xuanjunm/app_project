@@ -1,28 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
-<header>
-    <meta charset="utf-8">
+<html lang='en'>
+    <header>
+    <meta charset='utf-8'>
     <title>{% block title %}{% endblock %}</title>
     {% load staticfiles %}
-    <link rel="stylesheet" type="texts/css" href="{% static "base.css" %}" />
+    <link rel='stylesheet' type='texts/css' href='{% static "base.css" %}' />
     {% block more_header %}{% endblock %}
-</header>
-<body>
-    <h1><span class="h1_pre_and_post">{% block h1_pre %}{% endblock %}</span> {% block h1 %}{% endblock %} <span class="h1_pre_and_post">{% block h1_post %}{% endblock %}</span></h1>
-    <nav id="main_nav">
-        <ul>
-            <li><a href="{% url "main" %}">main</a></li>
-            <li><a href="{% url "events:events_list" %}">events list</a></li>
-            <li><a href="{% url "admin:index" %}">admin</a></li>
-        </ul>
-    </nav>
-    <div id="content">
-        {% if messages %}
-            {% for message in messages %}
-                <p class="message">{{ message.message }}</p>
-            {% endfor %}
-        {% endif %}
-        {% block content %}{% endblock %}
-    </div>
-</body>
+    </header>
+
+    <body>
+        <div id='header'>
+            <h1>{% block h1 %}{% endblock %}</h1>
+            <nav id='main_nav'>
+            <ul>
+                <li><a href='{% url "patio:main" %}'>main</a></li>
+                <li><a href='{% url "events:events_list" %}'>events list
+                </a></li>
+            </ul>
+            </nav>
+        </div>
+
+        <div id='body'>
+            {% block body %}{% endblock %}
+        </div>
+    </body>
 </html>

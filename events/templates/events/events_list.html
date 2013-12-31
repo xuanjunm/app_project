@@ -4,16 +4,18 @@
 
 {% block h1 %}Events List{% endblock %}
 
-{% block content %}
+{% block body %}
     <p>These are 10 latest events</p>
-    {% if latest_events_list %}
+    {% if events_list %}
     <ul>
-        {% for event in latest_events_list %}
-        <li><a href="{% url 'events:event_details' event.id %}">{{ event.event_name }}</a></li>
+        {% for event in events_list %}
+        <li><a href='{% url "events:event_details" event.id %}'>
+            {{ event.event_title }}</a></li>
         {% endfor %}
     </ul>
     {% else %}
     <p>No events are available.</p>
     {% endif %}
-    <p><a href='{% url "events:create_event" %}' title='create event link'>Create a new event</a></p>
+    <p><a href='{% url "events:create_event" %}' title='create event link'>
+        Create a new event</a></p>
 {% endblock %}

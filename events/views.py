@@ -1,18 +1,23 @@
-from django.http import HttpResponse, HttpResponseRedirect
+import datetime
+from django.utils import timezone
 from django.views import generic
+from events.models import *
+
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.core.urlresolvers import reverse
-#from django.template.loader import get_template
-
-from events.models import *
 from events.forms import *
 from events.mixins import *
 
 class EventsList(generic.ListView):
     template_name = 'events/events_list.html'
-    context_object_name = "latest_events_list"
+    context_object_name = "events_list"
+
     def get_queryset(self):
-        return Event.objects.order_by('-event_time')[:10]
+        today = timezone.now()
+        temp = Event.objects.filter(event_time__gt=today)
+#        import pdb;pdb.set_trace()
+        return temp.order_by('-event_time')
 
 class EventDetailsView(generic.DetailView):
     model = Event

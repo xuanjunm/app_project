@@ -12,8 +12,8 @@ from django.views.generic import TemplateView
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^$', TemplateView.as_view(template_name="main.html"), name="main"),
+    url(r'^', include('patio.urls', namespace='patio')),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^events/', include('events.urls', namespace="events")),
+    url(r'^events/', include('events.urls', namespace='events')),
 #    url(r'^api/', include(v01_api.urls)),
 )
