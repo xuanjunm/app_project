@@ -8,6 +8,9 @@ from django.shortcuts import get_object_or_404, render
 from django.core.urlresolvers import reverse
 #from events.mixins import *
 
+# for CreateEventView
+from .forms import *
+
 class EventsList(generic.ListView):
     template_name = 'events/events_list.html'
     context_object_name = "events_list"
@@ -24,9 +27,17 @@ class EventDetailsView(generic.DetailView):
 
 class CreateEventView(generic.CreateView):
     model = Event
-
+    form_class = EventCreateForm
     template_name = 'events/create_event.html'
-#    success_message = 'Event has been created.'
+
+    def get_initial(self):
+        # get the initial dict from the superclass method
+        initial = super(CreateEventView, self).get_initial()
+        # copy the dict so we don't accidentally change a mutable dict
+        initial = initial.copy()
+        initial['fk_event_poster_user'] = self.request.user
+
+        return initial
 
     def get_success_url(self):
         return reverse('events:events_list')
