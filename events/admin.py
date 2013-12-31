@@ -6,12 +6,11 @@ class AddressInline(admin.StackedInline):
     can_delete = False
 
 class EventAdmin(admin.ModelAdmin):
-#    fields = ['event_name', 'date', 'organizer', 'no_of_rsvp']
     list_display = ['event_title', 'event_type', 'event_time', 
                     'fk_event_poster_user', 'event_status']
     list_filter = ['event_time']
     date_hierarchy = 'event_time'
-    inlines = (AddressInline, )
+    inlines = [AddressInline]
 
 class EventSubscriptionAdmin(admin.ModelAdmin):
     list_display = ['fk_subscriber_user', 'fk_subscribed_event']

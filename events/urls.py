@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, url, include
-from api import EventResource, AccountResource
+#from api import EventResource, AccountResource
 from events import views
 
 urlpatterns = patterns('',
