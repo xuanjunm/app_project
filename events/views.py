@@ -73,11 +73,13 @@ class EventUpdateView(generic.UpdateView):
     def dispatch(self, *args, **kwargs):
         return super(EventUpdateView, self).dispatch(*args, **kwargs)
 
-
 class EventDeleteView(generic.DeleteView):
     model = Event
-    template_name = 'events/delete_event.html'
+    template_name = 'events/event_delete.html'
 
     def get_success_url(self):
         return reverse('events:events_list')
 
+    @method_decorator(authorized_to_update_decorator)
+    def dispatch(self, *args, **kwargs):
+        return super(EventDeleteView, self).dispatch(*args, **kwargs)

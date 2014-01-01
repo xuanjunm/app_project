@@ -13,7 +13,7 @@ urlpatterns = patterns('',
         name='event_create'),
     url(r'^event_update/(?P<pk>\d+)/$', views.EventUpdateView.as_view(), 
         name='event_update'),
-    url(r'^event_delete/(?P<pk>\d+)/$', views.EventUpdateView.as_view(), 
+    url(r'^event_delete/(?P<pk>\d+)/$', views.EventDeleteView.as_view(), 
         name='event_delete'),
 #    url(r'^api/', include(event_resource.urls)),
 )
