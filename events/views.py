@@ -9,7 +9,7 @@ from django.core.urlresolvers import reverse
 
 # Handles view authorizations
 from django.utils.decorators import method_decorator
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 
 # for EventCreateView
 from .forms import *
@@ -51,6 +51,16 @@ class EventCreateView(generic.CreateView):
     def dispatch(self, *args, **kwargs):
         return super(EventCreateView, self).dispatch(*args, **kwargs)
 
+def authorized_to_update_decorator(fn):
+    # a decorator to check login_user is the owner of an event
+    # import pdb;pdb.set_trace()
+    def decorator(request, *args, **kwargs):
+        if Event.objects.get(pk=kwargs['pk']).is_posted_by(request.user):
+            return fn(request, *args, **kwargs)
+        else:
+            return HttpResponseRedirect(reverse('patio:user_login'))
+    return decorator
+
 class EventUpdateView(generic.UpdateView):
     model = Event
     form_class = EventUpdateForm
@@ -58,6 +68,11 @@ class EventUpdateView(generic.UpdateView):
 
     def get_success_url(self):
         return reverse('events:event_details', args=(self.get_object().id,))
+
+    @method_decorator(authorized_to_update_decorator)
+    def dispatch(self, *args, **kwargs):
+        return super(EventUpdateView, self).dispatch(*args, **kwargs)
+
 
 class EventDeleteView(generic.DeleteView):
     model = Event

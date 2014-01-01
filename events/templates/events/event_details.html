@@ -5,39 +5,41 @@
 {% load staticfiles %}
 <link rel="stylesheet" type="text/css" href="{% static "events/event_details.css" %}" />
 {% endblock %}
-    
+
 {% block h1 %}Event: {{ event.event_title }}{% endblock %}
 
 {% block body %}
 <div>
-<ul id="detail_type">
-    <li>Type :</li>
-    <li>Status :</li>
-    <li>Time :</li>
-    <li>Create Time :</li>
-    <li>View Count :</li>
-    <li>Capacity :</li>
-    <li>RSVP :</li>
-    <li>Like :</li>
-    <li>Recent Update Time :</li>
-    <li>Organizer ID :</li>
-    <li>Detail :<li>
-</ul>
-<ul id="details">
-    <li>{{ event.event_type }}</li>
-    <li>{{ event.event_status }}</li>
-    <li>{{ event.event_time }}</li>
-    <li>{{ event.event_create_time }}</li>
-    <li>{{ event.event_view_count }}</li>
-    <li>{{ event.event_capacity }}</li>
-    <li>{{ event.event_rsvp }}</li>
-    <li>{{ event.event_like }}</li>
-    <li>{{ event.event_recent_update }}</li>
-    <li>{{ event.fk_event_poster_user.username }}</li>
-    <li>{{ event.event_detail }}</li>
-</ul>
+    <ul id="detail_type">
+        <li>Type :</li>
+        <li>Status :</li>
+        <li>Time :</li>
+        <li>Create Time :</li>
+        <li>View Count :</li>
+        <li>Capacity :</li>
+        <li>RSVP :</li>
+        <li>Like :</li>
+        <li>Recent Update Time :</li>
+        <li>Organizer ID :</li>
+        <li>Detail :<li>
+    </ul>
+    <ul id="details">
+        <li>{{ event.event_type }}</li>
+        <li>{{ event.event_status }}</li>
+        <li>{{ event.event_time }}</li>
+        <li>{{ event.event_create_time }}</li>
+        <li>{{ event.event_view_count }}</li>
+        <li>{{ event.event_capacity }}</li>
+        <li>{{ event.event_rsvp }}</li>
+        <li>{{ event.event_like }}</li>
+        <li>{{ event.event_recent_update }}</li>
+        <li>{{ event.fk_event_poster_user.username }}</li>
+        <li>{{ event.event_detail }}</li>
+    </ul>
 </div>
 <p><a href="{% url 'events:events_list' %}">back to list</a></p>
+{% if user == event.fk_event_poster_user %}
 <p><a href="{% url 'events:event_update' event.id %}">update event</a></p>
 <p><a href="{% url 'events:event_delete' event.id %}">delete event</a></p>
+{% endif %}
 {% endblock %}

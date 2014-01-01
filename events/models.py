@@ -29,6 +29,9 @@ class Event(models.Model):
     fk_event_poster_user = models.ForeignKey(User, 
                                              verbose_name='Event Poster')
 
+    def is_posted_by(self, user):
+        return self.fk_event_poster_user==user
+
     def __unicode__(self):
         return self.event_title
 

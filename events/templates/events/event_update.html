@@ -20,5 +20,6 @@
     {% endfor %}
     <p>* This field is required.</p>
     <input type="submit" value="Update Event" />
+    <a href='{% url "events:events_list" %}'>Cancel</a>
 </form>
 {% endblock %}
