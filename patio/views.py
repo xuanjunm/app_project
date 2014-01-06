@@ -19,7 +19,12 @@ class DashboardView(generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(DashboardView, self).get_context_data(**kwargs)
-        user = UserProfile.objects.get(user=self.request.user.id)
+
+        try:
+            user = UserProfile.objects.get(user=self.request.user.id)
+        except UserProfile.DoesNotExist:
+            user = UserProfile(user=self.request.user)
+            user.save()
 
         context['user_profile'] = user
         return context

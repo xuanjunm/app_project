@@ -9,7 +9,8 @@ class UserProfile(models.Model):
 
     user = models.OneToOneField(User, related_name='profile')
     user_gender = models.CharField(max_length=10,
-                                   choices=USER_GENDER_CHOICES)
+                                   choices=USER_GENDER_CHOICES,
+                                   blank=True)
     user_description = models.TextField(blank=True)
     user_nickname = models.CharField(blank=True, max_length=255)
 
