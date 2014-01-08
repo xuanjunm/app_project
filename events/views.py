@@ -58,7 +58,7 @@ def authorized_to_update_decorator(fn):
         if Event.objects.get(pk=kwargs['pk']).is_posted_by(request.user):
             return fn(request, *args, **kwargs)
         else:
-            return HttpResponseRedirect(reverse('patio:user_login'))
+            return HttpResponseRedirect(reverse('basal:user_login'))
     return decorator
 
 class EventUpdateView(generic.UpdateView):

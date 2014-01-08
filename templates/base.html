@@ -13,17 +13,17 @@
             <h1>{% block h1 %}{% endblock %}</h1>
             <nav id='main_nav'>
             <ul>
-                <li><a href='{% url "patio:main" %}'>main</a></li>
+                <li><a href='{% url "basal:main" %}'>main</a></li>
                 <li><a href='{% url "events:events_list" %}'>events list</a></li>
 
                 {% if user.username %}
                 <li>Hi {{ user.username }}</li>
                 <li>
-                <a href='{% url "patio:logout" %}?next={% url "patio:main" %}'>
+                <a href='{% url "basal:logout" %}?next={% url "basal:main" %}'>
                     logout</a></li>
                 {% else %}
-                <li><a href='{% url "patio:user_login" %}'>sign in</a></li>
-                <li><a href='{% url "patio:user_create" %}'>join us</a></li>
+                <li><a href='{% url "basal:user_login" %}'>sign in</a></li>
+                <li><a href='{% url "basal:user_create" %}'>join us</a></li>
                 {% endif %}
 
             </ul>

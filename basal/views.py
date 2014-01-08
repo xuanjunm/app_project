@@ -15,7 +15,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate
 
 class DashboardView(generic.TemplateView):
-    template_name = 'patio/dashboard.html'
+    template_name = 'basal/dashboard.html'
 
     def get_context_data(self, **kwargs):
         context = super(DashboardView, self).get_context_data(**kwargs)
@@ -34,7 +34,7 @@ class DashboardView(generic.TemplateView):
         return super(DashboardView, self).dispatch(*args, **kwargs)
 
 class UserCreate(generic.FormView):
-    template_name = 'patio/user_create.html'
+    template_name = 'basal/user_create.html'
     form_class = UserCreationForm
 
     def form_valid(self, form):
@@ -47,4 +47,4 @@ class UserCreate(generic.FormView):
         new_user = authenticate(username=self.request.POST['username'],
                                 password=self.request.POST['password1'])
         login(self.request, new_user)
-        return HttpResponseRedirect(reverse('patio:dashboard'))
+        return HttpResponseRedirect(reverse('basal:dashboard'))

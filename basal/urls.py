@@ -8,10 +8,10 @@ from . import views
 #user_resource = UserResource()
 
 urlpatterns = patterns('',
-    url(r'^$', TemplateView.as_view(template_name='patio/main.html'), 
+    url(r'^$', TemplateView.as_view(template_name='basal/main.html'), 
         name='main'),
     url(r'^user_login/$', 'django.contrib.auth.views.login',
-        {'template_name': 'patio/login.html'}, name='user_login'),
+        {'template_name': 'basal/login.html'}, name='user_login'),
     url(r'^logout/$', 'django.contrib.auth.views.logout',
         name='logout'),
     url(r'^user_create/$', views.UserCreate.as_view(), name='user_create'),

@@ -3,7 +3,7 @@ from tastypie.authorization import Authorization
 from tastypie import fields
 
 from .models import *
-from patio.api import *
+from basal.api import *
 
 class EventResource(ModelResource):
     fk_event_poster_user = fields.ForeignKey(UserResource,
