@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from tastypie.models import create_api_key
 
 class UserProfile(models.Model):
     USER_GENDER_CHOICES = (
@@ -17,3 +18,15 @@ class UserProfile(models.Model):
 class UserFriendAttribute(models.Model):
     fk_friend_a_user = models.ForeignKey(User, related_name='friend_a')
     fk_friend_b_user = models.ForeignKey(User, related_name='friend_b')
+
+def create_user_profile(sender, **kwargs):
+    """
+    A Signal for hooking up automatic ''UserProfile'' creation.
+    """
+    if kwargs.get('created') is True:
+        UserProfile.objects.create(user=kwargs.get('instance'))
+
+models.signals.post_save.connect(create_api_key, sender=User)
+models.signals.post_save.connect(create_user_profile, sender=User)
+
+
