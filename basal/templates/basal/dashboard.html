@@ -2,20 +2,23 @@
 {% block h2 %}Dashboard of </span>{{ user.username }}{% endblock %}
 {% block main %}
 <ul>
-    <li><span class='field_label'>username: </span>{{ user.username }}</li>
-    <li><span class='field_label'>last name: </span>{{ user.last_name }}</li>
-    <li><span class='field_label'>first name: </span>{{ user.first_name }}
-    </li>
-    <li><span class='field_label'>email: </span>{{ user.email }}</li>
-    <li><span class='field_label'>last login: </span>{{ user.last_login }}
-    </li>
-    <li><span class='field_label'>date joined: </span>{{ user.date_joined }}
-    </li>
-    <li><span class='field_label'>nick name: </span>
+    <li class='row'><span class='field_label four columns'>username: </span>
+    {{ user.username }}</li>
+    <li class='row'><span class='field_label four columns'>last name: </span>
+    {{ user.last_name }}</li>
+    <li class='row'><span class='field_label four columns'>
+        first name: </span>{{ user.first_name }}</li>
+    <li class='row'><span class='field_label four columns'>email: </span>
+    {{ user.email }}</li>
+    <li class='row'><span class='field_label four columns'>
+        last login: </span>{{ user.last_login }}</li>
+    <li class='row'><span class='field_label four columns'>
+        date joined: </span>{{ user.date_joined }}</li>
+    <li class='row'><span class='field_label four columns'>nick name: </span>
     {{ user_profile.user_nickname }}</li>
-    <li><span class='field_label'>gender: </span>
+    <li class='row'><span class='field_label four columns'>gender: </span>
     {{ user_profile.user_gender }}</li>
-    <li><span class='field_label'>description: </span>
-    {{ user_profile.user_description }}</li>
+    <li class='row'><span class='field_label four columns'>
+        description: </span>{{ user_profile.user_description }}</li>
 </ul>
 {% endblock %}

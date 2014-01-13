@@ -2,34 +2,28 @@
 {% block h2 %}Event: {{ event.event_title }}{% endblock %}
 
 {% block main %}
-<div>
-    <ul id='detail_type'>
-        <li>Type :</li>
-        <li>Status :</li>
-        <li>Time :</li>
-        <li>Create Time :</li>
-        <li>View Count :</li>
-        <li>Capacity :</li>
-        <li>RSVP :</li>
-        <li>Like :</li>
-        <li>Recent Update Time :</li>
-        <li>Organizer ID :</li>
-        <li>Detail :<li>
-    </ul>
-    <ul id='details'>
-        <li>{{ event.event_type }}</li>
-        <li>{{ event.event_status }}</li>
-        <li>{{ event.event_time }}</li>
-        <li>{{ event.event_create_time }}</li>
-        <li>{{ event.event_view_count }}</li>
-        <li>{{ event.event_capacity }}</li>
-        <li>{{ event.event_rsvp }}</li>
-        <li>{{ event.event_like }}</li>
-        <li>{{ event.event_recent_update }}</li>
-        <li>{{ event.fk_event_poster_user.username }}</li>
-        <li>{{ event.event_detail }}</li>
-    </ul>
-</div>
+<ul id='details'>
+    <li class='row'><span class='field_label four columns'>Event type: </span>
+    {{ event.event_type }}</li>
+    <li class='row'><span class='field_label four columns'>
+        Event status: </span>{{ event.event_status }}</li>
+    <li class='row'><span class='field_label four columns'>Event time: </span>
+    {{ event.event_time }}</li>
+    <li class='row'><span class='field_label four columns'>
+        Event create time: </span>{{ event.event_create_time }}</li>
+    <li class='row'><span class='field_label four columns'>
+        Event view count: </span>{{ event.event_view_count }}</li>
+    <li class='row'><span class='field_label four columns'>
+        Event capacity: </span>{{ event.event_capacity }}</li>
+    <li class='row'><span class='field_label four columns'>RSVP: </span>
+    {{ event.event_rsvp }}</li>
+    <li class='row'><span class='field_label four columns'>Likes: </span>
+    {{ event.event_like }}</li>
+    <li class='row'><span class='field_label four columns'>
+        Recent updates: </span>{{ event.event_recent_update }}</li>
+    <li class='row'><span class='field_label four columns'>Details: </span>
+    {{ event.event_detail }}</li>
+</ul>
 <p><a href='{% url 'events:event_list' %}'>back to list</a></p>
 {% if user == event.fk_event_poster_user %}
 <p><a href='{% url 'events:event_update' event.id %}'>update event</a></p>
