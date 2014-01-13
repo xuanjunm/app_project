@@ -72,7 +72,7 @@ class EventCreateView(generic.CreateView):
         return context
 
     def get_success_url(self):
-        return reverse('events:events_list')
+        return reverse('events:event_list')
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
