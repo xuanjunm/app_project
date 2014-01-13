@@ -1,4 +1,9 @@
 {% extends 'base.html' %}
+{% block head %}
+{% load staticfiles %}
+<script type='text/javascript' 
+    src='{% static 'events/js/event_create.js' %}'></script>
+{% endblock %}
 {% block h2 %}New Event{% endblock %}
 {% block main %}
 <form action='{% url 'events:event_create' %}' class='seven columns alpha' 
@@ -6,12 +11,14 @@
     {% csrf_token %}
     <div class='row alpha'>
         {{ form }}
-        <hr class='half-bottom'/>
-        {{ form_2 }}
+        <div id='address_holder' 
+            data-url='{% url 'events:address_detail' pk=999 %}'> 
+        </div>
     </div>
     <div class='row alpha'>
         <div class='three columns alpha'>
             <input type='submit' value='Create Event' />
+            <a href='{% url 'events:event_list' %}'>Back</a>
         </div>
     </div>
 </form>

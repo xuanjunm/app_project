@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Address(models.Model):
+    address_title = models.CharField(max_length=100)
     address_detail = models.TextField()
     address_postal_code = models.CharField(max_length=255)
     address_city = models.CharField(max_length=255)
@@ -9,7 +10,7 @@ class Address(models.Model):
     address_country = models.CharField(max_length=255, default='Canada')
 
     def __unicode__(self):
-        return self.address_city
+        return self.address_title
 
 class Event(models.Model):
     EVENT_TYPE_CHOICES = (
@@ -39,7 +40,8 @@ class Event(models.Model):
     fk_event_poster_user = models.ForeignKey(User, 
                                              verbose_name='Event Poster')
     fk_address = models.ForeignKey(Address,
-                                   verbose_name='Event Location')
+                                   verbose_name='Event Location',
+                                   unique=False)
 
     def is_posted_by(self, user):
         return self.fk_event_poster_user==user

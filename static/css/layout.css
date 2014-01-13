@@ -17,6 +17,10 @@
 /* #Site Styles
 ================================================== */
 
+.reset {
+    margin: 0;
+}
+
 .remove_decoration {
     text-decoration: none;
 }
@@ -48,6 +52,12 @@ nav li {
 
 nav a:hover {
     color: #f77;
+}
+
+/* address_detail */
+#address_wrapper {
+    padding: 1em;
+    border: 1px solid #ccc;
 }
 
 /* #Media Queries
