@@ -2,15 +2,15 @@
 {% block h2 %}Events List{% endblock %}
 {% block main %}
 <p>These are 10 latest events</p>
-{% if events_list %}
+{% if event_list %}
 <ul>
-    {% for event in events_list %}
+    {% for event in event_list %}
     <li><a href='{% url 'events:event_details' event.id %}'>
         {{ event.event_title }}</a></li>
     {% endfor %}
 </ul>
 {% else %}
-<p>No events are available.</p>
+<p>No event are available.</p>
 {% endif %}
 
 {% if user.username %}

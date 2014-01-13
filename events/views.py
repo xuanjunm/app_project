@@ -14,9 +14,9 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 # for EventCreateView
 from .forms import *
 
-class EventsList(generic.ListView):
-    template_name = 'events/events_list.html'
-    context_object_name = "events_list"
+class EventList(generic.ListView):
+    template_name = 'events/event_list.html'
+    context_object_name = "event_list"
 
     def get_queryset(self):
         today = timezone.now()
@@ -104,7 +104,7 @@ class EventDeleteView(generic.DeleteView):
     template_name = 'events/event_delete.html'
 
     def get_success_url(self):
-        return reverse('events:events_list')
+        return reverse('events:event_list')
 
     @method_decorator(authorized_to_update_decorator)
     def dispatch(self, *args, **kwargs):

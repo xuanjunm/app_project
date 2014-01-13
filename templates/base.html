@@ -50,7 +50,7 @@
             <li><a class='remove_decoration' 
                 href='{% url 'basal:main' %}'>main</a></li>
             <li><a  class='remove_decoration' 
-                href='{% url 'events:events_list' %}'>events list</a></li>
+                href='{% url 'events:event_list' %}'>event list</a></li>
             {% if user.username %}
             <li><a class='remove_decoration' 
                 href='{% url 'basal:dashboard' %}'>{{ user.username }}'s 

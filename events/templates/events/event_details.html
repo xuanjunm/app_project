@@ -30,7 +30,7 @@
         <li>{{ event.event_detail }}</li>
     </ul>
 </div>
-<p><a href='{% url 'events:events_list' %}'>back to list</a></p>
+<p><a href='{% url 'events:event_list' %}'>back to list</a></p>
 {% if user == event.fk_event_poster_user %}
 <p><a href='{% url 'events:event_update' event.id %}'>update event</a></p>
 <p><a href='{% url 'events:event_delete' event.id %}'>delete event</a></p>

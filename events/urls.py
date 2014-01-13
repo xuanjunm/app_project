@@ -6,7 +6,7 @@ from events import views
 #event_resource = EventResource()
 
 urlpatterns = patterns('',
-    url(r'^$', views.EventsList.as_view(), name='events_list'),
+    url(r'^$', views.EventList.as_view(), name='event_list'),
     url(r'^(?P<pk>\d+)/$', views.EventDetailsView.as_view(), 
         name='event_details'),
     url(r'^event_create/$', views.EventCreateView.as_view(), 
