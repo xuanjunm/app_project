@@ -1,37 +1,77 @@
 <!DOCTYPE html>
-<html lang='en'>
-    <header>
+<!--[if lt IE 7 ]><html class='ie ie6' lang='en'> <![endif]-->
+<!--[if IE 7 ]><html class='ie ie7' lang='en'> <![endif]-->
+<!--[if IE 8 ]><html class='ie ie8' lang='en'> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang='en'> <!--<![endif]-->
+<head>
+    <!-- Basic Page Needs
+    ================================================== -->
     <meta charset='utf-8'>
-    <title>{% block title %}APP{% endblock %}</title>
+    <title>{% block title %}App{% endblock %}</title>
+    <meta name='description' content=''>
+    <meta name='author' content=''>
+
+    <!-- Mobile Specific Metas
+    ================================================== -->
+    <meta name='viewport' 
+    content='width=device-width, initial-scale=1, maximum-scale=1'>
+
+    <!-- CSS
+    ================================================== -->
     {% load staticfiles %}
-    <link rel='stylesheet' type='texts/css' href='{% static "base.css" %}' />
-    {% block more_header %}{% endblock %}
-    </header>
+    <link rel='stylesheet' href='{% static 'css/base.css' %}'>
+    <link rel='stylesheet' href='{% static 'css/skeleton.css' %}'>
+    <link rel='stylesheet' href='{% static 'css/layout.css' %}'>
+    {% block head %}{% endblock %}
 
-    <body>
-        <div id='header'>
-            <h1>{% block h1 %}{% endblock %}</h1>
-            <nav id='main_nav'>
-            <ul>
-                <li><a href='{% url "basal:main" %}'>main</a></li>
-                <li><a href='{% url "events:events_list" %}'>events list</a></li>
+    <!--[if lt IE 9]>
+    <script src='http://html5shim.googlecode.com/svn/trunk/html5.js'>
+    </script>
+    <![endif]-->
 
-                {% if user.username %}
-                <li>Hi {{ user.username }}</li>
-                <li>
-                <a href='{% url "basal:logout" %}?next={% url "basal:main" %}'>
-                    logout</a></li>
-                {% else %}
-                <li><a href='{% url "basal:user_login" %}'>sign in</a></li>
-                <li><a href='{% url "basal:user_create" %}'>join us</a></li>
-                {% endif %}
+    <!-- Favicons
+    ================================================== -->
+    <link rel='shortcut icon' href='{% static 'img/favicon.ico' %}'>
+    <link rel='apple-touch-icon' 
+    href='{% static 'img/apple-touch-icon.png' %}'>
+    <link rel='apple-touch-icon' sizes='72x72' 
+    href='{% static 'img/apple-touch-icon-72x72.png' %}'>
+    <link rel='apple-touch-icon' sizes='114x114' 
+    href='{% static 'images/apple-touch-icon-114x114.png' %}'>
 
-            </ul>
-            </nav>
-        </div>
-
-        <div id='body'>
-            {% block body %}{% endblock %}
-        </div>
-    </body>
-</html>
+</head>
+<body>
+    <div class='container'>
+        <header class='add-bottom sixteen columns'>
+        <h1><a href='#' title='logo' class='remove_decoration'>App</a></h1>
+        </header>
+        <nav class='sixteen columns'>
+        <ul>
+            <li><a class='remove_decoration' 
+                href='{% url 'basal:main' %}'>main</a></li>
+            <li><a  class='remove_decoration' 
+                href='{% url 'events:events_list' %}'>events list</a></li>
+            {% if user.username %}
+            <li><a class='remove_decoration' 
+                href='{% url 'basal:dashboard' %}'>{{ user.username }}'s 
+                dashboard</a></li>
+            <li>
+            <a class='remove_decoration' 
+                href='{% url 'basal:logout' %}?next={% url 'basal:main' %}'>
+                logout</a></li>
+            {% else %}
+            <li><a class='remove_decoration' 
+                href='{% url 'basal:user_login' %}'>sign in</a></li>
+            <li><a class='remove_decoration' 
+                href='{% url 'basal:user_create' %}'>join us</a></li>
+            {% endif %}
+        </ul>
+        </nav>
+        <hr />
+        <main class='sixteen columns'>
+        <h2>{% block h2 %}{% endblock %}</h2>
+        {% block main %}{% endblock %}
+        </main>
+    </div><!-- container -->
+</body>
+    </html>

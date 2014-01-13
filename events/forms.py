@@ -1,13 +1,18 @@
-from django.forms import ModelForm
+from django import forms 
 from .models import *
 
-class EventCreateForm(ModelForm):
+class EventCreateForm(forms.ModelForm):
     class Meta:
         model = Event
         exclude = ['fk_event_poster_user', 'event_like', 'event_rsvp', 
-                   'event_view_count', 'event_status']
+                   'event_view_count', 'event_status', 'fk_address']
 
-class EventUpdateForm(ModelForm):
+class AddressForm(forms.ModelForm):
+    class Meta:
+        model = Address
+        exclude = ['fk_event']
+
+class EventUpdateForm(forms.ModelForm):
     class Meta:
         model = Event
         exclude = ['fk_event_poster_user', 'event_like', 'event_rsvp', 

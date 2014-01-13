@@ -1,13 +1,10 @@
-{% extends "base.html" %}
-{% block title %}Delete Confirmation{% endblock %}
-
-{% block h1 %}Are you really going to remove 
-    {{ event.event_title }}?{% endblock %}
-
-{% block body %}
-<form action="{% url 'events:event_delete' event.id %}" method="post">
-<input type="submit" value="Yes, Please"/>
+{% extends 'base.html' %}
+{% block h2 %}Are you really going to remove {{ event.event_title }}?
+{% endblock %}
+{% block main %}
+<form action='{% url 'events:event_delete' event.id %}' method='post'>
+<input type='submit' value='Yes, Please'/>
 {% csrf_token %}
 </form>
-<a href="{% url 'events:event_details' event.id %}">Back</a>
+<a href='{% url 'events:event_details' event.id %}'>Back</a>
 {% endblock %}

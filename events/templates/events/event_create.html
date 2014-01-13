@@ -1,25 +1,18 @@
 {% extends 'base.html' %}
-
-{% block more_header %}
-{% load staticfiles %}
-<link rel="stylesheet" type="text/css" 
-    href="{% static "events/create_event.css" %}" />
-{% endblock %}
-
-{% block h1 %}New Event{% endblock %}
-
-{% block body %}
-<form action="{% url 'events:event_create' %}" method="post">
+{% block h2 %}New Event{% endblock %}
+{% block main %}
+<form action='{% url 'events:event_create' %}' class='seven columns alpha' 
+    method='post'>
     {% csrf_token %}
-    {% for field in form %}
-        <div class="field_wrapper">
-            {{ field.label_tag }}:
-            {{ field.errors }}
-            {{ field }}
-            <p class="help_text">{{ field.help_text }}</p>
+    <div class='row alpha'>
+        {{ form }}
+        <hr class='half-bottom'/>
+        {{ form_2 }}
+    </div>
+    <div class='row alpha'>
+        <div class='three columns alpha'>
+            <input type='submit' value='Create Event' />
         </div>
-    {% endfor %}
-    <p>* This field is required.</p>
-    <input type="submit" value="Create Event" />
+    </div>
 </form>
 {% endblock %}
