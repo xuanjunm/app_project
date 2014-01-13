@@ -29,20 +29,47 @@ class EventDetailsView(generic.DetailView):
     template_name = 'events/event_details.html'
 
 class EventCreateView(generic.CreateView):
-    form_class = EventCreateForm
     template_name = 'events/event_create.html'
+    form_class = EventCreateForm
+    form_class_2 = AddressForm
+
+    def form_invalid(self, form, form_2):
+        """
+        will return the 2 forms with user inputs
+        """
+        return self.render_to_response(self.get_context_data(form=form,
+                                                             form_2=form_2))
 
     def post(self, request, *args, **kwargs):
         self.object = None
-        form_class = self.get_form_class()
-        form = self.get_form(form_class)
+        form = self.get_form(self.form_class)
+        form_2 = self.get_form(self.form_class_2)
 
+        # let fk_event_poster_user = current login user
         form.instance.fk_event_poster_user = request.user
 
-        if form.is_valid():
-            return self.form_valid(form)
+        # if AddressForm is valid, check EventCreateForm
+        if form_2.is_valid():
+            form_2_object = form_2.save()
+            form.instance.fk_address = form_2_object
+#            import pdb;pdb.set_trace()
+
+            if form.is_valid():
+                return self.form_valid(form)
+            else:
+                form_2_object.delete()
+                return self.form_invalid(form, form_2)
         else:
-            return self.form_invalid(form)
+            return self.form_invalid(form, form_2)
+
+#        import pdb;pdb.set_trace()
+    def get_context_data(self, **kwargs):
+        context = super(EventCreateView, self).get_context_data(**kwargs)
+
+        if 'form_2' not in context: 
+            context['form_2'] = self.form_class_2
+
+        return context
 
     def get_success_url(self):
         return reverse('events:events_list')
@@ -53,7 +80,6 @@ class EventCreateView(generic.CreateView):
 
 def authorized_to_update_decorator(fn):
     # a decorator to check login_user is the owner of an event
-    # import pdb;pdb.set_trace()
     def decorator(request, *args, **kwargs):
         if Event.objects.get(pk=kwargs['pk']).is_posted_by(request.user):
             return fn(request, *args, **kwargs)

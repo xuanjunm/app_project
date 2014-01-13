@@ -18,7 +18,6 @@ class EventSubscriptionAdmin(admin.ModelAdmin):
 class EventCommentAdmin(admin.ModelAdmin):
     list_display = ['fk_comment_poster_user', 'fk_event']
 
-
 admin.site.register(Address)
 admin.site.register(Event, EventAdmin)
 admin.site.register(EventSubscription, EventSubscriptionAdmin)

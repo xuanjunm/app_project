@@ -8,6 +8,9 @@ class Address(models.Model):
     address_region = models.CharField(max_length=255)
     address_country = models.CharField(max_length=255, default='Canada')
 
+    def __unicode__(self):
+        return self.address_city
+
 class Event(models.Model):
     EVENT_TYPE_CHOICES = (
         ('public', 'public'),
@@ -35,7 +38,8 @@ class Event(models.Model):
     event_recent_update = models.DateTimeField(auto_now_add=True)
     fk_event_poster_user = models.ForeignKey(User, 
                                              verbose_name='Event Poster')
-    fk_address = models.ForeignKey(Address, related_name='address')
+    fk_address = models.ForeignKey(Address,
+                                   verbose_name='Event Location')
 
     def is_posted_by(self, user):
         return self.fk_event_poster_user==user

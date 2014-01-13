@@ -1,21 +1,21 @@
 {% extends 'base.html' %}
-
-{% block title %}Dashboard{% endblock %}
-{% block more_header %}
-{% endblock %}
-{% block h1 %}Dashboard of {{ user.username }}{% endblock %}
-
-{% block body %}
+{% block h2 %}Dashboard of </span>{{ user.username }}{% endblock %}
+{% block main %}
 <ul>
-    <li><p>username: {{ user.username }}</p></li>
-    <li><p>last name:{{ user.last_name }}</p></li>
-    <li><p>first name: {{ user.first_name }}</p></li>
-    <li><p>email: {{ user.email }}</p></li>
-    <li><p>last login: {{ user.last_login }}</p></li>
-    <li><p>date joined: {{ user.date_joined }}</p></li>
-    <li><p>nick name: {{ user_profile.user_nickname }}</p></li>
-    <li><p>gender: {{ user_profile.user_gender }}</p></li>
-    <li><p>description: {{ user_profile.user_description }}</p></li>
+    <li><span class='field_label'>username: </span>{{ user.username }}</li>
+    <li><span class='field_label'>last name: </span>{{ user.last_name }}</li>
+    <li><span class='field_label'>first name: </span>{{ user.first_name }}
+    </li>
+    <li><span class='field_label'>email: </span>{{ user.email }}</li>
+    <li><span class='field_label'>last login: </span>{{ user.last_login }}
+    </li>
+    <li><span class='field_label'>date joined: </span>{{ user.date_joined }}
+    </li>
+    <li><span class='field_label'>nick name: </span>
+    {{ user_profile.user_nickname }}</li>
+    <li><span class='field_label'>gender: </span>
+    {{ user_profile.user_gender }}</li>
+    <li><span class='field_label'>description: </span>
+    {{ user_profile.user_description }}</li>
 </ul>
-
 {% endblock %}

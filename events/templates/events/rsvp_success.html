@@ -1,26 +1,17 @@
-{% extends "base.html" %}
-{% block title %}RSVP Success{% endblock %}
-
-{% block more_header %}
-{% load staticfiles %}
-    <link rel="stylesheet" type="text/css" href="{% static "events/event_details.css" %}" />
-{% endblock %}
-
-{% block h1_pre %}You have RSVP to{% endblock %}
-{% block h1 %}{{ event.name }}{% endblock %}
-{% block h1_post %}successfully!{% endblock %}
-{% block content %}
+{% extends 'base.html' %}
+{% block h2 %}{{ event.name }}{% endblock %}
+{% block main %}
 <div>
-<ul id="detail_type">
+<ul id='detail_type'>
     <li>date :</li>
     <li>organizer:</li>
     <li>No of RSVP:<li>
 </ul>
-<ul id="details">
+<ul id='details'>
     <li>{{ event.date }}</li>
     <li>{{ event.organizer }}</li>
     <li>{{ event.no_of_rsvp }}</li>
 </ul>
 </div>
-<a href="{% url 'events:events_list' %}">back to list</a>
+<a href='{% url 'events:events_list' %}'>back to list</a>
 {% endblock %}

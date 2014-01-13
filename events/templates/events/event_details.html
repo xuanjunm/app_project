@@ -1,16 +1,9 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+{% block h2 %}Event: {{ event.event_title }}{% endblock %}
 
-{% block title %}Events Details{% endblock %}
-{% block more_header %}
-{% load staticfiles %}
-<link rel="stylesheet" type="text/css" href="{% static "events/event_details.css" %}" />
-{% endblock %}
-
-{% block h1 %}Event: {{ event.event_title }}{% endblock %}
-
-{% block body %}
+{% block main %}
 <div>
-    <ul id="detail_type">
+    <ul id='detail_type'>
         <li>Type :</li>
         <li>Status :</li>
         <li>Time :</li>
@@ -23,7 +16,7 @@
         <li>Organizer ID :</li>
         <li>Detail :<li>
     </ul>
-    <ul id="details">
+    <ul id='details'>
         <li>{{ event.event_type }}</li>
         <li>{{ event.event_status }}</li>
         <li>{{ event.event_time }}</li>
@@ -37,9 +30,9 @@
         <li>{{ event.event_detail }}</li>
     </ul>
 </div>
-<p><a href="{% url 'events:events_list' %}">back to list</a></p>
+<p><a href='{% url 'events:events_list' %}'>back to list</a></p>
 {% if user == event.fk_event_poster_user %}
-<p><a href="{% url 'events:event_update' event.id %}">update event</a></p>
-<p><a href="{% url 'events:event_delete' event.id %}">delete event</a></p>
+<p><a href='{% url 'events:event_update' event.id %}'>update event</a></p>
+<p><a href='{% url 'events:event_delete' event.id %}'>delete event</a></p>
 {% endif %}
 {% endblock %}
