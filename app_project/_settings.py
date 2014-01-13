@@ -136,6 +136,7 @@ INSTALLED_APPS = (
     'events',
     'basal',
     'tastypie',
+#    'south',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -169,3 +170,4 @@ LOGGING = {
 
 LOGIN_REDIRECT_URL = 'basal:dashboard'
 LOGIN_URL = 'basal:user_login'
+AUTH_PROFILE_MODULE = 'basal.UserProfile'
