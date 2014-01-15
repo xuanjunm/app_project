@@ -11,8 +11,11 @@
     {% csrf_token %}
     <div class='row alpha'>
         {{ form }}
+        <a class='alpha two columns' 
+            href='{% url 'events:address_create' %}?path_from={{ path_current }}'>create address</a>
+
         <div id='address_holder' 
-            data-url='{% url 'events:address_detail' pk=999 %}'> 
+            data-url='{% url 'events:address_detail' pk=999 %}?path_from={{ path_current }}'> 
         </div>
     </div>
     <div class='row alpha'>

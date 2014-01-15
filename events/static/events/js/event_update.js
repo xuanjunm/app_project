@@ -8,7 +8,8 @@ $(document).ready(function() {
 
 function fetch_address_or_not() {
     if ($('#id_fk_address').val() == '') {
-        $('#address_holder').html('<div id="address_wrapper"> No address has'
+        $('#address_holder').html('<div class="alpha seven columns" '
+                                  + 'id="address_wrapper"> No address has'
                                   + ' been selected.</div>');
     } else {
         fetch_address(generate_address_url());

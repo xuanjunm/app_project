@@ -32,19 +32,10 @@ class EventDetailView(generic.DetailView):
 class EventCreateView(generic.CreateView):
     template_name = 'events/event_create.html'
     form_class = EventCreateForm
-#    form_class_2 = AddressForm
-
-#    def form_invalid(self, form, form_2):
-#        """
-#        will return the 2 forms with user inputs
-#        """
-#        return self.render_to_response(self.get_context_data(form=form,
-#                                                             form_2=form_2))
 
     def post(self, request, *args, **kwargs):
         self.object = None
         form = self.get_form(self.form_class)
-#        form_2 = self.get_form(self.form_class_2)
 
         # let fk_event_poster_user = current login user
         form.instance.fk_event_poster_user = request.user
@@ -54,31 +45,15 @@ class EventCreateView(generic.CreateView):
         else:
             return self.form_invalid(form)
 
-        # if AddressForm is valid, check EventCreateForm
-#        if form_2.is_valid():
-#            form_2_object = form_2.save()
-#            form.instance.fk_address = form_2_object
-        #    import pdb;pdb.set_trace()
-
-#            if form.is_valid():
-#                return self.form_valid(form)
-#            else:
-#                form_2_object.delete()
-#                return self.form_invalid(form, form_2)
-#        else:
-#            return self.form_invalid(form, form_2)
-
-#        import pdb;pdb.set_trace()
-#    def get_context_data(self, **kwargs):
-#        context = super(EventCreateView, self).get_context_data(**kwargs)
-
-#        if 'form_2' not in context: 
-#            context['form_2'] = self.form_class_2
-
-#        return context
-
     def get_success_url(self):
         return reverse('events:event_list')
+
+    def get_context_data(self, **kwargs):
+        context = super(EventCreateView, self).get_context_data(**kwargs)
+        context['path_current'] = self.request.get_full_path()
+#        import pdb;pdb.set_trace()
+        return context
+
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
@@ -96,36 +71,16 @@ def authorized_to_update_decorator(fn):
 class EventUpdateView(generic.UpdateView):
     model = Event
     form_class = EventUpdateForm
-#    form_class_2 = AddressForm
     template_name = 'events/event_update.html'
-
-#    def post(self, request, *args, **kwargs):
-#        self.object = self.get_object()
-#        if 'event_form' in request.POST:
-#            form_class = self.get_form_class()
-#            form_name = 'form'
-#        else:
-#            form_class = self.form_class_2
-#            form_name = 'form_2'
-#
-#        form = self.get_form(form_class)
-#
-#        if form.is_valid():
-#            return self.form_valid(form)
-#        else:
-#            return self.form_invalid(**{form_name: form})
 
     def get_success_url(self):
         return reverse('events:event_detail', args=(self.get_object().id,))
 
-#    def get_context_data(self, **kwargs):
-#        context = super(EventUpdateView, self).get_context_data(**kwargs)
-#
-#        # include Address of the Event in view
-#        context['form_2'] = self.form_class_2(
-#                initial=model_to_dict(self.get_object().fk_address))
-#        #        import pdb;pdb.set_trace()
-#        return context
+    def get_context_data(self, **kwargs):
+        context = super(EventUpdateView, self).get_context_data(**kwargs)
+        context['path_current'] = self.request.get_full_path()
+#        import pdb;pdb.set_trace()
+        return context
 
     @method_decorator(authorized_to_update_decorator)
     def dispatch(self, *args, **kwargs):
@@ -146,12 +101,37 @@ class AddressDetailView(generic.DetailView):
     template_name = 'events/address_detail.html'
     model = Address
 
+    def get_context_data(self, **kwargs):
+        context = super(AddressDetailView, self).get_context_data(**kwargs)
+        if self.request.GET.get('path_from'):
+            context['path_from'] = self.request.GET.get('path_from')
+
+        return context
+
 class AddressCreateView(generic.CreateView):
     template_name = 'events/address_create.html'
     model = Address
+
+    def get_success_url(self):
+        return self.request.POST.get('path_from')
+
+    def get_context_data(self, **kwargs):
+        context = super(AddressCreateView, self).get_context_data(**kwargs)
+        if self.request.GET.get('path_from'):
+            context['path_from'] = self.request.GET.get('path_from')
+
+        return context
 
 class AddressUpdateView(generic.UpdateView):
     template_name = 'events/address_update.html'
     model = Address
 
+    def get_success_url(self):
+        return self.request.POST.get('path_from')
 
+    def get_context_data(self, **kwargs):
+        context = super(AddressUpdateView, self).get_context_data(**kwargs)
+        if self.request.GET.get('path_from'):
+            context['path_from'] = self.request.GET.get('path_from')
+
+        return context
