@@ -6,10 +6,10 @@ from .models import *
 #    can_delete = False
 
 class EventAdmin(admin.ModelAdmin):
-    list_display = ['event_title', 'event_type', 'event_time', 
+    list_display = ['event_title', 'event_type', 'event_date', 
                     'fk_event_poster_user', 'event_status', 'fk_address']
-    list_filter = ['event_time']
-    date_hierarchy = 'event_time'
+    list_filter = ['event_date']
+    date_hierarchy = 'event_date'
 #    inlines = [AddressInline]
 
 class EventSubscriptionAdmin(admin.ModelAdmin):

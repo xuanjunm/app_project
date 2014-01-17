@@ -29,7 +29,8 @@ class Event(models.Model):
     event_status = models.CharField(max_length=10,
                                     choices=EVENT_STATUS_CHOICES,
                                     default='active')
-    event_time = models.DateTimeField('event time')
+    event_date = models.DateField('event date')
+    event_time = models.TimeField('event time')
     event_create_time = models.DateTimeField(auto_now_add=True)
     event_detail = models.TextField(blank=True)
     event_view_count = models.PositiveSmallIntegerField(default=0)
