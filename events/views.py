@@ -21,7 +21,7 @@ class EventList(generic.ListView):
 
     def get_queryset(self):
         today = timezone.now()
-        temp = Event.objects.filter(event_time__gt=today)
+        temp = Event.objects.filter(event_date__gt=today)
 #        import pdb;pdb.set_trace()
         return temp.order_by('-event_time')
 
@@ -53,7 +53,6 @@ class EventCreateView(generic.CreateView):
         context['path_current'] = self.request.get_full_path()
 #        import pdb;pdb.set_trace()
         return context
-
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
