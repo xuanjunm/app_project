@@ -1,16 +1,6 @@
 from django.db import models
+from basal.models import *
 from django.contrib.auth.models import User
-
-class Address(models.Model):
-    address_title = models.CharField(max_length=100)
-    address_detail = models.TextField()
-    address_postal_code = models.CharField(max_length=255)
-    address_city = models.CharField(max_length=255)
-    address_region = models.CharField(max_length=255)
-    address_country = models.CharField(max_length=255, default='Canada')
-
-    def __unicode__(self):
-        return self.address_title
 
 class Event(models.Model):
     EVENT_TYPE_CHOICES = (
