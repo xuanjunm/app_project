@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block h2 %}Dashboard of </span>{{ user.username }}{% endblock %}
 {% block main %}
-<ul>
+<ul class='row'>
     <li class='row'><span class='field_label four columns'>username: </span>
     {{ user.username }}</li>
     <li class='row'><span class='field_label four columns'>last name: </span>
@@ -21,4 +21,7 @@
     <li class='row'><span class='field_label four columns'>
         description: </span>{{ user_profile.user_description }}</li>
 </ul>
+<div class='row'>
+    <a href='{% url 'basal:user_update' %}'>update profile</a>
+</div>
 {% endblock %}
