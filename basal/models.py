@@ -15,18 +15,22 @@ class UserProfile(models.Model):
     user_description = models.TextField(blank=True)
     user_nickname = models.CharField(blank=True, max_length=255)
 
+    def __unicode__(self):
+        return self.user.username
+
 class UserFriendAttribute(models.Model):
     fk_friend_a_user = models.ForeignKey(User, related_name='friend_a')
     fk_friend_b_user = models.ForeignKey(User, related_name='friend_b')
 
-def create_user_profile(sender, **kwargs):
-    """
-    A Signal for hooking up automatic ''UserProfile'' creation.
-    """
-    if kwargs.get('created') is True:
-        UserProfile.objects.create(user=kwargs.get('instance'))
+#def create_user_profile(sender, **kwargs):
+#    """
+#    A Signal for hooking up automatic ''UserProfile'' creation.
+#    """
+#    if kwargs.get('created') is True:
+#        import pdb;pdb.set_trace()
+        #UserProfile.objects.create(user=kwargs.get('instance'))
 
 models.signals.post_save.connect(create_api_key, sender=User)
-models.signals.post_save.connect(create_user_profile, sender=User)
+#models.signals.post_save.connect(create_user_profile, sender=User)
 
 

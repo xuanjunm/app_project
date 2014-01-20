@@ -21,12 +21,12 @@ class DashboardView(generic.TemplateView):
         context = super(DashboardView, self).get_context_data(**kwargs)
 
         try:
-            user = UserProfile.objects.get(user=self.request.user.id)
+            user_profile = UserProfile.objects.get(user=self.request.user.id)
         except UserProfile.DoesNotExist:
-            user = UserProfile(user=self.request.user)
-            user.save()
+            user_profile = UserProfile(user=self.request.user)
+            user_profile.save()
 
-        context['user_profile'] = user
+        context['user_profile'] = user_profile
         return context
 
     @method_decorator(login_required)
