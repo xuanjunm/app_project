@@ -170,4 +170,4 @@ LOGGING = {
 
 LOGIN_REDIRECT_URL = 'basal:dashboard'
 LOGIN_URL = 'basal:user_login'
-AUTH_PROFILE_MODULE = 'basal.UserProfile'
+AUTH_USER_MODEL = 'basal.CustomUser'
