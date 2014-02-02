@@ -4,7 +4,6 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
 
 # import models
-from django.contrib.auth.models import User
 from .models import *
 
 # Handles view authorizations
@@ -21,17 +20,17 @@ from .forms import *
 class DashboardView(generic.TemplateView):
     template_name = 'basal/dashboard.html'
 
-    def get_context_data(self, **kwargs):
-        context = super(DashboardView, self).get_context_data(**kwargs)
+#    def get_context_data(self, **kwargs):
+#        context = super(DashboardView, self).get_context_data(**kwargs)
+#
+#        try:
+#            user_profile = UserProfile.objects.get(user=self.request.user.id)
+#        except UserProfile.DoesNotExist:
+#            user_profile = UserProfile(user=self.request.user)
+#            user_profile.save()
 
-        try:
-            user_profile = UserProfile.objects.get(user=self.request.user.id)
-        except UserProfile.DoesNotExist:
-            user_profile = UserProfile(user=self.request.user)
-            user_profile.save()
-
-        context['user_profile'] = user_profile
-        return context
+#        context['user_profile'] = user_profile
+#        return context
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
@@ -47,15 +46,15 @@ class UserCreateView(generic.FormView):
                                        user_description='',
                                        user_nickname='')
         new_user_profile.save()
-
         new_user = authenticate(username=self.request.POST['username'],
                                 password=self.request.POST['password1'])
+
         login(self.request, new_user)
         return HttpResponseRedirect(reverse('basal:dashboard'))
 
 class UserUpdateView(generic.UpdateView):
     template_name = 'basal/user_update.html'
-    form_class = UserProfileUpdateForm
+    form_class = UserUpdateForm
 #    form_class_2 = UserProfileUpdateForm
 
 #    def post(self, request, *args, **kwargs):

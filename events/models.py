@@ -1,6 +1,5 @@
 from django.db import models
 from basal.models import *
-from django.contrib.auth.models import User
 
 class Event(models.Model):
     EVENT_TYPE_CHOICES = (
@@ -28,11 +27,11 @@ class Event(models.Model):
     event_rsvp = models.PositiveSmallIntegerField(default=0)
     event_like = models.PositiveSmallIntegerField(default=0)
     event_recent_update = models.DateTimeField(auto_now_add=True)
-    fk_event_poster_user = models.ForeignKey(User, 
+    fk_event_poster_user = models.ForeignKey(CustomUser, 
                                              verbose_name='Event Poster')
-    fk_address = models.ForeignKey(Address,
-                                   verbose_name='Event Location',
-                                   unique=False)
+#    fk_address = models.ForeignKey(Address,
+###                                   verbose_name='Event Location',
+  ###                                 unique=False)
 
     def is_posted_by(self, user):
         return self.fk_event_poster_user==user
@@ -41,7 +40,7 @@ class Event(models.Model):
         return self.event_title
 
 class EventSubscription(models.Model):
-    fk_subscriber_user = models.ForeignKey(User)
+    fk_subscriber_user = models.ForeignKey(CustomUser)
     fk_subscribed_event = models.ForeignKey(Event)
 
     def __unicode__(self):
@@ -51,7 +50,7 @@ class EventComment(models.Model):
     comment_detail = models.TextField()
     comment_post_time = models.DateTimeField(auto_now_add=True)
     fk_event = models.ForeignKey(Event)
-    fk_comment_poster_user = models.ForeignKey(User)
+    fk_comment_poster_user = models.ForeignKey(CustomUser)
 
     def __unicode__(self):
         return self.fk_comment_poster_event

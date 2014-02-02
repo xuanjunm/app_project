@@ -96,41 +96,41 @@ class EventDeleteView(generic.DeleteView):
     def dispatch(self, *args, **kwargs):
         return super(EventDeleteView, self).dispatch(*args, **kwargs)
 
-class AddressDetailView(generic.DetailView):
-    template_name = 'events/address_detail.html'
-    model = Address
-
-    def get_context_data(self, **kwargs):
-        context = super(AddressDetailView, self).get_context_data(**kwargs)
-        if self.request.GET.get('path_from'):
-            context['path_from'] = self.request.GET.get('path_from')
-
-        return context
-
-class AddressCreateView(generic.CreateView):
-    template_name = 'events/address_create.html'
-    model = Address
-
-    def get_success_url(self):
-        return self.request.POST.get('path_from')
-
-    def get_context_data(self, **kwargs):
-        context = super(AddressCreateView, self).get_context_data(**kwargs)
-        if self.request.GET.get('path_from'):
-            context['path_from'] = self.request.GET.get('path_from')
-
-        return context
-
-class AddressUpdateView(generic.UpdateView):
-    template_name = 'events/address_update.html'
-    model = Address
-
-    def get_success_url(self):
-        return self.request.POST.get('path_from')
-
-    def get_context_data(self, **kwargs):
-        context = super(AddressUpdateView, self).get_context_data(**kwargs)
-        if self.request.GET.get('path_from'):
-            context['path_from'] = self.request.GET.get('path_from')
-
-        return context
+#class AddressDetailView(generic.DetailView):
+#    template_name = 'events/address_detail.html'
+#    model = Address
+#
+#    def get_context_data(self, **kwargs):
+#        context = super(AddressDetailView, self).get_context_data(**kwargs)
+#        if self.request.GET.get('path_from'):
+#            context['path_from'] = self.request.GET.get('path_from')
+#
+#        return context
+#
+#class AddressCreateView(generic.CreateView):
+#    template_name = 'events/address_create.html'
+#    model = Address
+#
+#    def get_success_url(self):
+#        return self.request.POST.get('path_from')
+#
+#    def get_context_data(self, **kwargs):
+#        context = super(AddressCreateView, self).get_context_data(**kwargs)
+#        if self.request.GET.get('path_from'):
+#            context['path_from'] = self.request.GET.get('path_from')
+#
+#        return context
+#
+#class AddressUpdateView(generic.UpdateView):
+#    template_name = 'events/address_update.html'
+#    model = Address
+#
+#    def get_success_url(self):
+#        return self.request.POST.get('path_from')
+#
+#    def get_context_data(self, **kwargs):
+#        context = super(AddressUpdateView, self).get_context_data(**kwargs)
+#        if self.request.GET.get('path_from'):
+#            context['path_from'] = self.request.GET.get('path_from')
+#
+#        return context

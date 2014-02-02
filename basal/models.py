@@ -1,59 +1,57 @@
 from django.db import models
-from django.contrib.auth.models import User
-from tastypie.models import create_api_key
+from django.utils import timezone
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 
-class Address(models.Model):
-    address_title = models.CharField(max_length=100)
-    address_detail = models.TextField()
-    address_postal_code = models.CharField(blank=True, max_length=255)
-    address_city = models.CharField(blank=True, max_length=255)
-    address_region = models.CharField(blank=True, max_length=255)
-    address_country = models.CharField(blank=True, 
-                                       max_length=255, 
-                                       default='Canada')
+class CustomUserManager(BaseUserManager):
+    def _create_user(self, username, password, 
+                     is_staff, is_superuser, **extra_fields): 
+        now = timezone.now()
+#        if not email:
+#            raise ValueError('The given email must be set')
+#        email = self.normalize_email(email)
+        user = self.model(username=username,
+                            is_staff=is_staff, is_active=True,
+                            is_superuser=is_superuser, last_login=now,
+                            date_joined=now, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
 
-    def __unicode__(self):
-        return self.address_title
+    def create_user(self, username, password=None, **extra_fields):
+        return self._create_user(username, password, False, False,
+                                 **extra_fields)
 
-class UserAddressAttribute(models.Model):
-    fk_user_id = models.ForeignKey(User)
-    fk_address_id = models.ForeignKey(Address)
+    def create_superuser(self, username, password, **extra_fields):
+        return self._create_user(username, password, True, True, 
+                                    **extra_fields)
 
-    def __unicode__(self):
-        return "%s - %s" % (self.fk_user_id, self.fk_address_id)
+class CustomUser(AbstractBaseUser, PermissionsMixin):
+    username = models.CharField(max_length=20, unique=True)
+    email = models.EmailField(max_length=100, unique=True)
+    first_name = models.CharField(max_length=50, blank=True)
+    last_name = models.CharField(max_length=50, blank=True)
+    is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    date_joined = models.DateTimeField(default=timezone.now)
+    location = models.CharField(blank=True, max_length=50)
+    about_me = models.TextField(blank=True)
 
-class UserProfile(models.Model):
-    USER_GENDER_CHOICES = (
-            ('male', 'male'),
-            ('female', 'female'),
-            )
+    objects = CustomUserManager()
 
-    user = models.OneToOneField(User, related_name='profile')
-    user_gender = models.CharField(max_length=10,
-            choices=USER_GENDER_CHOICES,
-            blank=True)
-    user_description = models.TextField(blank=True)
-    user_nickname = models.CharField(blank=True, max_length=255)
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = []
 
-    def __unicode__(self):
-        return self.user.username
+    class Meta:
+        verbose_name = 'user'
+        verbose_name_plural = 'users'
 
-class UserFriendAttribute(models.Model):
-    fk_friend_a_user = models.ForeignKey(User, related_name='friend_a')
-    fk_friend_b_user = models.ForeignKey(User, related_name='friend_b')
+    def get_absolute_url(self):
+        return "/users/%s/" % (self.username)
 
-    def __unicode__(self):
-        return "%s - %s" % (self.fk_friend_a_user, self.fk_friend_b_user)
+    def get_full_name(self):
+        return '%s %s' % (self.first_name, self.last_name)
 
-#def create_user_profile(sender, **kwargs):
-#    """
-#    A Signal for hooking up automatic ''UserProfile'' creation.
-#    """
-#    if kwargs.get('created') is True:
-#        import pdb;pdb.set_trace()
-        #UserProfile.objects.create(user=kwargs.get('instance'))
-
-models.signals.post_save.connect(create_api_key, sender=User)
-#models.signals.post_save.connect(create_user_profile, sender=User)
+    def get_short_name(self):
+        return self.first_name
 
 

@@ -6,8 +6,8 @@ from .models import *
 #    can_delete = False
 
 class EventAdmin(admin.ModelAdmin):
-    list_display = ['event_title', 'event_type', 'event_date', 
-                    'fk_event_poster_user', 'event_status', 'fk_address']
+#    list_display = ['event_title', 'event_type', 'event_date', 
+#                    'fk_event_poster_user', 'event_status', 'fk_address']
     list_filter = ['event_date']
     date_hierarchy = 'event_date'
 #    inlines = [AddressInline]
