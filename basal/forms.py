@@ -18,8 +18,9 @@ class CustomUserCreationForm(UserCreationForm):
             self.error_messages['duplicate_username'],
             code='duplicate_username',
         )
-        class Meta:
-            model = CustomUser
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'email', 'password1', 'password2']
 
 class CustomUserChangeForm(UserChangeForm):
     """
@@ -40,4 +41,6 @@ class UserUpdateForm(forms.ModelForm):
     """
     class Meta:
         model = CustomUser
-        fields = ['user_first_name', 'user_last_name', 'email']
+        exclude = ['password', 'last_login', 'is_superuser', 
+                   'last_login', 'date_joined', 'groups', 
+                   'is_staff', 'is_active', 'user_permissions']

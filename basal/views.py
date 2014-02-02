@@ -10,8 +10,7 @@ from .models import *
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 
-# CreateUser
-from django.contrib.auth.forms import UserCreationForm
+# User
 from django.contrib.auth import login, authenticate
 
 # UserUpdate
@@ -36,63 +35,64 @@ class DashboardView(generic.TemplateView):
     def dispatch(self, *args, **kwargs):
         return super(DashboardView, self).dispatch(*args, **kwargs)
 
-class UserCreateView(generic.FormView):
+class UserCreateView(generic.CreateView):
     template_name = 'basal/user_create.html'
-    form_class = UserCreationForm
+    form_class = CustomUserCreationForm
 
     def form_valid(self, form):
         user = form.save()
-        new_user_profile = UserProfile(user=user, user_gender='', 
-                                       user_description='',
-                                       user_nickname='')
-        new_user_profile.save()
-        new_user = authenticate(username=self.request.POST['username'],
-                                password=self.request.POST['password1'])
 
+        new_user = authenticate(username=self.request.POST['username'],
+                                 password=self.request.POST['password1'])
         login(self.request, new_user)
         return HttpResponseRedirect(reverse('basal:dashboard'))
 
 class UserUpdateView(generic.UpdateView):
     template_name = 'basal/user_update.html'
     form_class = UserUpdateForm
-#    form_class_2 = UserProfileUpdateForm
-
-#    def post(self, request, *args, **kwargs):
-#        update_user = User.objects.get(id=request.user.id)
-#        form = self.get_form(self.form_class)
-#        form = self.form_class({'instance':update_user,
-#                                'data':request.POST})
-#        form_2 = self.get_form(self.form_class_2)
-
-#        import pdb;pdb.set_trace()
-
-#        if form.is_valid():# and form_2.is_valid():
-    #        form_data = form.save(commit=False)
-    #        form_data.save()
-#            form.save()
-#            return HttpResponseRedirect(self.get_success_url())
-#        else:
-#            return self.render_to_response(
-#                    self.get_context_data(form=form, form_2=form_2))
-        
 
     def get_object(self, queryset=None):
-        obj = get_object_or_404(UserProfile, user=self.request.user)
+        obj = get_object_or_404(CustomUser, pk=self.request.user.pk)
         return obj
 
     def get_success_url(self):
         return reverse('basal:dashboard')
 
-#    def get_context_data(self, **kwargs):
-#        context = super(UserUpdateView, self).get_context_data(**kwargs)
+class AddressDetailView(generic.DetailView):
+    template_name = 'basal/address_detail.html'
+    model = Address
 
-#        if 'form_2' not in context:
-#            try:
-#                user_profile = UserProfile.objects.get(user=self.request.user)
-#            except UserProfile.DoesNotExist:
-#                user_profile = UserProfile(user=self.request.user)
-#                user_profile.save()
-    
-#            context['form_2'] = self.form_class_2(instance=user_profile)
-#        return context
+    def get_context_data(self, **kwargs):
+        context = super(AddressDetailView, self).get_context_data(**kwargs)
+        if self.request.GET.get('path_from'):
+            context['path_from'] = self.request.GET.get('path_from')
 
+        return context
+
+class AddressCreateView(generic.CreateView):
+    template_name = 'basal/address_create.html'
+    model = Address
+
+    def get_success_url(self):
+        return self.request.POST.get('path_from')
+
+    def get_context_data(self, **kwargs):
+        context = super(AddressCreateView, self).get_context_data(**kwargs)
+        if self.request.GET.get('path_from'):
+            context['path_from'] = self.request.GET.get('path_from')
+
+        return context
+
+class AddressUpdateView(generic.UpdateView):
+    template_name = 'basal/address_update.html'
+    model = Address
+
+    def get_success_url(self):
+        return self.request.POST.get('path_from')
+
+    def get_context_data(self, **kwargs):
+        context = super(AddressUpdateView, self).get_context_data(**kwargs)
+        if self.request.GET.get('path_from'):
+            context['path_from'] = self.request.GET.get('path_from')
+
+        return context

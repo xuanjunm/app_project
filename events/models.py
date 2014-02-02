@@ -13,9 +13,10 @@ class Event(models.Model):
     )
 
     event_title = models.CharField(max_length=255)
-    event_type = models.CharField(max_length=10,
-                            choices=EVENT_TYPE_CHOICES)
-    event_status = models.CharField(max_length=10,
+    event_type = models.CharField(max_length=255,
+                            choices=EVENT_TYPE_CHOICES,
+                            default='public')
+    event_status = models.CharField(max_length=255,
                                     choices=EVENT_STATUS_CHOICES,
                                     default='active')
     event_date = models.DateField('event date')
@@ -29,9 +30,9 @@ class Event(models.Model):
     event_recent_update = models.DateTimeField(auto_now_add=True)
     fk_event_poster_user = models.ForeignKey(CustomUser, 
                                              verbose_name='Event Poster')
-#    fk_address = models.ForeignKey(Address,
-###                                   verbose_name='Event Location',
-  ###                                 unique=False)
+    fk_address = models.ForeignKey(Address,
+                                   verbose_name='Event Location',
+                                   unique=False)
 
     def is_posted_by(self, user):
         return self.fk_event_poster_user==user
