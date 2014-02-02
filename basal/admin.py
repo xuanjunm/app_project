@@ -12,15 +12,15 @@ class CustomUserAdmin(UserAdmin):
     # that reference the removed 'username' field
     fieldsets = (
         (None, {
-            'fields': ('username', 'password')
+            'fields': ('username', 'email', 'password')
         }),
         ('Personal info', {
-            'fields': ('first_name', 'last_name', 'email', 
-                        'location', 'about_me')
+            'fields': ('user_first_name', 'user_last_name', 'user_gender', 
+                       'user_description', 'user_nickname')
         }),
         ('Permissions', {
             'fields': ('is_active', 'is_staff', 'is_superuser',
-                        'groups', 'user_permissions')
+                       'groups', 'user_permissions')
         }),
         ('Important dates', {
             'fields': ('last_login', 'date_joined')
@@ -36,8 +36,10 @@ class CustomUserAdmin(UserAdmin):
 
     form = CustomUserChangeForm
     add_form = CustomUserCreationForm
-    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff')
-    search_fields = ('username', 'email', 'first_name', 'last_name')
+    list_display = ('username', 'email', 'user_first_name', 
+                    'user_last_name', 'is_staff')
+    search_fields = ('username', 'email', 'user_first_name', 
+                     'user_last_name')
     ordering = ('username',)
 
 admin.site.register(CustomUser, CustomUserAdmin)
