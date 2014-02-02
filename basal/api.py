@@ -68,7 +68,7 @@ class UserCustomAuthorization(Authorization):
     def delete_list(self, object_list, bundle):
         return Unauthorized('Disabled')
 
-   def create_detail(self, object_list, bundle):
+    def create_detail(self, object_list, bundle):
         return Unauthorized('Disabled')
 
     def read_detail(self, object_list, bundle):
