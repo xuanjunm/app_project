@@ -27,7 +27,7 @@ class Event(models.Model):
     event_capacity = models.PositiveSmallIntegerField(blank=True, null=True)
     event_rsvp = models.PositiveSmallIntegerField(default=0)
     event_like = models.PositiveSmallIntegerField(default=0)
-    event_recent_update = models.DateTimeField(auto_now_add=True)
+    event_recent_update = models.DateTimeField(auto_now=True)
     fk_event_poster_user = models.ForeignKey(CustomUser, 
                                              verbose_name='Event Poster')
     fk_address = models.ForeignKey(Address,
@@ -35,7 +35,7 @@ class Event(models.Model):
                                    unique=False)
 
     def is_posted_by(self, user):
-        return self.fk_event_poster_user==user
+        return self.fk_event_poster_user == user
 
     def __unicode__(self):
         return self.event_title
@@ -57,7 +57,7 @@ class EventComment(models.Model):
         return self.fk_comment_poster_event
 
 class Tag(models.Model):
-    tag_name = models.CharField(max_length=255)
+    tag_name = models.CharField(unique=True, max_length=255)
 
     def __unicode__(self):
         return self.tag_name

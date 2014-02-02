@@ -55,27 +55,30 @@ class CustomAuthentication(ApiKeyAuthentication):
         return True
 
 class UserCustomAuthorization(Authorization):
+    def create_list(self, object_list, bundle):
+        return Unauthorized('Disabled')
+
     def read_list(self, object_list, bundle):
 #       import pdb;pdb.set_trace()
        return object_list
 
+    def update_list(self, object_list, bundle):
+        return Unauthorized('Disabled')
+
+    def delete_list(self, object_list, bundle):
+        return Unauthorized('Disabled')
+
+   def create_detail(self, object_list, bundle):
+        return Unauthorized('Disabled')
+
     def read_detail(self, object_list, bundle):
        return bundle.obj == bundle.request.user 
-
-    def create_detail(self, object_list, bundle):
-        return Unauthorized('Sorry no create_detail')
-
-    def update_list(self, object_list, bundle):
-        return Unauthorized('Sorry, no update list')
-
+ 
     def update_detail(self, object_list, bundle):
         return bundle.obj == bundle.request.user
 
     def delete_detail(self, object_list, bundle):
-        return Unauthorized('Sorry, no deletes')
-
-    def delete_list(self, object_list, bundle):
-        return Unauthorized('Sorry, no deletes')
+        return Unauthorized('Disabled')
 
 class UserResource(ModelResource):
     class Meta:

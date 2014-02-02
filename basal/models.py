@@ -38,7 +38,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     user_first_name = models.CharField(max_length=255, blank=True)
     user_last_name = models.CharField(max_length=255, blank=True)
     email = models.EmailField(max_length=255, unique=True)
-    date_joined = models.DateTimeField(default=timezone.now)
+    date_joined = models.DateTimeField(auto_now_add=True)
     user_gender = models.CharField(max_length=255,
                                    choices=USER_GENDER_CHOICES,
                                    blank=True)
@@ -67,7 +67,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return self.user_first_name
 
     def __unicode__(self):
-        return self.get_full_name()
+        return self.username
 
 class Address(models.Model):
     address_title = models.CharField(max_length=255)
@@ -83,8 +83,8 @@ class Address(models.Model):
         return self.address_title
 
 class UserAddressAttribute(models.Model):
-    fk_user_id = models.ForeignKey(CustomUser)
-    fk_address_id = models.ForeignKey(Address)
+    fk_user = models.ForeignKey(CustomUser)
+    fk_address = models.ForeignKey(Address)
 
     def __unicode__(self):
         return "%s - %s" % (self.fk_user_id, self.fk_address_id)
