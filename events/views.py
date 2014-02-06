@@ -59,7 +59,7 @@ class EventCreateView(generic.CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(EventCreateView, self).get_context_data(**kwargs)
-        context['path_current'] = self.request.get_full_path()
+        context['next'] = self.request.get_full_path()
 #        import pdb;pdb.set_trace()
         return context
 
@@ -67,7 +67,7 @@ class EventCreateView(generic.CreateView):
     def dispatch(self, *args, **kwargs):
         return super(EventCreateView, self).dispatch(*args, **kwargs)
 
-def authorized_to_update_decorator(fn):
+def authorized_to_update_event_decorator(fn):
     # a decorator to check login_user is the owner of an event
     def decorator(request, *args, **kwargs):
         if Event.objects.get(pk=kwargs['pk']).is_posted_by(request.user):
@@ -86,11 +86,11 @@ class EventUpdateView(generic.UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super(EventUpdateView, self).get_context_data(**kwargs)
-        context['path_current'] = self.request.get_full_path()
+        context['next_path'] = self.request.get_full_path()
 #        import pdb;pdb.set_trace()
         return context
 
-    @method_decorator(authorized_to_update_decorator)
+    @method_decorator(authorized_to_update_event_decorator)
     def dispatch(self, *args, **kwargs):
         return super(EventUpdateView, self).dispatch(*args, **kwargs)
 
@@ -101,7 +101,7 @@ class EventDeleteView(generic.DeleteView):
     def get_success_url(self):
         return reverse('events:event_list')
 
-    @method_decorator(authorized_to_update_decorator)
+    @method_decorator(authorized_to_update_event_decorator)
     def dispatch(self, *args, **kwargs):
         return super(EventDeleteView, self).dispatch(*args, **kwargs)
 

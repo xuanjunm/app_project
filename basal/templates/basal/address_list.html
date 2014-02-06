@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block h2 %}My Address List{% endblock %}
+{% block main %}
+{% if address_list %}
+<ul>
+    {% for address in address_list %}
+    <div class='row'>
+        <div class='alpha nine columns' id='address_wrapper'>
+            <h5 class='reset'>{{ address.address_title }}</h5>
+            <p class='reset'>{{ address.address_detail }}</p>
+            <p class='reset'>{{ address.address_city }}, 
+            {{ address.address_region }}</p> 
+            <p class='reset'>{{ address.address_country }} 
+            {{ address.address_postal_code }}</p>
+            <hr />
+            <div class='row'>
+                <a class='' href='{% url 'basal:address_update' address.id %}?next={{ next }}'>update address</a>
+                <a class='' href='{% url 'basal:address_delete' address.id %}?next={{ next }}'>delete address</a>
+            </div>
+
+        </div>
+    </div>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No Address are available.</p>
+{% endif %}
+
+<a class='row' href='{% url 'basal:address_create' %}?next={{ next }}' title='create address link'>Create a new address</a>
+<a class='row' href='{% url 'basal:dashboard' %}'>back to Dashboard</a> 
+{% endblock %}
