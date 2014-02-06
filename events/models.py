@@ -36,16 +36,21 @@ class Event(models.Model):
 
     def is_posted_by(self, user):
         return self.fk_event_poster_user == user
+    
+    def rsvp(self, user):
+        try:
+            self.eventrsvp_set.get(fk_user=user.id)
+        except EventRSVP.DoesNotExist:
+            return False
+        else:
+            return True
 
     def __unicode__(self):
         return self.event_title
 
-class EventSubscription(models.Model):
-    fk_subscriber_user = models.ForeignKey(CustomUser)
-    fk_subscribed_event = models.ForeignKey(Event)
-
-    def __unicode__(self):
-        return self.fk_subscriber_user
+class EventRSVP(models.Model):
+    fk_user = models.ForeignKey(CustomUser)
+    fk_event = models.ForeignKey(Event)
 
 class EventComment(models.Model):
     comment_detail = models.TextField()

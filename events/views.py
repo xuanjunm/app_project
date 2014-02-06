@@ -29,6 +29,15 @@ class EventDetailView(generic.DetailView):
     model = Event
     template_name = 'events/event_detail.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(EventDetailView, self).get_context_data(**kwargs)
+        c_event = Event.objects.get(pk=self.kwargs['pk'])
+        if (self.request.user) :
+            context['event_owner'] = c_event.is_posted_by(self.request.user)
+            context['event_rsvp'] = c_event.rsvp(self.request.user)
+#        import pdb;pdb.set_trace()
+        return context
+
 class EventCreateView(generic.CreateView):
     template_name = 'events/event_create.html'
     form_class = EventCreateForm
@@ -95,3 +104,32 @@ class EventDeleteView(generic.DeleteView):
     @method_decorator(authorized_to_update_decorator)
     def dispatch(self, *args, **kwargs):
         return super(EventDeleteView, self).dispatch(*args, **kwargs)
+
+@login_required
+def event_rsvp(request, pk):
+#    import pdb;pdb.set_trace()
+    c_event = Event.objects.get(pk=pk)
+    new_rsvp = EventRSVP(fk_user=request.user, fk_event=c_event)
+    new_rsvp.save()
+    return HttpResponseRedirect(reverse('events:event_detail', args=(pk,)))
+
+@login_required
+def event_rsvp_remove(request, pk):
+#    import pdb;pdb.set_trace()
+    c_event = Event.objects.get(pk=pk)
+    c_rsvp = EventRSVP.objects.filter(
+                fk_user=request.user).get(fk_event=c_event)
+    c_rsvp.delete()
+    return HttpResponseRedirect(reverse('events:event_detail', args=(pk,)))
+
+#class SubscriptionListView(generic.ListView):
+#    template_name = 'events/subscription_list.html'
+#    model = EventSubscription
+
+#    def get_queryset(self):
+#        today = timezone.now()
+#        temp = Event.objects.filter(event_date__gt=today)
+#        import pdb;pdb.set_trace()
+#        return temp.order_by('-event_time')
+
+

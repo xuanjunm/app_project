@@ -12,12 +12,12 @@ class EventAdmin(admin.ModelAdmin):
     date_hierarchy = 'event_date'
 #    inlines = [AddressInline]
 
-class EventSubscriptionAdmin(admin.ModelAdmin):
-    list_display = ['fk_subscriber_user', 'fk_subscribed_event']
+class EventRSVPAdmin(admin.ModelAdmin):
+    list_display = ['fk_user', 'fk_event']
 
 class EventCommentAdmin(admin.ModelAdmin):
     list_display = ['fk_comment_poster_user', 'fk_event']
 
 admin.site.register(Event, EventAdmin)
-admin.site.register(EventSubscription, EventSubscriptionAdmin)
+admin.site.register(EventRSVP, EventRSVPAdmin)
 admin.site.register(EventComment, EventCommentAdmin)

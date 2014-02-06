@@ -58,16 +58,16 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = _('users')
 
     def get_absolute_url(self):
-        return "/users/%s/" % (self.username)
+        return '/users/%s/' % (self.username)
 
     def get_full_name(self):
-        return '%s %s' % (self.user_first_name, self.user_last_name)
+        return u'%s %s' % (self.user_first_name, self.user_last_name)
 
     def get_short_name(self):
-        return self.user_first_name
+        return u'%s' % self.user_first_name
 
     def __unicode__(self):
-        return self.username
+        return u'%s' % self.username 
 
 class Address(models.Model):
     address_title = models.CharField(max_length=255)
