@@ -8,6 +8,7 @@ from tastypie.constants import ALL
 from .models import *
 
 from tastypie.http import HttpUnauthorized
+from django.contrib.auth import get_user_model
 
 class CustomAuthentication(ApiKeyAuthentication):
     def is_authenticated(self, request, **kwargs):
@@ -15,9 +16,7 @@ class CustomAuthentication(ApiKeyAuthentication):
         Will try to authenticate User using ApiKey
         If fail, User = None
         """
-
-        from tastypie.compat import User
-
+        User = get_user_model()
         try:
             username, api_key = self.extract_credentials(request)
         except ValueError:
@@ -31,7 +30,7 @@ class CustomAuthentication(ApiKeyAuthentication):
             # user = None, but can still access api
             return True
 #            return self._unauthorized()
-
+        
         try:
             #import pdb;pdb.set_trace()
             user = User.objects.get(username=username)

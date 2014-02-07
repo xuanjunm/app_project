@@ -9,6 +9,7 @@ from tastypie.api import Api
 from events.api import *
 from basal.api import *
 v01_api = Api(api_name='v01')
+v01_api.register(AddressResource())
 v01_api.register(EventResource())
 v01_api.register(UserResource())
 
