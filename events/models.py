@@ -34,7 +34,7 @@ class Event(models.Model):
                                    verbose_name='Event Location',
                                    unique=False)
 
-    def is_posted_by(self, user):
+    def is_owner(self, user):
         return self.fk_event_poster_user == user
     
     def rsvp(self, user):

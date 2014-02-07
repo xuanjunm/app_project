@@ -1,5 +1,5 @@
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from .models import CustomUser
+from .models import *
 from django import forms
 
 class CustomUserCreationForm(UserCreationForm):
@@ -44,3 +44,8 @@ class UserUpdateForm(forms.ModelForm):
         exclude = ['password', 'last_login', 'is_superuser', 
                    'last_login', 'date_joined', 'groups', 
                    'is_staff', 'is_active', 'user_permissions']
+
+class AddressForm(forms.ModelForm):
+    class Meta:
+        model = Address
+        exclude = ['fk_address_owner']

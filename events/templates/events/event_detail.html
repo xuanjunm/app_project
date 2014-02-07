@@ -47,17 +47,22 @@
 </div>
 </div>
 <div class='row'>
+{% if next %}
+<p class='alpha two columns'><a href='{{ next }}'>back</a></p>
+{% else %}
 <p class='alpha two columns'><a href='{% url 'events:event_list' %}'>back to list</a></p>
-{% if event_owner %}
-<p class='alpha two columns'><a href='{% url 'events:event_update' event.id %}'>update event</a></p>
-<p class='alpha two columns'><a href='{% url 'events:event_delete' event.id %}'>delete event</a></p>
 {% endif %}
+{% if event_owner %}
+<p class='alpha two columns'><a href='{% url 'events:event_update' event.id %}?next={{ next }}'>update event</a></p>
+<p class='alpha two columns'><a href='{% url 'events:event_delete' event.id %}?next={{ next }}'>delete event</a></p>
+{% else %}
 {% if event_rsvp %}
 <p class='alpha two columns'>
-    <a href='{% url 'events:event_rsvp_remove' event.id %}'>remove rsvp</a></p>
+<a href='{% url 'events:event_rsvp_remove' event.id %}?next={{ next }}'>remove rsvp</a></p>
 {% else %}
 <p class='alpha two columns'><a href='{% url 'events:event_rsvp' event.id %}'>
     rsvp</a></p>
+{% endif %}
 {% endif %}
 </div>
 {% endblock %}

@@ -12,15 +12,15 @@
     <div class='row alpha'>
         {{ form }}
         <a class='alpha two columns' 
-            href='{% url 'basal:address_create' %}?path_from={{ path_current }}'>create address</a>
+            href='{% url 'basal:address_create' %}?next={{ next }}'>create address</a>
         <div id='address_holder' 
-            data-url='{% url 'basal:address_detail' pk=999 %}?path_from={{ path_current }}'> 
+            data-url='{% url 'basal:address_detail' pk=999 %}?next={{ next }}'> 
         </div>
     </div>
     <div class='row alpha'>
         <div class='three columns alpha'>
             <input name='form' type='submit' value='Update Event' />
-            <a href='{% url 'events:event_list' %}'>Back</a>
+            <a href='{% url 'events:event_detail' event.id %}'>Back</a>
         </div>
     </div>
 </form>

@@ -33,9 +33,11 @@ class EventDetailView(generic.DetailView):
         context = super(EventDetailView, self).get_context_data(**kwargs)
         c_event = Event.objects.get(pk=self.kwargs['pk'])
         if (self.request.user) :
-            context['event_owner'] = c_event.is_posted_by(self.request.user)
+            context['event_owner'] = c_event.is_owner(self.request.user)
             context['event_rsvp'] = c_event.rsvp(self.request.user)
 #        import pdb;pdb.set_trace()
+        if self.request.GET.get('next'):
+            context['next'] = self.request.GET.get('next')
         return context
 
 class EventCreateView(generic.CreateView):
@@ -57,6 +59,12 @@ class EventCreateView(generic.CreateView):
     def get_success_url(self):
         return reverse('events:event_list')
 
+    def get_form(self, form_class):
+        form = super(EventCreateView, self).get_form(form_class)
+        c_address = Address.objects.filter(fk_address_owner=self.request.user)
+        form.fields['fk_address'].queryset = c_address 
+        return form
+
     def get_context_data(self, **kwargs):
         context = super(EventCreateView, self).get_context_data(**kwargs)
         context['next'] = self.request.get_full_path()
@@ -70,7 +78,7 @@ class EventCreateView(generic.CreateView):
 def authorized_to_update_event_decorator(fn):
     # a decorator to check login_user is the owner of an event
     def decorator(request, *args, **kwargs):
-        if Event.objects.get(pk=kwargs['pk']).is_posted_by(request.user):
+        if Event.objects.get(pk=kwargs['pk']).is_owner(request.user):
             return fn(request, *args, **kwargs)
         else:
             return HttpResponseRedirect(reverse('basal:user_login'))
@@ -84,9 +92,15 @@ class EventUpdateView(generic.UpdateView):
     def get_success_url(self):
         return reverse('events:event_detail', args=(self.get_object().id,))
 
+    def get_form(self, form_class):
+        form = super(EventUpdateView, self).get_form(form_class)
+        c_address = Address.objects.filter(fk_address_owner=self.request.user)
+        form.fields['fk_address'].queryset = c_address 
+        return form
+
     def get_context_data(self, **kwargs):
         context = super(EventUpdateView, self).get_context_data(**kwargs)
-        context['next_path'] = self.request.get_full_path()
+        context['next'] = self.request.get_full_path()
 #        import pdb;pdb.set_trace()
         return context
 
@@ -115,21 +129,11 @@ def event_rsvp(request, pk):
 
 @login_required
 def event_rsvp_remove(request, pk):
-#    import pdb;pdb.set_trace()
     c_event = Event.objects.get(pk=pk)
     c_rsvp = EventRSVP.objects.filter(
                 fk_user=request.user).get(fk_event=c_event)
     c_rsvp.delete()
-    return HttpResponseRedirect(reverse('events:event_detail', args=(pk,)))
-
-#class SubscriptionListView(generic.ListView):
-#    template_name = 'events/subscription_list.html'
-#    model = EventSubscription
-
-#    def get_queryset(self):
-#        today = timezone.now()
-#        temp = Event.objects.filter(event_date__gt=today)
-#        import pdb;pdb.set_trace()
-#        return temp.order_by('-event_time')
-
-
+    if request.GET.get('next'):
+        return HttpResponseRedirect(request.GET.get('next'))
+    else:
+        return HttpResponseRedirect(reverse('events:event_detail', args=(pk,)))

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block h2 %}My RSVPs{% endblock %}
+{% block main %}
+{% if eventrsvp_list %}
+<ul>
+    {% for eventrsvp in eventrsvp_list %}
+    <li><a href='{% url 'events:event_detail' eventrsvp.fk_event.id %}?next={{ next }}'>
+        {{ eventrsvp.fk_event.event_title }}</a></li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No rsvp are available.</p>
+{% endif %}
+
+<a href='{% url 'basal:dashboard' %}'>back</a>
+{% endblock %}

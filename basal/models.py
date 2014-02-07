@@ -78,23 +78,27 @@ class Address(models.Model):
     address_country = models.CharField(blank=True, 
                                        max_length=255, 
                                        default='Canada')
+    fk_address_owner = models.ForeignKey(CustomUser)
+
+    def is_owner(self, user):
+        return self.fk_address_owner == user
 
     def __unicode__(self):
-        return self.address_title
+        return u'%s - %s' % (self.fk_address_owner, self.address_title)
 
-class UserAddressAttribute(models.Model):
-    fk_user = models.ForeignKey(CustomUser)
-    fk_address = models.ForeignKey(Address)
-
-    def __unicode__(self):
-        return "%s - %s" % (self.fk_user_id, self.fk_address_id)
+#class UserAddressAttribute(models.Model):
+#    fk_user = models.ForeignKey(CustomUser)
+#    fk_address = models.ForeignKey(Address)
+#
+##    def __unicode__(self):
+#        return "%s - %s" % (self.fk_user_id, self.fk_address_id)
 
 class UserFriendAttribute(models.Model):
     fk_friend_a_user = models.ForeignKey(CustomUser, related_name='friend_a')
     fk_friend_b_user = models.ForeignKey(CustomUser, related_name='friend_b')
 
     def __unicode__(self):
-        return "%s - %s" % (self.fk_friend_a_user, self.fk_friend_b_user)
+        return '%s - %s' % (self.fk_friend_a_user, self.fk_friend_b_user)
                                         
 #def create_user_profile(sender, **kwargs):        
 #    """
