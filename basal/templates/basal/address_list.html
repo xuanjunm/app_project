@@ -14,8 +14,8 @@
             {{ address.address_postal_code }}</p>
             <hr />
             <div class='row'>
-                <a class='' href='{% url 'basal:address_update' address.id %}?next={{ next }}'>update address</a>
-                <a class='' href='{% url 'basal:address_delete' address.id %}?next={{ next }}'>delete address</a>
+                <a class='' href='{% url 'basal:address_update' address.id %}?back={{ current_path }}'>update address</a>
+                <a class='' href='{% url 'basal:address_delete' address.id %}?back={{ current_path }}'>delete address</a>
             </div>
 
         </div>
@@ -26,6 +26,6 @@
 <p>No Address are available.</p>
 {% endif %}
 
-<a class='row' href='{% url 'basal:address_create' %}?next={{ next }}' title='create address link'>Create a new address</a>
+<a class='row' href='{% url 'basal:address_create' %}?back={{ current_path }}' title='create address link'>Create a new address</a>
 <a class='row' href='{% url 'basal:dashboard' %}'>back to Dashboard</a> 
 {% endblock %}

@@ -36,8 +36,9 @@ class EventDetailView(generic.DetailView):
             context['event_owner'] = c_event.is_owner(self.request.user)
             context['event_rsvp'] = c_event.rsvp(self.request.user)
 #        import pdb;pdb.set_trace()
-        if self.request.GET.get('next'):
-            context['next'] = self.request.GET.get('next')
+        if self.request.GET.get('back'):
+            context['back'] = self.request.GET.get('back')
+        context['current_path'] = self.request.get_full_path()
         return context
 
 class EventCreateView(generic.CreateView):
@@ -67,7 +68,7 @@ class EventCreateView(generic.CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(EventCreateView, self).get_context_data(**kwargs)
-        context['next'] = self.request.get_full_path()
+        context['current_path'] = self.request.get_full_path()
 #        import pdb;pdb.set_trace()
         return context
 
@@ -90,7 +91,7 @@ class EventUpdateView(generic.UpdateView):
     template_name = 'events/event_update.html'
 
     def get_success_url(self):
-        return reverse('events:event_detail', args=(self.get_object().id,))
+        return self.request.POST.get('back')
 
     def get_form(self, form_class):
         form = super(EventUpdateView, self).get_form(form_class)
@@ -100,7 +101,9 @@ class EventUpdateView(generic.UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super(EventUpdateView, self).get_context_data(**kwargs)
-        context['next'] = self.request.get_full_path()
+        if self.request.GET.get('back'):
+            context['back'] = self.request.GET.get('back')
+        context['current_path'] = self.request.get_full_path() 
 #        import pdb;pdb.set_trace()
         return context
 
@@ -113,11 +116,19 @@ class EventDeleteView(generic.DeleteView):
     template_name = 'events/event_delete.html'
 
     def get_success_url(self):
-        return reverse('events:event_list')
+        return self.request.POST.get('back')
 
     @method_decorator(authorized_to_update_event_decorator)
     def dispatch(self, *args, **kwargs):
         return super(EventDeleteView, self).dispatch(*args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(EventDeleteView, self).get_context_data(**kwargs)
+        if self.request.GET.get('back'):
+            context['back'] = self.request.GET.get('back')
+#        import pdb;pdb.set_trace()
+        return context
+
 
 @login_required
 def event_rsvp(request, pk):
@@ -125,7 +136,10 @@ def event_rsvp(request, pk):
     c_event = Event.objects.get(pk=pk)
     new_rsvp = EventRSVP(fk_user=request.user, fk_event=c_event)
     new_rsvp.save()
-    return HttpResponseRedirect(reverse('events:event_detail', args=(pk,)))
+    if request.GET.get('back'):
+        return HttpResponseRedirect(request.GET.get('back'))
+    else:
+        return HttpResponseRedirect(reverse('events:event_detail', args=(pk,)))
 
 @login_required
 def event_rsvp_remove(request, pk):
@@ -133,7 +147,7 @@ def event_rsvp_remove(request, pk):
     c_rsvp = EventRSVP.objects.filter(
                 fk_user=request.user).get(fk_event=c_event)
     c_rsvp.delete()
-    if request.GET.get('next'):
-        return HttpResponseRedirect(request.GET.get('next'))
+    if request.GET.get('back'):
+        return HttpResponseRedirect(request.GET.get('back'))
     else:
         return HttpResponseRedirect(reverse('events:event_detail', args=(pk,)))

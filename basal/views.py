@@ -59,7 +59,7 @@ class MyRSVPsView(generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super(MyRSVPsView, self).get_context_data(**kwargs)
-        context['next'] = self.request.get_full_path()
+        context['current_path'] = self.request.get_full_path()
         return context
 
     @method_decorator(login_required)
@@ -75,7 +75,7 @@ class MyEventsView(generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super(MyEventsView, self).get_context_data(**kwargs)
-        context['next'] = self.request.get_full_path()
+        context['current_path'] = self.request.get_full_path()
         return context
 
     @method_decorator(login_required)
@@ -100,7 +100,7 @@ class AddressListView(generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super(AddressListView, self).get_context_data(**kwargs)
-        context['next'] = self.request.get_full_path()
+        context['current_path'] = self.request.get_full_path()
         return context
 
     @method_decorator(login_required)
@@ -113,13 +113,13 @@ class AddressDetailView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(AddressDetailView, self).get_context_data(**kwargs)
-        if self.request.GET.get('next'):
-            context['next'] = self.request.GET.get('next')
+        if self.request.GET.get('back'):
+            context['back'] = self.request.GET.get('back')
         return context
 
     @method_decorator(authorized_to_update_address_decorator)
     def dispatch(self, *args, **kwargs):
-        return super(AddressView, self).dispatch(*args, **kwargs)
+        return super(AddressDetailView, self).dispatch(*args, **kwargs)
 
 class AddressCreateView(generic.CreateView):
     template_name = 'basal/address_create.html'
@@ -140,12 +140,12 @@ class AddressCreateView(generic.CreateView):
             return self.form_invalid(form)
 
     def get_success_url(self):
-        return self.request.POST.get('next')
+        return self.request.POST.get('back')
 
     def get_context_data(self, **kwargs):
         context = super(AddressCreateView, self).get_context_data(**kwargs)
-        if self.request.GET.get('next'):
-            context['next'] = self.request.GET.get('next')
+        if self.request.GET.get('back'):
+            context['back'] = self.request.GET.get('back')
         return context
 
     @method_decorator(login_required)
@@ -159,12 +159,12 @@ class AddressUpdateView(generic.UpdateView):
     form_class = AddressForm
 
     def get_success_url(self):
-        return self.request.POST.get('next')
+        return self.request.POST.get('back')
 
     def get_context_data(self, **kwargs):
         context = super(AddressUpdateView, self).get_context_data(**kwargs)
-        if self.request.GET.get('next'):
-            context['next'] = self.request.GET.get('next')
+        if self.request.GET.get('back'):
+            context['back'] = self.request.GET.get('back')
         return context
 
     @method_decorator(authorized_to_update_address_decorator)
@@ -176,12 +176,12 @@ class AddressDeleteView(generic.DeleteView):
     model = Address
 
     def get_success_url(self):
-        return self.request.POST.get('next')
+        return self.request.POST.get('back')
 
     def get_context_data(self, **kwargs):
         context = super(AddressDeleteView, self).get_context_data(**kwargs)
-        if self.request.GET.get('next'):
-            context['next'] = self.request.GET.get('next')
+        if self.request.GET.get('back'):
+            context['back'] = self.request.GET.get('back')
         return context
 
     @method_decorator(authorized_to_update_address_decorator)

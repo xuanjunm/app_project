@@ -47,21 +47,32 @@
 </div>
 </div>
 <div class='row'>
-{% if next %}
-<p class='alpha two columns'><a href='{{ next }}'>back</a></p>
+{% if back %}
+<p class='alpha two columns'><a href='{{ back }}'>back</a></p>
 {% else %}
 <p class='alpha two columns'><a href='{% url 'events:event_list' %}'>back to list</a></p>
 {% endif %}
 {% if event_owner %}
-<p class='alpha two columns'><a href='{% url 'events:event_update' event.id %}?next={{ next }}'>update event</a></p>
-<p class='alpha two columns'><a href='{% url 'events:event_delete' event.id %}?next={{ next }}'>delete event</a></p>
+<p class='alpha two columns'><a href='{% url 'events:event_update' event.id %}?back={{ current_path }}'>update event</a></p>
+{% if back %}
+<p class='alpha two columns'><a href='{% url 'events:event_delete' event.id %}?back={{ back }}'>delete event</a></p>
+{% else %}
+<p class='alpha two columns'><a href='{% url 'events:event_delete' event.id %}?back={% url 'events:event_list' %}'>delete event</a></p>
+{% endif %}
 {% else %}
 {% if event_rsvp %}
 <p class='alpha two columns'>
-<a href='{% url 'events:event_rsvp_remove' event.id %}?next={{ next }}'>remove rsvp</a></p>
+{% if back %}
+<a href='{% url 'events:event_rsvp_remove' event.id %}?back={{ current_path }}'>remove rsvp</a></p>
 {% else %}
-<p class='alpha two columns'><a href='{% url 'events:event_rsvp' event.id %}'>
-    rsvp</a></p>
+<a href='{% url 'events:event_rsvp_remove' event.id %}'>remove rsvp</a></p>
+{% endif %}
+{% else %}
+{% if back %}
+<p class='alpha two columns'><a href='{% url 'events:event_rsvp' event.id %}?back={{ current_path }}'>rsvp</a></p>
+{% else %}
+<p class='alpha two columns'><a href='{% url 'events:event_rsvp' event.id %}'>rsvp</a></p>
+{% endif %}
 {% endif %}
 {% endif %}
 </div>

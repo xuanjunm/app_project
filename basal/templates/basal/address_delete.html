@@ -2,10 +2,10 @@
 {% block h2 %}Are you really going to remove {{ address.address_title }}?
 {% endblock %}
 {% block main %}
-<form action='{% url 'basal:address_delete' address.id %}?next={{ next }}' method='post'>
+<form action='{% url 'basal:address_delete' address.id %}?back={{ back }}' method='post'>
     <input type='submit' value='Yes, Please'/>
     {% csrf_token %}
-    <input type='hidden' name='next' value='{{ next }}'>
+    <input type='hidden' name='back' value='{{ back }}'>
 </form>
-<a href='{{ next }}'>Back</a>
+<a href='{{ back }}'>Back</a>
 {% endblock %}

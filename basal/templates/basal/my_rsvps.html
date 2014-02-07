@@ -4,7 +4,7 @@
 {% if eventrsvp_list %}
 <ul>
     {% for eventrsvp in eventrsvp_list %}
-    <li><a href='{% url 'events:event_detail' eventrsvp.fk_event.id %}?next={{ next }}'>
+    <li><a href='{% url 'events:event_detail' eventrsvp.fk_event.id %}?back={{ current_path }}'>
         {{ eventrsvp.fk_event.event_title }}</a></li>
     {% endfor %}
 </ul>

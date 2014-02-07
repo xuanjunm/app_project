@@ -2,9 +2,10 @@
 {% block h2 %}Are you really going to remove {{ event.event_title }}?
 {% endblock %}
 {% block main %}
-<form action='{% url 'events:event_delete' event.id %}' method='post'>
+<form action='{% url 'events:event_delete' event.id %}?back={{ back }}' method='post'>
 <input type='submit' value='Yes, Please'/>
 {% csrf_token %}
+<input type='hidden' name='back' value='{{ back }}'>
 </form>
-<a href='{% url 'events:event_detail' event.id %}'>Back</a>
+<a href='{{ back }}'>Back</a>
 {% endblock %}
