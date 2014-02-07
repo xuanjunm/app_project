@@ -30,7 +30,7 @@ class CustomAuthentication(ApiKeyAuthentication):
             # user = None, but can still access api
             return True
 #            return self._unauthorized()
-        
+
         try:
             #import pdb;pdb.set_trace()
             user = User.objects.get(username=username)
@@ -46,7 +46,7 @@ class CustomAuthentication(ApiKeyAuthentication):
 
         key_auth_check = self.get_key(user, api_key)
         if key_auth_check and not isinstance(key_auth_check, 
-                                             HttpUnauthorized):
+                HttpUnauthorized):
             request.user = user
         else:
             request.user = None
@@ -58,8 +58,8 @@ class UserCustomAuthorization(Authorization):
         return Unauthorized('Disabled')
 
     def read_list(self, object_list, bundle):
-#       import pdb;pdb.set_trace()
-       return object_list
+        #       import pdb;pdb.set_trace()
+        return object_list
 
     def update_list(self, object_list, bundle):
         return Unauthorized('Disabled')
@@ -69,15 +69,43 @@ class UserCustomAuthorization(Authorization):
 
     def create_detail(self, object_list, bundle):
         return Unauthorized('Disabled')
-
-    def read_detail(self, object_list, bundle):
-       return bundle.obj == bundle.request.user 
  
+    def read_detail(self, object_list, bundle):
+        return bundle.obj == bundle.request.user 
+
     def update_detail(self, object_list, bundle):
         return bundle.obj == bundle.request.user
 
     def delete_detail(self, object_list, bundle):
         return Unauthorized('Disabled')
+
+class AddressCustomAuthorization(Authorization):
+    def create_list(self, object_list, bundle):
+        return Unauthorized('Disabled')
+
+    def read_list(self, object_list, bundle):
+        return object_list.filter(fk_address_owner=bundle.request.user)
+
+    def update_list(self, object_list, bundle):
+        return Unauthorized('Disabled')
+
+    def delete_list(self, object_list, bundle):
+        return Unauthorized('Disabled')
+
+    def create_detail(self, object_list, bundle):
+        if bundle.request.user == None:
+            return False
+        return True
+
+    def read_detail(self, object_list, bundle):
+        return bundle.obj.fk_address_owner == bundle.request.user
+
+    def update_detail(self, object_list, bundle):
+        #import pdb;pdb.set_trace()
+        return bundle.obj.fk_address_owner == bundle.request.user
+
+    def delete_detail(self, object_list, bundle):
+        return bundle.obj.fk_address_owner == bundle.request.user
 
 class UserResource(ModelResource):
     class Meta:
@@ -95,3 +123,9 @@ class UserResource(ModelResource):
         self.fields['last_login'].use_in = u'detail'
         self.fields['id'].use_in = u'detail'
         return bundle
+
+class AddressResource(ModelResource):
+    class Meta:
+        queryset = Address.objects.all()
+        authentication = CustomAuthentication()
+        authorization = AddressCustomAuthorization()
