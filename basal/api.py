@@ -1,9 +1,10 @@
 from tastypie.resources import ModelResource
 from tastypie.authorization import Authorization
-from tastypie.authentication import ApiKeyAuthentication
+from tastypie.authentication import ApiKeyAuthentication, BasicAuthentication
 from tastypie.exceptions import Unauthorized
 from tastypie import fields
 from tastypie.constants import ALL
+from tastypie.models import ApiKey
 
 from .models import *
 
@@ -129,3 +130,24 @@ class AddressResource(ModelResource):
         queryset = Address.objects.all()
         authentication = CustomAuthentication()
         authorization = AddressCustomAuthorization()
+
+class ApiTokenResource(ModelResource):
+    class Meta:
+        queryset = ApiKey.objects.all()
+        resource_name = 'token'
+        include_resource_uri = False
+        fields = ['key']
+        list_allowed_methods = []
+        detail_allowed_methids = ['get']
+        authentication = BasicAuthentication()
+
+    def get_detail(self, request, **kwargs):
+#        import pdb;pdb.set_trace()
+#        if kwargs['pk'] != 'auth':
+           # raise NotImplementedError('Resource not found')
+        obj = ApiKey.objects.get(user=request.user)
+
+        bundle = self.build_bundle(obj=obj, request=request)
+        bundle = self.full_dehydrate(bundle)
+        bundle = self.alter_detail_data_to_serialize(request, bundle)
+        return self.create_response(request, bundle)

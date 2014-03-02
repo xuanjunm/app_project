@@ -3,10 +3,6 @@ from django.views.generic import TemplateView
 
 from . import views
 
-# for tastypie web service
-#from .api import * 
-#user_resource = UserResource()
-
 urlpatterns = patterns('',
     url(r'^$', TemplateView.as_view(template_name='basal/main.html'), 
         name='main'),
@@ -30,5 +26,4 @@ urlpatterns = patterns('',
         name='address_update'),
     url(r'^address_delete/(?P<pk>\d+)/$', views.AddressDeleteView.as_view(), 
         name='address_delete'),
-#    url(r'^api/', include(user_resource.urls)),
 )

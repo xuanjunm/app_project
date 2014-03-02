@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block h2 %}New Address{% endblock %}
+{% block main %}
+<form action='{% url 'events:address_create' %}' class='seven columns alpha' 
+    method='post'>
+    {% csrf_token %}
+    <input type='hidden' name='path_from' value='{{ path_from }}'>
+    <div class='row alpha'>
+        {{ form }}
+    </div>
+    <div class='row alpha'>
+        <div class='three columns alpha'>
+            <input type='submit' value='Create Address' />
+            <a href='{{ path_from }}'>Back</a>
+        </div>
+    </div>
+</form>
+{% endblock %}
