@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block h2 %}My UserImage List{% endblock %}
+{% block main %}
+{% if user_image_list %}
+<ul>
+    {{ userimage }}
+    {{ userimage_list }}
+    {% for user_image in user_image_list %}
+    <div class='row'>
+        <div class='alpha nine columns' id='user_image_wrapper'>
+            <h5 class='reset'>{{ user_image.path }}</h5>
+            <img class='user_image' 
+            src='{{ MEDIA_URL }}{{ user_image.path }}' />
+            <hr />
+            <div class='row'>
+                <a class='' href='{% url 'basal:user_image_update' user_image.id %}?back={{ current_path }}'>update user_image</a>
+                <a class='' href='{% url 'basal:user_image_delete' user_image.id %}?back={{ current_path }}'>delete user_image</a>
+            </div>
+
+        </div>
+    </div>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No UserImage are available.</p>
+{% endif %}
+
+<a class='row' href='{% url 'basal:user_image_create' %}?back={{ current_path }}' title='create user_image link'>Create a new user_image</a>
+<a class='row' href='{% url 'basal:dashboard' %}'>back to Dashboard</a> 
+{% endblock %}

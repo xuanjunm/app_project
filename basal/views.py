@@ -187,3 +187,113 @@ class AddressDeleteView(generic.DeleteView):
     @method_decorator(authorized_to_update_address_decorator)
     def dispatch(self, *args, **kwargs):
         return super(AddressDeleteView, self).dispatch(*args, **kwargs)
+
+def authorized_to_update_user_image_decorator(fn):
+    # a decorator to check login_user is the owner of an user_image
+    def decorator(request, *args, **kwargs):
+        if UserImage.objects.get(pk=kwargs['pk']).is_owner(request.user):
+            return fn(request, *args, **kwargs)
+        else:
+            return HttpResponseRedirect(reverse('basal:user_login'))
+    return decorator
+
+class UserImageListView(generic.ListView):
+    template_name = 'basal/user_image_list.html'
+    model = UserImage
+    context_object_name = "user_image_list"
+
+    def get_queryset(self):
+        return UserImage.objects.filter(fk_user=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super(UserImageListView, self).get_context_data(**kwargs)
+        context['current_path'] = self.request.get_full_path()
+       # import pdb;pdb.set_trace()
+        return context
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(UserImageListView, self).dispatch(*args, **kwargs)
+
+class UserImageDetailView(generic.DetailView):
+    template_name = 'basal/user_image_detail.html'
+    model = UserImage
+
+    def get_context_data(self, **kwargs):
+        context = super(UserImageDetailView, self).get_context_data(**kwargs)
+        if self.request.GET.get('back'):
+            context['back'] = self.request.GET.get('back')
+        return context
+
+    @method_decorator(authorized_to_update_user_image_decorator)
+    def dispatch(self, *args, **kwargs):
+        return super(UserImageDetailView, self).dispatch(*args, **kwargs)
+
+class UserImageCreateView(generic.CreateView):
+    template_name = 'basal/user_image_create.html'
+    model = UserImage
+
+    form_class = UserImageForm
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        form = self.get_form(self.form_class)
+
+        # let fk_user = current login user
+        form.instance.fk_user = request.user
+
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    def get_success_url(self):
+        return self.request.POST.get('back')
+
+    def get_context_data(self, **kwargs):
+        context = super(UserImageCreateView, self).get_context_data(**kwargs)
+        if self.request.GET.get('back'):
+            context['back'] = self.request.GET.get('back')
+        return context
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(UserImageCreateView, self).dispatch(*args, **kwargs)
+
+
+class UserImageUpdateView(generic.UpdateView):
+    template_name = 'basal/user_image_update.html'
+    model = UserImage
+    form_class = UserImageForm
+    context_object_name = 'user_image'
+
+    def get_success_url(self):
+        return self.request.POST.get('back')
+
+    def get_context_data(self, **kwargs):
+        context = super(UserImageUpdateView, self).get_context_data(**kwargs)
+        if self.request.GET.get('back'):
+            context['back'] = self.request.GET.get('back')
+        return context
+
+    @method_decorator(authorized_to_update_user_image_decorator)
+    def dispatch(self, *args, **kwargs):
+        return super(UserImageUpdateView, self).dispatch(*args, **kwargs)
+
+class UserImageDeleteView(generic.DeleteView):
+    template_name = 'basal/user_image_delete.html'
+    model = UserImage
+    context_object_name = 'user_image'
+
+    def get_success_url(self):
+        return self.request.POST.get('back')
+
+    def get_context_data(self, **kwargs):
+        context = super(UserImageDeleteView, self).get_context_data(**kwargs)
+        if self.request.GET.get('back'):
+            context['back'] = self.request.GET.get('back')
+        return context
+
+    @method_decorator(authorized_to_update_user_image_decorator)
+    def dispatch(self, *args, **kwargs):
+        return super(UserImageDeleteView, self).dispatch(*args, **kwargs)

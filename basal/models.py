@@ -78,6 +78,9 @@ class UserImage(models.Model):
                              blank=True)
     fk_user = models.ForeignKey(CustomUser)
 
+    def is_owner(self, user):
+        return self.fk_user == user
+
     def __unicode__(self):
         return u'%s' % self.path 
 

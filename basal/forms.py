@@ -48,4 +48,9 @@ class UserUpdateForm(forms.ModelForm):
 class AddressForm(forms.ModelForm):
     class Meta:
         model = Address
-        exclude = ['fk_address_owner']
+        exclude = ['fk_user']
+
+class UserImageForm(forms.ModelForm):
+    class Meta:
+        model = UserImage
+        exclude = ['fk_user']

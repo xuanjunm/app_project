@@ -60,6 +60,12 @@ nav a:hover {
     border: 1px solid #ccc;
 }
 
+/* user_image */
+.user_image {
+    height: 200px;
+    width: auto;
+}
+
 /* #Media Queries
 ================================================== */
 
