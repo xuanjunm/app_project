@@ -44,6 +44,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
                                    blank=True)
     user_description = models.TextField(blank=True)
     user_nickname = models.CharField(max_length=255, blank=True)
+    fk_user_background_image = models.ForeignKey('UserImage', blank=True, null=True, related_name='user_background_image')
+    fk_user_image = models.ForeignKey('UserImage', blank=True, null=True, related_name='user_image')
+    # UserImage is between quote because of circular reference
 
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -69,6 +72,15 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     def __unicode__(self):
         return u'%s' % self.username 
 
+class UserImage(models.Model):
+    path = models.ImageField(upload_to='user_image', 
+                             help_text='help text',      
+                             blank=True)
+    fk_user = models.ForeignKey(CustomUser)
+
+    def __unicode__(self):
+        return u'%s' % self.path 
+
 class Address(models.Model):
     address_title = models.CharField(max_length=255)
     address_detail = models.TextField()
@@ -78,20 +90,13 @@ class Address(models.Model):
     address_country = models.CharField(blank=True, 
                                        max_length=255, 
                                        default='Canada')
-    fk_address_owner = models.ForeignKey(CustomUser)
+    fk_user = models.ForeignKey(CustomUser)
 
     def is_owner(self, user):
-        return self.fk_address_owner == user
+        return self.fk_user == user
 
     def __unicode__(self):
-        return u'%s - %s' % (self.fk_address_owner, self.address_title)
-
-#class UserAddressAttribute(models.Model):
-#    fk_user = models.ForeignKey(CustomUser)
-#    fk_address = models.ForeignKey(Address)
-#
-##    def __unicode__(self):
-#        return "%s - %s" % (self.fk_user_id, self.fk_address_id)
+        return u'%s - %s' % (self.fk_user, self.address_title)
 
 class UserFriendAttribute(models.Model):
     fk_friend_a_user = models.ForeignKey(CustomUser, related_name='friend_a')
@@ -100,13 +105,13 @@ class UserFriendAttribute(models.Model):
     def __unicode__(self):
         return '%s - %s' % (self.fk_friend_a_user, self.fk_friend_b_user)
                                         
-#def create_user_profile(sender, **kwargs):        
+#def create_user_image(sender, **kwargs):        
 #    """
-#    A Signal for hooking up automatic ''UserProfile'' creation.
+#    A Signal for hooking up automatic 'UserImage' creation.
 #    """
 #    if kwargs.get('created') is True:
 #        import pdb;pdb.set_trace()
-#        UserProfile.objects.create(user=kwargs.get('instance'))
+#        UserImage.objects.create()
 
 models.signals.post_save.connect(create_api_key, sender=CustomUser)
-#models.signals.post_save.connect(create_user_profile, sender=User)
+#models.signals.post_save.connect(create_user_image, sender=CustomUser)

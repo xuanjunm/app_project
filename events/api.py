@@ -76,6 +76,8 @@ class EventResource(ModelResource):
         queryset = Event.objects.all()
         authentication = CustomAuthentication()
         authorization = EventCustomAuthorization()
+        ordering = ['event_date', 'event_time', 'event_create_time',
+                    'event_view_count', 'event_rsvp', 'event_like']
         filtering = { 'event_title': 'contains',
                       'event_date': ALL,
                       'event_type': ALL,

@@ -16,7 +16,8 @@ class CustomUserAdmin(UserAdmin):
         }),
         ('Personal info', {
             'fields': ('user_first_name', 'user_last_name', 'user_gender', 
-                       'user_description', 'user_nickname')
+                       'user_description', 'user_nickname', 'fk_user_image'
+                       'user_background_image')
         }),
         ('Permissions', {
             'fields': ('is_active', 'is_staff', 'is_superuser',
@@ -44,3 +45,4 @@ class CustomUserAdmin(UserAdmin):
 
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(Address)
+admin.site.register(UserImage)

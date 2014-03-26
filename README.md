@@ -13,4 +13,8 @@ This is the website/web-service for app_project.
     -   django dependencies
     -   there might be a few more I have missed out..
     
+#Using virtualenvwrapper:
+workon django_1.6.2
+#To deactivate
+deactivate
 *Sean Su on January 2, 2014*

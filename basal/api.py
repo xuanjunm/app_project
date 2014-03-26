@@ -80,12 +80,12 @@ class UserCustomAuthorization(Authorization):
     def delete_detail(self, object_list, bundle):
         return Unauthorized('Disabled')
 
-class AddressCustomAuthorization(Authorization):
+class PropertiesCustomAuthorization(Authorization):
     def create_list(self, object_list, bundle):
         return Unauthorized('Disabled')
 
     def read_list(self, object_list, bundle):
-        return object_list.filter(fk_address_owner=bundle.request.user)
+        return object_list.filter(fk_user=bundle.request.user)
 
     def update_list(self, object_list, bundle):
         return Unauthorized('Disabled')
@@ -99,14 +99,14 @@ class AddressCustomAuthorization(Authorization):
         return True
 
     def read_detail(self, object_list, bundle):
-        return bundle.obj.fk_address_owner == bundle.request.user
+        return bundle.obj.fk_user == bundle.request.user
 
     def update_detail(self, object_list, bundle):
         #import pdb;pdb.set_trace()
-        return bundle.obj.fk_address_owner == bundle.request.user
+        return bundle.obj.fk_user == bundle.request.user
 
     def delete_detail(self, object_list, bundle):
-        return bundle.obj.fk_address_owner == bundle.request.user
+        return bundle.obj.fk_user == bundle.request.user
 
 class UserResource(ModelResource):
     class Meta:
@@ -129,7 +129,14 @@ class AddressResource(ModelResource):
     class Meta:
         queryset = Address.objects.all()
         authentication = CustomAuthentication()
-        authorization = AddressCustomAuthorization()
+        authorization = PropertiesCustomAuthorization()
+
+
+class UserImageResource(ModelResource):
+    class Meta:
+        queryset = UserImage.objects.all()
+        authentication = CustomAuthentication()
+        authorization = PropertiesCustomAuthorization()
 
 class ApiTokenResource(ModelResource):
     class Meta:

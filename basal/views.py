@@ -96,7 +96,7 @@ class AddressListView(generic.ListView):
     model = Address
 
     def get_queryset(self):
-        return Address.objects.filter(fk_address_owner=self.request.user)
+        return Address.objects.filter(fk_user=self.request.user)
 
     def get_context_data(self, **kwargs):
         context = super(AddressListView, self).get_context_data(**kwargs)
@@ -131,8 +131,8 @@ class AddressCreateView(generic.CreateView):
         self.object = None
         form = self.get_form(self.form_class)
 
-        # let fk_address_owner = current login user
-        form.instance.fk_address_owner = request.user
+        # let fk_user = current login user
+        form.instance.fk_user = request.user
 
         if form.is_valid():
             return self.form_valid(form)

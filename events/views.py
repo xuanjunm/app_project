@@ -62,7 +62,7 @@ class EventCreateView(generic.CreateView):
 
     def get_form(self, form_class):
         form = super(EventCreateView, self).get_form(form_class)
-        c_address = Address.objects.filter(fk_address_owner=self.request.user)
+        c_address = Address.objects.filter(fk_user=self.request.user)
         form.fields['fk_address'].queryset = c_address 
         return form
 
@@ -95,7 +95,7 @@ class EventUpdateView(generic.UpdateView):
 
     def get_form(self, form_class):
         form = super(EventUpdateView, self).get_form(form_class)
-        c_address = Address.objects.filter(fk_address_owner=self.request.user)
+        c_address = Address.objects.filter(fk_user=self.request.user)
         form.fields['fk_address'].queryset = c_address 
         return form
 
