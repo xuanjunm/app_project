@@ -108,7 +108,21 @@ class PropertiesCustomAuthorization(Authorization):
     def delete_detail(self, object_list, bundle):
         return bundle.obj.fk_user == bundle.request.user
 
+class UserImageResource(ModelResource):
+    class Meta:
+        queryset = UserImage.objects.all()
+        authentication = CustomAuthentication()
+        authorization = PropertiesCustomAuthorization()
+
 class UserResource(ModelResource):
+    fk_user_image = fields.ForeignKey(UserImageResource,
+                                      'fk_user_image',
+                                      full=True, null=True)
+
+    fk_user_background_image = fields.ForeignKey(UserImageResource,
+                               'fk_user_background_image',
+                               full=True, null=True)
+
     class Meta:
         queryset = CustomUser.objects.all()
         authentication = CustomAuthentication()
@@ -131,13 +145,6 @@ class AddressResource(ModelResource):
         authentication = CustomAuthentication()
         authorization = PropertiesCustomAuthorization()
 
-
-class UserImageResource(ModelResource):
-    class Meta:
-        queryset = UserImage.objects.all()
-        authentication = CustomAuthentication()
-        authorization = PropertiesCustomAuthorization()
-
 class ApiTokenResource(ModelResource):
     class Meta:
         queryset = ApiKey.objects.all()
@@ -149,7 +156,7 @@ class ApiTokenResource(ModelResource):
         authentication = BasicAuthentication()
 
     def get_detail(self, request, **kwargs):
-#        import pdb;pdb.set_trace()
+        #        import pdb;pdb.set_trace()
 #        if kwargs['pk'] != 'auth':
            # raise NotImplementedError('Resource not found')
         obj = ApiKey.objects.get(user=request.user)
