@@ -144,7 +144,7 @@ class ApiTokenResource(ModelResource):
         resource_name = 'token'
         include_resource_uri = False
         fields = ['key']
-       # list_allowed_methods = []
+        list_allowed_methods = []
         detail_allowed_methids = ['get']
         authentication = BasicAuthentication()
 
