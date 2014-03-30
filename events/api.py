@@ -87,11 +87,12 @@ class EventResource(ModelResource):
 
 class EventRSVPResource(ModelResource):
     fk_event = fields.ForeignKey(EventResource,
-                                 'fk_event',
-                                 full=True)
+                                 'fk_event')
+    fk_user = fields.ForeignKey(UserResource,
+                                 'fk_user')
     class Meta:
         queryset = EventRSVP.objects.all()
-        authentication = CustomAuthentication()
-        authorization = EventRSVPCustomAuthorization()
+       # authentication = CustomAuthentication()
+       # authorization = EventRSVPCustomAuthorization()
 
 
