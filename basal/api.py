@@ -114,6 +114,38 @@ class UserImageResource(ModelResource):
         authentication = CustomAuthentication()
         authorization = PropertiesCustomAuthorization()
 
+class TestAuthorization(Authorization):
+    def create_list(self, object_list, bundle):
+        return Unauthorized('Disabled')
+
+    def read_list(self, object_list, bundle):
+        #       import pdb;pdb.set_trace()
+        return object_list
+
+    def update_list(self, object_list, bundle):
+        return Unauthorized('Disabled')
+
+    def delete_list(self, object_list, bundle):
+        return Unauthorized('Disabled')
+
+    def create_detail(self, object_list, bundle):
+        return Unauthorized('Disabled')
+ 
+    def read_detail(self, object_list, bundle):
+        return bundle.obj == bundle.request.user 
+
+    def update_detail(self, object_list, bundle):
+        return bundle.obj == bundle.request.user
+
+    def delete_detail(self, object_list, bundle):
+        return Unauthorized('Disabled')
+
+class TestResource(ModelResource):
+    class Meta:
+        queryset = CustomUser.objects.all()
+        authentication = BasicAuthentication()
+        authorization = TestAuthorization()
+
 class UserResource(ModelResource):
     fk_user_image = fields.ForeignKey(UserImageResource,
                                       'fk_user_image',
@@ -136,7 +168,7 @@ class UserResource(ModelResource):
         self.fields['email'].use_in = u'detail'
         self.fields['date_joined'].use_in = u'detail'
         self.fields['last_login'].use_in = u'detail'
-        self.fields['id'].use_in = u'detail'
+#        self.fields['id'].use_in = u'detail'
         return bundle
 
 class AddressResource(ModelResource):

@@ -19,6 +19,8 @@ v01_api.register(UserResource())
 v01_api.register(UserImageResource())
 v01_api.register(ApiTokenResource())
 
+v01_api.register(TestResource())
+
 urlpatterns = patterns('',
     url(r'^', include('basal.urls', namespace='basal')),
     url(r'^admin/', include(admin.site.urls)),
