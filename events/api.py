@@ -92,6 +92,9 @@ class EventRSVPResource(ModelResource):
                                  'fk_user')
     class Meta:
         queryset = EventRSVP.objects.all()
+        filtering = { 'fk_event': ALL,
+                      'fk_user': ALL,
+                    }
        # authentication = CustomAuthentication()
        # authorization = EventRSVPCustomAuthorization()
 
