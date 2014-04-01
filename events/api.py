@@ -87,9 +87,11 @@ class EventResource(ModelResource):
 
 class EventRSVPResource(ModelResource):
     fk_event = fields.ForeignKey(EventResource,
-                                 'fk_event')
+                                 'fk_event',
+			 	 full=True)
     fk_user = fields.ForeignKey(UserResource,
-                                 'fk_user')
+                                 'fk_user',
+			 	 full=True)
     class Meta:
         queryset = EventRSVP.objects.all()
         filtering = { 'fk_event': ALL,
