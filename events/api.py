@@ -103,8 +103,7 @@ class EventRSVPResource(ModelResource):
 
 class EventLikeResource(ModelResource):
     fk_event = fields.ForeignKey(EventResource,
-                                 'fk_event',
-                                 full=True)
+                                 'fk_event')
     fk_user = fields.ForeignKey(UserResource,
                                  'fk_user',
                                  full=True)
