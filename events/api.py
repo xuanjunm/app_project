@@ -12,7 +12,8 @@ class EventRSVPCustomAuthorization(Authorization):
         return Unauthorized('Disabled')
 
     def read_list(self, object_list, bundle):
-        return object_list.filter(fk_user=bundle.request.user)
+        return object_list
+#        return object_list.filter(fk_user=bundle.request.user)
 
     def update_list(self, object_list, bundle):
         return Unauthorized('Disabled')
@@ -26,7 +27,8 @@ class EventRSVPCustomAuthorization(Authorization):
         return True
 
     def read_detail(self, object_list, bundle):
-        return bundle.obj.fk_user == bundle.request.user
+        return True
+#        return bundle.obj.fk_user == bundle.request.user
 
     def update_detail(self, object_list, bundle):
         #import pdb;pdb.set_trace()
@@ -88,16 +90,31 @@ class EventResource(ModelResource):
 class EventRSVPResource(ModelResource):
     fk_event = fields.ForeignKey(EventResource,
                                  'fk_event',
-			 	 full=True)
+                                 full=True)
     fk_user = fields.ForeignKey(UserResource,
                                  'fk_user',
-			 	 full=True)
+                                 full=True)
     class Meta:
         queryset = EventRSVP.objects.all()
         filtering = { 'fk_event': ALL,
                       'fk_user': ALL,
                     }
-       # authentication = CustomAuthentication()
-       # authorization = EventRSVPCustomAuthorization()
+        authentication = CustomAuthentication()
+        authorization = EventRSVPCustomAuthorization()
+
+class EventLikeResource(ModelResource):
+    fk_event = fields.ForeignKey(EventResource,
+                                 'fk_event',
+                                 full=True)
+    fk_user = fields.ForeignKey(UserResource,
+                                 'fk_user',
+                                 full=True)
+    class Meta:
+        queryset = EventLike.objects.all()
+        filtering = { 'fk_event': ALL,
+                      'fk_user': ALL,
+                    }
+        authentication = CustomAuthentication()
+        authorization = EventRSVPCustomAuthorization()
 
 

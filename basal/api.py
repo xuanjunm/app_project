@@ -146,6 +146,10 @@ class AddressResource(ModelResource):
         authorization = PropertiesCustomAuthorization()
 
 class ApiTokenResource(ModelResource):
+    user = fields.ForeignKey(UserResource,
+                             'user',
+                             full=True)
+
     class Meta:
         queryset = ApiKey.objects.all()
         resource_name = 'token'

@@ -21,3 +21,4 @@ class EventCommentAdmin(admin.ModelAdmin):
 admin.site.register(Event, EventAdmin)
 admin.site.register(EventRSVP, EventRSVPAdmin)
 admin.site.register(EventComment, EventCommentAdmin)
+admin.site.register(EventLike)

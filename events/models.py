@@ -1,4 +1,5 @@
 from django.db import models
+from django.db import OperationalError
 from basal.models import *
 
 class Event(models.Model):
@@ -51,6 +52,26 @@ class Event(models.Model):
 class EventRSVP(models.Model):
     fk_user = models.ForeignKey(CustomUser)
     fk_event = models.ForeignKey(Event)
+
+class EventLike(models.Model):
+    fk_user = models.ForeignKey(CustomUser)
+    fk_event = models.ForeignKey(Event)
+
+    def exists(self):
+        try:
+            temp = EventLike.objects.filter(fk_user=self.fk_user.id)
+            temp.get(fk_event=self.fk_event.id)
+        except EventLike.DoesNotExist, EventLike.MultipleObjectsReturned:
+            return False
+        else:
+            return True
+
+    def save(self):
+        if not self.exists():
+            super(EventLike, self).save()
+# if similar EventLike object exists, then it wouldn't be saved
+#        else:
+#            raise OperationalError
 
 class EventComment(models.Model):
     comment_detail = models.TextField()

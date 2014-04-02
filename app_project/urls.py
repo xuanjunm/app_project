@@ -15,11 +15,10 @@ v01_api = Api(api_name='v01')
 v01_api.register(AddressResource())
 v01_api.register(EventResource())
 v01_api.register(EventRSVPResource())
+v01_api.register(EventLikeResource())
 v01_api.register(UserResource())
 v01_api.register(UserImageResource())
 v01_api.register(ApiTokenResource())
-
-v01_api.register(TestResource())
 
 urlpatterns = patterns('',
     url(r'^', include('basal.urls', namespace='basal')),
