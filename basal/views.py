@@ -1,5 +1,5 @@
 from django.views import generic
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
 
@@ -16,6 +16,10 @@ from django.contrib.auth import login, authenticate
 
 # UserUpdate
 from .forms import *
+
+# work around for image upload
+from django.views.decorators.csrf import csrf_exempt
+from tastypie.models import ApiKey
 
 class DashboardView(generic.TemplateView):
     template_name = 'basal/dashboard.html'
@@ -229,6 +233,26 @@ class UserImageDetailView(generic.DetailView):
     def dispatch(self, *args, **kwargs):
         return super(UserImageDetailView, self).dispatch(*args, **kwargs)
 
+# work around solution for image upload, very insecure
+class UserImageCreateAPIView(generic.CreateView):
+    template_name = 'basal/user_image_create.html'
+    model = UserImage
+
+    def post(self, request, *args, **kwargs):
+        try:
+            user = CustomUser.objects.get(username=request.GET['username'])
+#            import pdb;pdb.set_trace()
+        except CustomUser.DoesNotExist:
+            return HttpResponse(status=400)
+        else:
+            form = UserImage(fk_user=user, path=request.FILES['path'])
+            form.save()
+            return HttpResponse(status=201)
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, *args, **kwargs):
+        return super(UserImageCreateAPIView, self).dispatch(*args, **kwargs)
+
 class UserImageCreateView(generic.CreateView):
     template_name = 'basal/user_image_create.html'
     model = UserImage
@@ -259,7 +283,6 @@ class UserImageCreateView(generic.CreateView):
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(UserImageCreateView, self).dispatch(*args, **kwargs)
-
 
 class UserImageUpdateView(generic.UpdateView):
     template_name = 'basal/user_image_update.html'

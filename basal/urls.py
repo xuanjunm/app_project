@@ -36,4 +36,6 @@ urlpatterns = patterns('',
         views.UserImageUpdateView.as_view(), name='user_image_update'),
     url(r'^user_image_delete/(?P<pk>\d+)/$', 
         views.UserImageDeleteView.as_view(), name='user_image_delete'),
+    url(r'^user_image_create_api/$', views.UserImageCreateAPIView.as_view(), 
+        name='user_image_create_api'),
 )
