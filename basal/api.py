@@ -140,6 +140,9 @@ class UserResource(ModelResource):
         return bundle
 
 class AddressResource(ModelResource):
+    fk_user = fields.ForeignKey(UserResource,
+                                 'fk_user',
+                                 full=True)
     class Meta:
         queryset = Address.objects.all()
         authentication = CustomAuthentication()
