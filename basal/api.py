@@ -141,8 +141,7 @@ class UserResource(ModelResource):
 
 class AddressResource(ModelResource):
     fk_user = fields.ForeignKey(UserResource,
-                                 'fk_user',
-                                 full=True)
+                                 'fk_user')
     class Meta:
         queryset = Address.objects.all()
         authentication = CustomAuthentication()
