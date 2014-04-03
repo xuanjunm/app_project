@@ -247,7 +247,11 @@ class UserImageCreateAPIView(generic.CreateView):
         else:
             form = UserImage(fk_user=user, path=request.FILES['path'])
             form.save()
-            return HttpResponse(status=201)
+#            import pdb;pdb.set_trace()
+#            return HttpResponse(status=201, content=form.path, content_type='text/plain')
+            return HttpResponse(status=201, 
+                                content=form.path.name, 
+                                content_type='text/plain')
 
     @method_decorator(csrf_exempt)
     def dispatch(self, *args, **kwargs):
