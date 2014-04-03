@@ -249,6 +249,8 @@ class UserImageCreateAPIView(generic.CreateView):
             form.save()
             return HttpResponse(status=201)
 
+    def get_success_url(self):
+        return self.request.POST.get('back')
     @method_decorator(csrf_exempt)
     def dispatch(self, *args, **kwargs):
         return super(UserImageCreateAPIView, self).dispatch(*args, **kwargs)
