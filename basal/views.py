@@ -253,6 +253,8 @@ class UserImageCreateAPIView(generic.CreateView):
                                 content=form.path.name, 
                                 content_type='text/plain')
 
+    def get_success_url(self):
+        return self.request.POST.get('back')
     @method_decorator(csrf_exempt)
     def dispatch(self, *args, **kwargs):
         return super(UserImageCreateAPIView, self).dispatch(*args, **kwargs)
