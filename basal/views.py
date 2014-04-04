@@ -250,7 +250,7 @@ class UserImageCreateAPIView(generic.CreateView):
 #            import pdb;pdb.set_trace()
 #            return HttpResponse(status=201, content=form.path, content_type='text/plain')
             return HttpResponse(status=201, 
-                                content=form.path, 
+                                content=form.path.name, 
                                 content_type='text/plain')
 
     def get_success_url(self):
