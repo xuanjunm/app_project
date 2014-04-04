@@ -75,7 +75,7 @@ class EventResource(ModelResource):
                                    full=True)
     fk_event_image = fields.ForeignKey(UserImageResource,
                                        'fk_event_image',
-                                       full=True)
+                                       full=True,null=True)
 
     class Meta:
         queryset = Event.objects.all()
