@@ -113,6 +113,8 @@ class UserImageResource(ModelResource):
         queryset = UserImage.objects.all()
         authentication = CustomAuthentication()
         authorization = PropertiesCustomAuthorization()
+        filtering = { 'fk_user': ALL,
+                        'path': ALL},
 
 class UserResource(ModelResource):
     fk_user_image = fields.ForeignKey(UserImageResource,
