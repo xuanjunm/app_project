@@ -15,6 +15,9 @@ from django.forms.models import model_to_dict
 # for EventCreateView
 from .forms import *
 
+# use models from basal
+from basal.models import UserImage
+
 class EventList(generic.ListView):
     template_name = 'events/event_list.html'
     context_object_name = "event_list"
@@ -51,6 +54,8 @@ class EventCreateView(generic.CreateView):
 
         # let fk_event_poster_user = current login user
         form.instance.fk_event_poster_user = request.user
+        form.instance.fk_event_image=UserImage.objects.get(path=form.instance.event_image_name)
+
 
         if form.is_valid():
             return self.form_valid(form)
