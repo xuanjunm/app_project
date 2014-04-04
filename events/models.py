@@ -29,7 +29,10 @@ class Event(models.Model):
     event_rsvp = models.PositiveSmallIntegerField(default=0)
     event_like = models.PositiveSmallIntegerField(default=0)
     event_recent_update = models.DateTimeField(auto_now=True)
-    fk_event_image = models.ForeignKey(UserImage, blank=True, null=True, related_name='event_image')
+<<<<<<< HEAD
+    fk_event_image = models.TextField('event_image')
+=======
+>>>>>>> parent of d49f133... added event_image field in event model
     fk_event_poster_user = models.ForeignKey(CustomUser, 
                                              verbose_name='Event Poster')
     fk_address = models.ForeignKey(Address,

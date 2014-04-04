@@ -2,3 +2,4 @@ _static/
 sqlite3.db
 media/user_image/*
 basal/migration
+*.pyc
