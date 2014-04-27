@@ -156,3 +156,26 @@ def event_rsvp_remove(request, pk):
         return HttpResponseRedirect(request.GET.get('back'))
     else:
         return HttpResponseRedirect(reverse('events:event_detail', args=(pk,)))
+
+class EventCommentCreateView(generic.CreateView):
+    form_class=EventCommentCreateForm
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        form = self.get_form(request.POST)
+
+        import pdb
+        pdb.set_trace()
+        # let fk_event_poster_user = current login user
+        form.instance.fk_event_poster_user = request.user
+        # form.instance.fk_event_image=UserImage.objects.get(path=form.instance.event_image_name)
+
+
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(EventCommentCreateView, self).dispatch(*args, **kwargs)

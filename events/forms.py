@@ -17,3 +17,8 @@ class EventUpdateForm(forms.ModelForm):
         model = Event
         exclude = ['fk_event_poster_user', 'event_like', 'event_rsvp', 
                    'event_view_count']
+
+class EventCommentCreateForm(forms.ModelForm):
+	class Meta:
+		model=EventComment
+		exclude=['fk_comment_poster_user','comment_post_time']

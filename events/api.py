@@ -109,7 +109,7 @@ class EventLikeResource(ModelResource):
                                  'fk_event')
     fk_user = fields.ForeignKey(UserResource,
                                  'fk_user',
-                                 full=True)
+                                 full=True) 
     class Meta:
         queryset = EventLike.objects.all()
         filtering = { 'fk_event': ALL,
@@ -118,4 +118,22 @@ class EventLikeResource(ModelResource):
         authentication = CustomAuthentication()
         authorization = EventRSVPCustomAuthorization()
 
+class EventCommentResource(ModelResource):
+    fk_comment_poster_user = fields.ForeignKey(UserResource,
+                                             'fk_comment_poster_user',
+                                             full=True)
 
+    fk_event = fields.ForeignKey(EventResource,
+                                       'fk_event')
+
+    class Meta:
+        queryset = EventComment.objects.all()
+        authentication = CustomAuthentication()
+        authorization = EventRSVPCustomAuthorization()
+        # ordering = ['event_date', 'event_time', 'event_create_time',
+        #             'event_view_count', 'event_rsvp', 'event_like']
+        filtering = { 'comment_detail': 'contains',
+                      'fk_event':ALL,
+                      'comment_post_time':ALL,
+                      'fk_comment_poster_user': ALL,
+                    }

@@ -56,7 +56,7 @@ class CustomAuthentication(ApiKeyAuthentication):
 
 class UserCustomAuthorization(Authorization):
     def create_list(self, object_list, bundle):
-        return Unauthorized('Disabled')
+        return True #Unauthorized('Disabled')
 
     def read_list(self, object_list, bundle):
         #       import pdb;pdb.set_trace()
@@ -69,7 +69,7 @@ class UserCustomAuthorization(Authorization):
         return Unauthorized('Disabled')
 
     def create_detail(self, object_list, bundle):
-        return Unauthorized('Disabled')
+        return True
  
     def read_detail(self, object_list, bundle):
         return bundle.obj == bundle.request.user 
