@@ -178,7 +178,7 @@ class EventLikeResource(ModelResource):
             # if bundle.data['email'] in emaillist:
             #     raise BadRequest('Email -'+bundle.data['email']+'- has been used.')
         # event=Event.objects.get(pk=bundle.obj.fk_event_id)
-        event.event_like=len(EvnetLike.objects.filter(fk_event__id=event.id))
+        event.event_like=len(EventLike.objects.filter(fk_event__id=event.id))
         event.save()
         return bundle
 
