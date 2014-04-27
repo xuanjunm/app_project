@@ -29,7 +29,7 @@ class Event(models.Model):
     event_rsvp = models.PositiveSmallIntegerField(default=0)
     event_like = models.PositiveSmallIntegerField(default=0)
     event_recent_update = models.DateTimeField(auto_now=True)
-    event_image_name = models.CharField(max_length=255,null=True)
+    event_image_name = models.CharField(max_length=255,null=True,blank=True)
     fk_event_image = models.ForeignKey(UserImage, blank=True, null=True, related_name='event_image')
     fk_event_poster_user = models.ForeignKey(CustomUser, 
                                              verbose_name='Event Poster')

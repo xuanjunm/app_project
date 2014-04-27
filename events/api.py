@@ -2,10 +2,14 @@ from tastypie.resources import ModelResource, ALL, ALL_WITH_RELATIONS
 from tastypie.authentication import ApiKeyAuthentication, Authentication
 from tastypie.authorization import Authorization, DjangoAuthorization
 from tastypie import fields
-from tastypie.exceptions import Unauthorized
+from tastypie.exceptions import Unauthorized,BadRequest
 
 from .models import *
 from basal.api import *
+
+
+class DuplicateError(Exception):
+  pass;
 
 class EventRSVPCustomAuthorization(Authorization):
     def create_list(self, object_list, bundle):
@@ -23,7 +27,7 @@ class EventRSVPCustomAuthorization(Authorization):
 
     def create_detail(self, object_list, bundle):
         if bundle.request.user == None:
-            return False
+            return Unauthorized('Disabled')
         return True
 
     def read_detail(self, object_list, bundle):
@@ -103,6 +107,32 @@ class EventRSVPResource(ModelResource):
                     }
         authentication = CustomAuthentication()
         authorization = EventRSVPCustomAuthorization()
+
+
+        
+    def obj_create(self, bundle, **kwargs):
+        try:
+          user=UserResource().get_via_uri(bundle.data['fk_user'],bundle.request)
+          event=EventResource().get_via_uri(bundle.data['fk_event'],bundle.request)
+          userlist=[rsvp.fk_user for rsvp in EventRSVP.objects.filter(fk_event=event)]
+          if user in userlist:
+            raise DuplicateError
+          bundle = super(EventRSVPResource, self).obj_create(bundle, **kwargs)
+            
+            # event=Event.objects.get(pk=bundle.)
+
+        except DuplicateError:
+          raise BadRequest('RSVP already.')
+            # usernamelist=[user.username for user in CustomUser.objects.all()]
+            # if bundle.data['username'] in usernamelist:
+            #     raise BadRequest('Username -'+bundle.data['username']+'- has been used.')
+            # emaillist=[user.email for user in CustomUser.objects.all()]
+            # if bundle.data['email'] in emaillist:
+            #     raise BadRequest('Email -'+bundle.data['email']+'- has been used.')
+        # event=Event.objects.get(pk=bundle.obj.fk_event_id)
+        event.event_rsvp=len(EventRSVP.objects.filter(fk_event__id=event.id))
+        event.save()
+        return bundle
 
 class EventLikeResource(ModelResource):
     fk_event = fields.ForeignKey(EventResource,
