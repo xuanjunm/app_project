@@ -145,8 +145,8 @@ class UserResource(ModelResource):
         try:
             bundle = super(UserResource, self).obj_create(bundle, **kwargs)
             bundle.obj.set_password(bundle.data.get('password'))
-            import pdb
-            pdb.set_trace()
+            # import pdb
+            # pdb.set_trace()
             bundle.obj.fk_user_image=UserImage.objects.get(path=bundle.data['profile_image_name'])
             bundle.obj.save() 
         except IntegrityError:
