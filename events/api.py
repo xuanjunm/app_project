@@ -162,7 +162,7 @@ class EventLikeResource(ModelResource):
         try:
           user=UserResource().get_via_uri(bundle.data['fk_user'],bundle.request)
           event=EventResource().get_via_uri(bundle.data['fk_event'],bundle.request)
-          userlist=[rsvp.fk_user for like in EventLike.objects.filter(fk_event=event)]
+          userlist=[like.fk_user for like in EventLike.objects.filter(fk_event=event)]
           if user in userlist:
             raise DuplicateError
           bundle = super(EventLikeResource, self).obj_create(bundle, **kwargs)
