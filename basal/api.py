@@ -1,10 +1,11 @@
 from tastypie.resources import ModelResource
 from tastypie.authorization import Authorization
 from tastypie.authentication import ApiKeyAuthentication, BasicAuthentication
-from tastypie.exceptions import Unauthorized
+from tastypie.exceptions import Unauthorized,BadRequest
 from tastypie import fields
 from tastypie.constants import ALL
 from tastypie.models import ApiKey
+from django.db import IntegrityError
 
 from .models import *
 
@@ -56,7 +57,7 @@ class CustomAuthentication(ApiKeyAuthentication):
 
 class UserCustomAuthorization(Authorization):
     def create_list(self, object_list, bundle):
-        return True #Unauthorized('Disabled')
+        return True
 
     def read_list(self, object_list, bundle):
         #       import pdb;pdb.set_trace()
@@ -132,13 +133,24 @@ class UserResource(ModelResource):
         excludes = ['password', 'is_staff', 'is_active', 'is_superuser']
         filtering = { 'username': ALL }
 
-#        import pdb;pdb.set_trace()
     def dehydrate(self, bundle):
         self.fields['username'].use_in = u'detail'
         self.fields['email'].use_in = u'detail'
         self.fields['date_joined'].use_in = u'detail'
         self.fields['last_login'].use_in = u'detail'
 #        self.fields['id'].use_in = u'detail'
+        return bundle
+
+    def obj_create(self, bundle, **kwargs):
+        try:
+            bundle = super(UserResource, self).obj_create(bundle, **kwargs)
+            bundle.obj.set_password(bundle.data.get('password'))
+
+            bundle.obj.save() 
+        except IntegrityError:
+            import pdb
+            pdb.set_trace()
+            raise BadRequest(IntegrityError.message)
         return bundle
 
 class AddressResource(ModelResource):
