@@ -55,6 +55,9 @@ class EventRSVP(models.Model):
     fk_user = models.ForeignKey(CustomUser)
     fk_event = models.ForeignKey(Event)
 
+    def __unicode__(self):
+        return self.fk_user.username+" rsvps "+self.fk_event.event_title
+
 class EventLike(models.Model):
     fk_user = models.ForeignKey(CustomUser)
     fk_event = models.ForeignKey(Event)
@@ -71,6 +74,9 @@ class EventLike(models.Model):
     def save(self):
         if not self.exists():
             super(EventLike, self).save()
+
+    def __unicode__(self):
+        return self.fk_user.username+" likes "+self.fk_event.event_title
 # if similar EventLike object exists, then it wouldn't be saved
 #        else:
 #            raise OperationalError
