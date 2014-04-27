@@ -134,6 +134,15 @@ class EventRSVPResource(ModelResource):
         event.save()
         return bundle
 
+    def obj_delete_like(self,bundle,**kwargs):
+        # import pdb
+        # pdb.set_trace()
+        user=UserResource().get_via_uri(bundle.data['fk_user'],bundle.request)
+        event=EventResource().get_via_uri(bundle.data['fk_event'],bundle.request)
+        rsvplist=EventRSVP.objects.filter(fk_event=event,fk_user=user)
+        rsvplist.delect()
+        return bundle
+
 class EventLikeResource(ModelResource):
     fk_event = fields.ForeignKey(EventResource,
                                  'fk_event')
