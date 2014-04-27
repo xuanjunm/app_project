@@ -145,12 +145,15 @@ class UserResource(ModelResource):
         try:
             bundle = super(UserResource, self).obj_create(bundle, **kwargs)
             bundle.obj.set_password(bundle.data.get('password'))
-
             bundle.obj.save() 
         except IntegrityError:
-            import pdb
-            pdb.set_trace()
-            raise BadRequest(IntegrityError.message)
+
+            usernamelist=[user.username for user in CustomUser.objects.all()]
+            if bundle.data['username'] in usernamelist:
+                raise BadRequest(bundle.data['username']+' has been used.')
+            emaillist=[user.email for user in CustomUser.objects.all()]
+            if bundle.data['email'] in emaillist:
+                raise BadRequest(bundle.data['email']+' has been used.')
         return bundle
 
 class AddressResource(ModelResource):
