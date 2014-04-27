@@ -150,10 +150,10 @@ class UserResource(ModelResource):
 
             usernamelist=[user.username for user in CustomUser.objects.all()]
             if bundle.data['username'] in usernamelist:
-                raise BadRequest(bundle.data['username']+' has been used.')
+                raise BadRequest('Username "'+bundle.data['username']+'"" has been used.')
             emaillist=[user.email for user in CustomUser.objects.all()]
             if bundle.data['email'] in emaillist:
-                raise BadRequest(bundle.data['email']+' has been used.')
+                raise BadRequest('Email "'+bundle.data['email']+'"" has been used.')
         return bundle
 
 class AddressResource(ModelResource):
