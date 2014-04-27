@@ -148,6 +148,31 @@ class EventLikeResource(ModelResource):
         authentication = CustomAuthentication()
         authorization = EventRSVPCustomAuthorization()
 
+
+    def obj_create(self, bundle, **kwargs):
+        try:
+          user=UserResource().get_via_uri(bundle.data['fk_user'],bundle.request)
+          event=EventResource().get_via_uri(bundle.data['fk_event'],bundle.request)
+          userlist=[rsvp.fk_user for like in EventLike.objects.filter(fk_event=event)]
+          if user in userlist:
+            raise DuplicateError
+          bundle = super(EventLikeResource, self).obj_create(bundle, **kwargs)
+            
+            # event=Event.objects.get(pk=bundle.)
+
+        except DuplicateError:
+          raise BadRequest('like already.')
+            # usernamelist=[user.username for user in CustomUser.objects.all()]
+            # if bundle.data['username'] in usernamelist:
+            #     raise BadRequest('Username -'+bundle.data['username']+'- has been used.')
+            # emaillist=[user.email for user in CustomUser.objects.all()]
+            # if bundle.data['email'] in emaillist:
+            #     raise BadRequest('Email -'+bundle.data['email']+'- has been used.')
+        # event=Event.objects.get(pk=bundle.obj.fk_event_id)
+        event.event_like=len(EvnetLike.objects.filter(fk_event__id=event.id))
+        event.save()
+        return bundle
+
 class EventCommentResource(ModelResource):
     fk_comment_poster_user = fields.ForeignKey(UserResource,
                                              'fk_comment_poster_user',
