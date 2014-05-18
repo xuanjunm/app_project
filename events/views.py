@@ -52,10 +52,7 @@ class EventCreateView(generic.CreateView):
         self.object = None
         form = self.get_form(self.form_class)
 
-        # let fk_event_poster_user = current login user
         form.instance.fk_event_poster_user = request.user
-        form.instance.fk_event_image=UserImage.objects.get(path=form.instance.event_image_name)
-
 
         if form.is_valid():
             return self.form_valid(form)

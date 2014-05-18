@@ -24,6 +24,19 @@ from tastypie.models import ApiKey
 class DashboardView(generic.TemplateView):
     template_name = 'basal/dashboard.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(DashboardView, self).get_context_data(**kwargs)
+
+        temp = Address.objects.filter(fk_user=self.request.user)
+        context['address_list'] = temp
+
+        temp = Event.objects.filter(fk_event_poster_user=self.request.user)
+        context['event_list'] = temp
+
+        context['current_path'] = self.request.get_full_path()
+
+        return context
+
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(DashboardView, self).dispatch(*args, **kwargs)
@@ -62,7 +75,7 @@ class MyRSVPsView(generic.ListView):
         return EventRSVP.objects.filter(fk_user=self.request.user)
 
     def get_context_data(self, **kwargs):
-        context = super(MyRSVPsView, self).get_context_data(**kwargs)
+        context = super(myrsvpsview, self).get_context_data(**kwargs)
         context['current_path'] = self.request.get_full_path()
         return context
 

@@ -14,41 +14,36 @@ from django.contrib.auth import get_user_model
 
 class CustomAuthentication(ApiKeyAuthentication):
     def is_authenticated(self, request, **kwargs):
-        """
+        '''
         Will try to authenticate User using ApiKey
         If fail, User = None
-        """
+        '''
         User = get_user_model()
         try:
             username, api_key = self.extract_credentials(request)
         except ValueError:
             request.user = None
-            # user = None, but can still access api
             return True 
-#            return self._unauthorized()
 
         if not username or not api_key:
             request.user = None
-            # user = None, but can still access api
             return True
 #            return self._unauthorized()
 
         try:
-            #import pdb;pdb.set_trace()
+#            import pdb;pdb.set_trace()
             user = User.objects.get(username=username)
         except (User.DoesNotExist, User.MultipleObjectsReturned):
             request.user = None
-            # user = None, but can still access api
             return True
-#            return self._unauthorized()
 
         if not self.check_active(user):
             request.user = None
             return True
 
         key_auth_check = self.get_key(user, api_key)
-        if key_auth_check and not isinstance(key_auth_check, 
-                HttpUnauthorized):
+
+        if key_auth_check and not isinstance(key_auth_check, HttpUnauthorized):
             request.user = user
         else:
             request.user = None
@@ -56,11 +51,15 @@ class CustomAuthentication(ApiKeyAuthentication):
         return True
 
 class UserCustomAuthorization(Authorization):
+    '''
+    used by UserResource
+    '''
+
     def create_list(self, object_list, bundle):
-        return True
+        return Unauthorized('Disabled')
+#        return True
 
     def read_list(self, object_list, bundle):
-        #       import pdb;pdb.set_trace()
         return object_list
 
     def update_list(self, object_list, bundle):
@@ -81,18 +80,13 @@ class UserCustomAuthorization(Authorization):
     def delete_detail(self, object_list, bundle):
         return Unauthorized('Disabled')
 
-class PropertiesCustomAuthorization(Authorization):
-    def create_list(self, object_list, bundle):
-        return Unauthorized('Disabled')
+class PropertiesCustomAuthorization(UserCustomAuthorization):
+    '''
+    used by  UserImageResource, AddressResource
+    '''
 
     def read_list(self, object_list, bundle):
         return object_list.filter(fk_user=bundle.request.user)
-
-    def update_list(self, object_list, bundle):
-        return Unauthorized('Disabled')
-
-    def delete_list(self, object_list, bundle):
-        return Unauthorized('Disabled')
 
     def create_detail(self, object_list, bundle):
         if bundle.request.user == None:
@@ -103,7 +97,7 @@ class PropertiesCustomAuthorization(Authorization):
         return bundle.obj.fk_user == bundle.request.user
 
     def update_detail(self, object_list, bundle):
-        #import pdb;pdb.set_trace()
+#        import pdb;pdb.set_trace()
         return bundle.obj.fk_user == bundle.request.user
 
     def delete_detail(self, object_list, bundle):
@@ -183,9 +177,9 @@ class ApiTokenResource(ModelResource):
         authentication = BasicAuthentication()
 
     def get_detail(self, request, **kwargs):
-        #        import pdb;pdb.set_trace()
+#        import pdb;pdb.set_trace()
 #        if kwargs['pk'] != 'auth':
-           # raise NotImplementedError('Resource not found')
+#            raise NotImplementedError('Resource not found')
         obj = ApiKey.objects.get(user=request.user)
 
         bundle = self.build_bundle(obj=obj, request=request)

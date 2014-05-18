@@ -1,0 +1,27 @@
+<div class='event_list_wrapper row'>
+    <h3 id='my_events'>Event</h3>
+    {% if event_list %}
+    <ul>
+        {% for event in event_list %}
+        <div class='row'>
+            <div class='alpha nine columns event_wrapper'>
+                <h5 class='lesser_emphasis'>{{ event.event_title }}</h5>
+                <p>{{ event.event_status }}, 
+                {{ event.event_time }},
+                <br />{{ event.event_location.address_region }} 
+                {{ event.event_location.address_city }}</p>
+                <div class='row'>
+                    <a class='' href='{% url 'events:event_update' event.id %}?back={{ current_path }}'>Update</a>
+                    <a class='' href='{% url 'events:event_delete' event.id %}?back={{ current_path }}'>Delete</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p class='italic'>No Event are available.</p>
+    {% endif %}
+
+    <a class='row lesser_emphasis' href='{% url 'events:event_create' %}?back={{ current_path }}' title='create event link'>Create a new event</a>
+    <hr class='half-bottom' />
+</div>

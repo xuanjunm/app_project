@@ -39,6 +39,9 @@ class UserUpdateForm(forms.ModelForm):
     """
     Form use for user_update page
     """
+
+    CHOICES=[('male','male'),('female','female')]
+    user_gender = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect)
     class Meta:
         model = CustomUser
         exclude = ['password', 'last_login', 'is_superuser', 

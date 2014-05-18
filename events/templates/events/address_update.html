@@ -2,7 +2,7 @@
 {% block h2 %}Update Address{% endblock %}
 {% block main %}
 <form action='{% url 'events:address_update' address.id %}' 
-    class='remove-bottom six columns alpha' method='post'>
+    class='remove-bottom alpha' method='post'>
     {% csrf_token %}
     <input type='hidden' name='path_from' value='{{ path_from }}'>
     <div class='row alpha'>

@@ -1,23 +1,31 @@
 {% extends 'base.html' %}
-{% block h2 %}Events List{% endblock %}
+{% block h1 %}The Events{% endblock %}
+{% block h4 %}Latest events. Upcoming events.{% endblock %}
 {% block main %}
-<p>These are 10 latest events</p>
 {% if event_list %}
 <ul>
     {% for event in event_list %}
-    <li><a href='{% url 'events:event_detail' event.id %}'>
-        {{ event.event_title }}</a></li>
+    <li><div class='event_wrapper'>
+        <h3>{{ event.event_title }}</h3>
+        <h6 class='italic_span'>{{ event.event_date }}</h6>
+        <p>{{ event.fk_address.address_region }}, {{ event.fk_address.address_city }}</p>
+        <a href='{% url 'events:event_detail' event.id %}'>
+            Details<a>
+        <hr />
+    </div></li>
     {% endfor %}
 </ul>
 {% else %}
 <p>No event are available.</p>
 {% endif %}
 
+<p class='lesser_emphasis'>
 {% if user.username %}
-<p><a href='{% url 'events:event_create' %}' title='create event link'>
-    Create a new event</a></p>
+<a href='{% url 'events:event_create' %}' title='create event link'>
+    Create a new event</a>
 {% else %}
-<p><a href='{% url 'basal:user_login' %}'>Sign in</a> to create a new 
-event. Or <a href='{% url 'basal:user_create' %}'>Join us</a> today!</p>
+<a href='{% url 'basal:user_login' %}'>Sign in</a> to create a new 
+event. Or <a href='{% url 'basal:user_create' %}'>Join us</a> today!
 {% endif %}
+</p>
 {% endblock %}

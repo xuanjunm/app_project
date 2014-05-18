@@ -1,21 +1,22 @@
 {% extends 'base.html' %}
-{% block h2 %}Login{% endblock %}
+{% block h1 %}Sign In{% endblock %}
+{% block h4 %}Update profile. Change avatar image. Create events. Join events.{% endblock %}
 {% block main %}
-<div id='form_container'>
+<div class='form_wrapper'>
     {% if form.non_field_errors %}
-    <ul class='form-errors'>
+    <ul class='form_errors'>
         {% for error in form.non_field_errors %}
         <li>{{ error }}</li>
         {% endfor %}
     </ul>
     {% endif %}
-    <form id='form' method='post' action='{% url 'basal:user_login' %}'>
+    <form id='login_form' method='post' action='{% url 'basal:user_login' %}'>
         {% csrf_token %}
         {% for field in form %}
         <div class='field_wrapper'>
-            <div id='labelname'>{{ field.label_tag }}</div>
-            <div id='error'><strong>{{ field.errors }}</strong></div>
-            <div id='field'>{{ field }}</div>
+            <div class='labelname'>{{ field.label_tag }}</div>
+            <div class='error'>{{ field.errors }}</div>
+            <div class='field'>{{ field }}</div>
             <p>{{ field.help_text }}</p>
         </div>
         {% endfor %}

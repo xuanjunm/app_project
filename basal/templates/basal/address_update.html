@@ -1,18 +1,22 @@
 {% extends 'base.html' %}
-{% block h2 %}Update Address{% endblock %}
+{% block h1 %}Update Address{% endblock %}
+
 {% block main %}
-<form action='{% url 'basal:address_update' address.id %}?back={{ back }}' 
-    class='remove-bottom six columns alpha' method='post'>
-    {% csrf_token %}
-    <input type='hidden' name='back' value='{{ back }}'>
-    <div class='row alpha'>
+<div class='form_wrapper'>
+    {% if form.non_field_errors %}
+    <ul class='form_errors'>
+        {% for error in form.non_field_errors %}
+        <li>{{ error }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <form id='address_update_form' action='{% url 'basal:address_update' address.id %}?back={{ back }}' class='alpha clearfix' method='post'>
+        <input type='hidden' name='back' value='{{ back }}'>
+        {% csrf_token %}
         {{ form }}
-    </div>
-    <div class='row alpha'>
-        <div class='three columns alpha'>
-            <input name='form' type='submit' value='Update Address' />
-            <a href='{{ back }}'>Back</a>
-        </div>
-    </div>
-</form>
+        <input name='form' type='submit' value='Update Address' />
+        <br />
+        <a class='back_btn' href='{{ back }}'>Back</a>
+    </form>
+</div>
 {% endblock %}

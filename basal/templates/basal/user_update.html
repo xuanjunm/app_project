@@ -1,22 +1,29 @@
 {% extends 'base.html' %}
-{% block head %}
+{% block extra_head %}
 {% load staticfiles %}
 <script type='text/javascript' 
     src='{% static 'events/js/event_form.js' %}'></script>
 {% endblock %}
-{% block h2 %}Update Profile{% endblock %}
+
+{% block h1 %}Update Profile{% endblock %}
+{% block h4 %}Change you name, change your email, change your everything.{% endblock %}
+
 {% block main %}
-<form action='{% url 'basal:user_update' %}' 
-    class='seven columns alpha' method='post'>
-    {% csrf_token %}
-    <div class='row alpha'>
+<div class='form_wrapper'>
+    {% if form.non_field_errors %}
+    <ul class='form_errors'>
+        {% for error in form.non_field_errors %}
+        <li>{{ error }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <form id='user_update_form' class='alpha clearfix' action='{% url 'basal:user_update' %}' method='post'>
+        {% csrf_token %}
         {{ form }}
-    </div>
-    <div class='row alpha'>
-        <div class='three columns alpha'>
-            <input name='form' type='submit' value='Update Profile' />
-            <a href='{% url 'basal:dashboard' %}'>Back</a>
-        </div>
-    </div>
-</form>
+
+        <input name='form' type='submit' value='Update Profile' />
+        <br />
+        <a href='{% url 'basal:dashboard' %}'>Back</a>
+    </form>
+</div>
 {% endblock %}

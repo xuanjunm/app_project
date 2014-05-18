@@ -17,53 +17,123 @@
 /* #Site Styles
 ================================================== */
 
-.reset {
-    margin: 0;
+/* #layout
+--------------------*/ 
+.side_bar {
+    position: fixed;
+    margin-top: 6em;
 }
 
-.remove_decoration {
-    text-decoration: none;
+.main_wrapper {
+    margin-top: 6em;
+    overflow: auto;
 }
 
-h2 {
+/* #nav
+--------------------*/ 
+.side_bar h3 {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: bold;
-    color: #666;
-    font-size: 24px;
     margin-bottom: 1em;
 }
 
-.field_label {
-    font-weight: bold;
+#nav_hr {
+    margin: 3em 0;
+}
+
+nav ul li a, nav ul li a:visited {
+   text-decoration: none; 
+   font-size: 14px;
+   font-weight: 600;
+   color: #555;
+}
+
+.anchor_nav {
+    margin-left: 1em;
+}
+
+/* #header
+--------------------*/ 
+header {
+    border-bottom: 0.5em solid #eaeaea;
+    margin-bottom: 3em;
+}
+
+header h1 {
+    font-size: 60px;
+}
+
+header h4 {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 600;
+    color: #aaa;
+    margin-bottom: 3em;
+}
+
+/* #form
+--------------------*/ 
+.form_errors li, .error {
+    font-style: italic;
+    color: #600;
+}
+
+.form_label {
+    font-weight: 700;
+    margin: 0;
+}
+
+
+.form_detail {
+    margin: 0 0 0.5em 0;
+}
+
+form label {
+    text-transform: capitalize;
 }
 
 form textarea {
-    width: 100%;
+    width: 90%;
+}
+
+.radio_wrapper {
+    float: left;
+}
+
+.radio_wrapper input {
+    float: left;
+    margin-right: 1em;
+}
+
+/* #misc
+--------------------*/ 
+.italic {
+    font-style: italic;
+}
+
+.lesser_emphasis { /* for additional options and side menu */
+    font-weight: 600;
+    color: #555;
 }
 
 /* #Page Styles
 ================================================== */
 
-/* header & nav */
-nav li {
-    display: block;
-    float: left;
-    margin-right: 2em;
+/* #event_list.html & dashboard_wrapper.html
+--------------------*/ 
+.address_wrapper {
+    border-bottom: 1px dashed #ddd;
 }
 
-nav a:hover {
-    color: #f77;
+.event_wrapper, .address_wrapper h5 {
+    text-transform: capitalize;
 }
 
-/* address_detail */
-#address_wrapper {
-    padding: 2px;
-    border: 1px solid #ccc;
+.event_wrapper h3, .dashboard_wrapper h3, .address_wrapper h3 {
+    margin-bottom: 1em;
 }
 
-/* user_image */
-.user_image {
-    height: 200px;
-    width: auto;
+.event_wrapper p, .address_wrapper p {
+    margin-bottom: 0.5em;
 }
 
 /* #Media Queries

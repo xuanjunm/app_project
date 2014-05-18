@@ -10,7 +10,16 @@
     method='post'>
     {% csrf_token %}
     <div class='row alpha'>
-        {{ form }}
+        <div class='form_label'>Event Title</div>
+        {{ form.event_title }}
+        <div class='form_label'>Event Title</div>
+
+        {{ form.event_type }}
+        {{ form.event_time }}
+        {{ form.event_detail }}
+        {{ form.event_capacity }}
+        {{ form.event_fk_event_image }}
+        {{ form.event_fk_event_location }}
         <a class='alpha two columns' 
             href='{% url 'basal:address_create' %}?back={{ current_path }}'>create address</a>
 

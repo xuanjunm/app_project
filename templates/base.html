@@ -33,7 +33,7 @@
         src='{% static 'js/jquery-ui-1.10.3.custom.min.js' %}'></script>
     <script type='text/javascript' 
         src='{% static 'js/jquery.ui.timepicker.js' %}'></script>
-    {% block head %}{% endblock %}
+    {% block extra_head %}{% endblock %}
 
     <!--[if lt IE 9]>
     <script src='http://html5shim.googlecode.com/svn/trunk/html5.js'>
@@ -49,40 +49,45 @@
     href='{% static 'img/apple-touch-icon-72x72.png' %}'>
     <link rel='apple-touch-icon' sizes='114x114' 
     href='{% static 'images/apple-touch-icon-114x114.png' %}'>
-
 </head>
+
 <body>
     <div class='container'>
-        <header class='add-bottom sixteen columns'>
-        <h1><a href='#' title='logo' class='remove_decoration'>App</a></h1>
-        </header>
-        <nav class='sixteen columns'>
-        <ul>
-            <li><a class='remove_decoration' 
-                href='{% url 'basal:main' %}'>main</a></li>
-            <li><a  class='remove_decoration' 
-                href='{% url 'events:event_list' %}'>event list</a></li>
-            {% if user.username %}
-            <li><a class='remove_decoration' 
-                href='{% url 'basal:dashboard' %}'>{{ user.username }}'s 
-                dashboard</a></li>
-            <li>
-            <a class='remove_decoration' 
-                href='{% url 'basal:logout' %}?next={% url 'basal:main' %}'>
-                logout</a></li>
-            {% else %}
-            <li><a class='remove_decoration' 
-                href='{% url 'basal:user_login' %}'>sign in</a></li>
-            <li><a class='remove_decoration' 
-                href='{% url 'basal:user_create' %}'>join us</a></li>
-            {% endif %}
-        </ul>
-        </nav>
-        <hr />
-        <main class='sixteen columns'>
-        <h2>{% block h2 %}{% endblock %}</h2>
-        {% block main %}{% endblock %}
-        </main>
+        <div class='side_bar clearfix three columns'>
+            <h3>The App</h3>
+            <nav>
+            <ul>
+                <li><a id='nav_a' href='{% url 'basal:main' %}'>What's Up?</a></li>
+                <li><a href='{% url 'events:event_list' %}'>The Events</a></li>
+                <li><a href=#>Contact Us</a></li>
+            </ul>
+            <hr id='nav_hr' />
+            <ul>
+                {% if user.username %}
+                <li><a class='nav_b' href='{% url 'basal:dashboard' %}'>My Dashboard</a></li>
+                <div class='anchor_nav'>
+                    {% block sub_nav %}{% endblock %}
+                </div>
+                <li>
+                <a href='{% url 'basal:logout' %}?next={% url 'basal:main' %}'>Sign Out</a></li>
+                {% else %}
+                <li><a href='{% url 'basal:user_login' %}'>Sign In</a></li>
+                <li><a href='{% url 'basal:user_create' %}'>Join Us</a></li>
+                {% endif %}
+            </ul>
+            </nav>
+            &nbsp;
+        </div>
+
+        <div class='main_wrapper clearfix twelve columns offset-by-four'>
+            <header>
+            <h1>{% block h1 %}{% endblock %}</h1>
+            <h4>{% block h4 %}{% endblock %}</h4>
+            </header>
+            <main>
+            {% block main %}{% endblock %}
+            </main>
+        </div>
     </div><!-- container -->
 </body>
     </html>

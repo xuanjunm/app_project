@@ -1,11 +1,15 @@
 {% extends 'base.html' %}
-{% block h2 %}Are you really going to remove {{ address.address_title }}?
-{% endblock %}
+{% block h1 %}Delete Address{% endblock %}
+
 {% block main %}
-<form action='{% url 'basal:address_delete' address.id %}?back={{ back }}' method='post'>
-    <input type='submit' value='Yes, Please'/>
-    {% csrf_token %}
-    <input type='hidden' name='back' value='{{ back }}'>
-</form>
-<a href='{{ back }}'>Back</a>
+<p>Are you really going to remove {{ address.address_title }}?</p>
+<div class='form_wrapper'>
+    <form action='{% url 'basal:address_delete' address.id %}?back={{ back }}' method='post'>
+        <input type='hidden' name='back' value='{{ back }}'>
+        {% csrf_token %}
+        <input type='submit' value='Yes, Please'/>
+        <br />
+        <a href='{{ back }}'>Back</a>
+    </form>
+</div>
 {% endblock %}
