@@ -72,7 +72,7 @@ header h4 {
 
 /* #form
 --------------------*/ 
-.form_errors li, .error {
+.form_errors li, .error, .errorlist li {
     font-style: italic;
     color: #600;
 }
@@ -110,6 +110,10 @@ form textarea {
     font-style: italic;
 }
 
+.small {
+    font-size: 0.7em;
+}
+
 .lesser_emphasis { /* for additional options and side menu */
     font-weight: 600;
     color: #555;
@@ -118,22 +122,73 @@ form textarea {
 /* #Page Styles
 ================================================== */
 
-/* #event_list.html & dashboard_wrapper.html
+/* #event_list.html & dashboard.html
 --------------------*/ 
-.address_wrapper {
-    border-bottom: 1px dashed #ddd;
+.address_wrapper hr {
+    border: 1px dashed #ddd;
 }
 
-.event_wrapper, .address_wrapper h5 {
+.event_wrapper, .address_wrapper h5, .tag_wrapper {
     text-transform: capitalize;
 }
 
-.event_wrapper h3, .dashboard_wrapper h3, .address_wrapper h3 {
+.event_wrapper h3, .dashboard_wrapper h3, .address_wrapper h3, 
+.tag_list_wrapper h3 {
     margin-bottom: 1em;
 }
 
 .event_wrapper p, .address_wrapper p {
     margin-bottom: 0.5em;
+}
+
+.rsvp_wrapper p {
+    margin: 0;
+}
+
+.address_wrapper {
+    width: 90%;
+}
+
+.tag_list_wrapper p {
+    line-height: 3em;
+}
+
+.tag_wrapper {
+    padding: 0.5em;
+    background: #3c3;
+    margin-right: 0.5em;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+.tag_wrapper strong a {
+    margin-left: 1em;
+    text-decoration: none;
+    color: #f00;
+}
+
+#user_tag_form {
+    margin-top: 2em;
+}
+
+#user_tag_form input {
+    display: inline;
+}
+
+/* #event_detail.html
+--------------------*/ 
+.rsvp_list_wrapper ul li {
+    margin: 0;
+}
+
+.comment_wrapper {
+    background: #ededed;
+    margin-bottom: 1em;
+}
+
+.comment_wrapper p {
+    margin: 0;
 }
 
 /* #Media Queries

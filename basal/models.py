@@ -44,6 +44,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
                                    blank=True)
     user_description = models.TextField(blank=True)
     user_nickname = models.CharField(max_length=255, blank=True)
+    user_location = models.CharField(max_length=255, blank=True)
     fk_user_background_image = models.ForeignKey('UserImage', blank=True, null=True, related_name='user_background_image')
     fk_user_image = models.ForeignKey('UserImage', blank=True, null=True, related_name='user_image')
     # UserImage is between quote because of circular reference
@@ -99,7 +100,7 @@ class Address(models.Model):
         return self.fk_user == user
 
     def __unicode__(self):
-        return u'%s - %s' % (self.fk_user, self.address_title)
+        return u'%s' % (self.address_title)
 
 class UserFriendAttribute(models.Model):
     fk_friend_a_user = models.ForeignKey(CustomUser, related_name='friend_a')
@@ -107,7 +108,13 @@ class UserFriendAttribute(models.Model):
 
     def __unicode__(self):
         return '%s - %s' % (self.fk_friend_a_user, self.fk_friend_b_user)
-                                        
+
+class UserTag(models.Model):
+    tag = models.CharField(max_length=255)
+    fk_user = models.ForeignKey(CustomUser)
+
+    def __unicode__(self):
+        return u'%s %s' % (self.fk_user, self.tag)
 #def create_user_image(sender, **kwargs):        
 #    """
 #    A Signal for hooking up automatic 'UserImage' creation.

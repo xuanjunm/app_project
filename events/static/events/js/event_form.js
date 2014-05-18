@@ -15,17 +15,14 @@ $(document).ready(function() {
 
 function fetch_address_or_not() {
     if ($('#id_fk_address').val() == '') {
-        $('#address_holder').html('<div class="alpha seven columns" '
-                                  + 'id="address_wrapper"> No address has'
-                                  + ' been selected.</div>');
+        $('#address_holder').html('No address has been selected.');
     } else {
         fetch_address(generate_address_url());
     }
 }
 
 function generate_address_url() {
-    return $('#address_holder').data('url').replace(/999/,
-            $('#id_fk_address').val());
+    return $('#address_holder').data('url').replace(/1357924680/, $('#id_fk_address').val());
 }
 
 function fetch_address(url) {

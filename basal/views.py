@@ -33,6 +33,12 @@ class DashboardView(generic.TemplateView):
         temp = Event.objects.filter(fk_event_poster_user=self.request.user)
         context['event_list'] = temp
 
+        temp = EventRSVP.objects.filter(fk_user=self.request.user)
+        context['rsvp_list'] = temp
+
+        temp = UserTag.objects.filter(fk_user=self.request.user)
+        context['tag_list'] = temp
+
         context['current_path'] = self.request.get_full_path()
 
         return context
@@ -67,21 +73,21 @@ class UserUpdateView(generic.UpdateView):
     def dispatch(self, *args, **kwargs):
         return super(UserUpdateView, self).dispatch(*args, **kwargs)
 
-class MyRSVPsView(generic.ListView):
-    template_name = 'basal/my_rsvps.html'
-    model = EventRSVP
-
-    def get_queryset(self):
-        return EventRSVP.objects.filter(fk_user=self.request.user)
-
-    def get_context_data(self, **kwargs):
-        context = super(myrsvpsview, self).get_context_data(**kwargs)
-        context['current_path'] = self.request.get_full_path()
-        return context
-
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(MyRSVPsView, self).dispatch(*args, **kwargs)
+#class MyRSVPsView(generic.ListView):
+#    template_name = 'basal/my_rsvps.html'
+#    model = EventRSVP
+#
+#    def get_queryset(self):
+#        return EventRSVP.objects.filter(fk_user=self.request.user)
+#
+#    def get_context_data(self, **kwargs):
+#        context = super(myrsvpsview, self).get_context_data(**kwargs)
+#        context['current_path'] = self.request.get_full_path()
+#        return context
+#
+#    @method_decorator(login_required)
+#    def dispatch(self, *args, **kwargs):
+#        return super(MyRSVPsView, self).dispatch(*args, **kwargs)
 
 class MyEventsView(generic.ListView):
     template_name = 'basal/my_events.html'
@@ -108,35 +114,35 @@ def authorized_to_update_address_decorator(fn):
             return HttpResponseRedirect(reverse('basal:user_login'))
     return decorator
 
-class AddressListView(generic.ListView):
-    template_name = 'basal/address_list.html'
-    model = Address
+#class AddressListView(generic.ListView):
+#    template_name = 'basal/address_list.html'
+#    model = Address
+#
+#    def get_queryset(self):
+#        return Address.objects.filter(fk_user=self.request.user)
+#
+#    def get_context_data(self, **kwargs):
+#        context = super(AddressListView, self).get_context_data(**kwargs)
+#        context['current_path'] = self.request.get_full_path()
+#        return context
+#
+#    @method_decorator(login_required)
+#    def dispatch(self, *args, **kwargs):
+#        return super(AddressListView, self).dispatch(*args, **kwargs)
 
-    def get_queryset(self):
-        return Address.objects.filter(fk_user=self.request.user)
-
-    def get_context_data(self, **kwargs):
-        context = super(AddressListView, self).get_context_data(**kwargs)
-        context['current_path'] = self.request.get_full_path()
-        return context
-
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(AddressListView, self).dispatch(*args, **kwargs)
-
-class AddressDetailView(generic.DetailView):
-    template_name = 'basal/address_detail.html'
-    model = Address
-
-    def get_context_data(self, **kwargs):
-        context = super(AddressDetailView, self).get_context_data(**kwargs)
-        if self.request.GET.get('back'):
-            context['back'] = self.request.GET.get('back')
-        return context
-
-    @method_decorator(authorized_to_update_address_decorator)
-    def dispatch(self, *args, **kwargs):
-        return super(AddressDetailView, self).dispatch(*args, **kwargs)
+#class AddressDetailView(generic.DetailView):
+#    template_name = 'basal/address_detail.html'
+#    model = Address
+#
+#    def get_context_data(self, **kwargs):
+#        context = super(AddressDetailView, self).get_context_data(**kwargs)
+#        if self.request.GET.get('back'):
+#            context['back'] = self.request.GET.get('back')
+#        return context
+#
+#    @method_decorator(authorized_to_update_address_decorator)
+#    def dispatch(self, *args, **kwargs):
+#        return super(AddressDetailView, self).dispatch(*args, **kwargs)
 
 class AddressCreateView(generic.CreateView):
     template_name = 'basal/address_create.html'
@@ -339,3 +345,25 @@ class UserImageDeleteView(generic.DeleteView):
     @method_decorator(authorized_to_update_user_image_decorator)
     def dispatch(self, *args, **kwargs):
         return super(UserImageDeleteView, self).dispatch(*args, **kwargs)
+
+@login_required
+def user_tag_delete(request, pk):
+#    import pdb;pdb.set_trace()
+    user_tag = UserTag.objects.get(pk=pk)
+    user_tag.delete()
+    if request.GET.get('back'):
+        return HttpResponseRedirect(request.GET.get('back'))
+    else:
+        return HttpResponseRedirect(reverse('basal:dashboard'))
+
+@login_required
+def user_tag_create(request):
+    temp = request.POST.get('tag_input')
+    if temp != '':
+        user_tag = UserTag(fk_user=request.user, tag=temp)
+        user_tag.save()
+
+    if request.GET.get('back'):
+        return HttpResponseRedirect(request.GET.get('back'))
+    else:
+        return HttpResponseRedirect(reverse('basal:dashboard'))

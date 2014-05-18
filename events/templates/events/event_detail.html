@@ -1,79 +1,112 @@
 {% extends 'base.html' %}
-{% block h2 %}Event: {{ event.event_title }}{% endblock %}
+{% block h1 %}Event Details{% endblock %}
 
 {% block main %}
-<div class='row'>
-<div class='alpha eight columns'>
-    <ul id='details'>
-        <li class='row'><span class='field_label three columns'>
-            Event type: </span>{{ event.event_type }}</li>
-        <li class='row'><span class='field_label three columns'>
-            Event status: </span>{{ event.event_status }}</li>
-        <li class='row'><span class='field_label three columns'>
-            Event time: </span>{{ event.event_time }}</li>
-        <li class='row'><span class='field_label three columns'>
-            Event create time: </span>{{ event.event_create_time }}</li>
-        <li class='row'><span class='field_label three columns'>
-            Event view count: </span>{{ event.event_view_count }}</li>
-        <li class='row'><span class='field_label three columns'>
-            Event capacity: </span>{{ event.event_capacity }}</li>
-        <li class='row'><span class='field_label three columns'>RSVP: </span>
-        {{ event.event_rsvp }}</li>
-        <li class='row'><span class='field_label three columns'>Likes: </span>
-        {{ event.event_like }}</li>
-        <li class='row'><span class='field_label three columns'>
-            Recent updates: </span>{{ event.event_recent_update }}</li>
-        <li class='row'><span class='field_label three columns'>Details: </span>
-        {{ event.event_detail }}</li>
-        <li class='row'><span class='field_label three columns'>
-            Location: </span>
-        <div class='alpha three columns'>
-            <p class='reset'>[ {{ event.fk_address }} ]</p>
-            <p class='reset'>{{ event.fk_address.address_detail }}</p>
-            <p class='reset'>{{ event.fk_address.address_city }}, 
-            {{ event.fk_address.address_region }}</p> 
-            <p class='reset'>{{ event.fk_address.address_country }} 
-            {{ event.fk_address.address_postal_code }}</p>
-        </div></li>
+<div class='event_wrapper row'>
+    <h3>{{ event.event_title }}</h3>
+    <div class='row'>
+        <div class='alpha five columns'>
+            <p class='form_label'>Status:</p>
+            <p class='form_detail'>{{ event.event_status }}</p>
+            <p class='form_label'>Capacity:</p>
+            <p class='form_detail'>{{ event.event_capacity }}</p>
+            <p class='form_label'>View count:</p>
+            <p class='form_detail'>{{ event.event_view_count }}</p>
+            <p class='form_label'>Likes:</p>
+            <p class='form_detail'>{{ event.event_like }}</p>
+            <p class='form_label'>Organizer:</p>
+            <p class='form_detail'>{{ event.fk_event_poster_user.user_first_name }} {{ event.fk_event_poster_user.user_last_name }}</p>
+        </div>
+        <div class='five columns'>
+            <p class='form_label'>Time:</p>
+            <p class='form_detail'>{{ event.event_time }}</p>
+            <p class='form_label'>Location:</p>
+            <div class='address_wrapper'>
+                <h5 class='lesser_emphasis'>{{ event.fk_address.address_title }}</h5>
+                <p>{{ event.fk_address.address_city }}, 
+                {{ event.fk_address.address_region }}
+                <br />{{ event.fk_address.address_country }} 
+                {{ event.fk_address.address_postal_code }}</p>
+            </div>
+            <p class='form_label'>Description:</p>
+            <p class='form_detail'>{{ event.event_detail }}</p>
+        </div>
+    </div>
+</div>
+
+<hr />
+
+<div class='row rsvp_list_wrapper clearfix'>
+    <h3>RSVPs</h3>
+    <ul class='clearfix add-bottom'>
+        {% for rsvp in event.eventrsvp_set.all %}
+        <li class='alpha five columns'>- {{ rsvp.fk_user.username }}</li>
+        {% endfor %}
     </ul>
+    <p class='row'>Total: {{ event.eventrsvp_set.all.count }}</p>
 </div>
-<div class='alpha five columns'>
-    <p class='field_label'>RSVP List:</p>
-    <ul>
-    {% for rsvp in event.eventrsvp_set.all %}
-    <li>{{ rsvp.fk_user.username }}</li>
-    {% endfor %}
-    </ul>
+
+<hr />
+
+<div class='row comment_list_wrapper clearfix'>
+    <h3>Comments</h3>
+        {% for comment in comment_list %}
+        <div class='comment_wrapper alpha clearfix'>
+            <p>{{ comment.comment_detail }}</p>
+            <p class='small'>{{ comment.fk_comment_poster_user.user_first_name }}
+            <span class='small italic'>{{ comment.comment_post_time }}
+            </span></p>
+        </div>
+        {% endfor %}
+        <p><a class='row lesser_emphasis' href='{% url 'events:event_comment_create' event.id %}?back={{ current_path }}' title='create event comment link'>Create a new comment</a></p>
 </div>
-</div>
-<div class='row'>
-{% if back %}
-<p class='alpha two columns'><a href='{{ back }}'>back</a></p>
-{% else %}
-<p class='alpha two columns'><a href='{% url 'events:event_list' %}'>back to list</a></p>
-{% endif %}
-{% if event_owner %}
-<p class='alpha two columns'><a href='{% url 'events:event_update' event.id %}?back={{ current_path }}'>update event</a></p>
-{% if back %}
-<p class='alpha two columns'><a href='{% url 'events:event_delete' event.id %}?back={{ back }}'>delete event</a></p>
-{% else %}
-<p class='alpha two columns'><a href='{% url 'events:event_delete' event.id %}?back={% url 'events:event_list' %}'>delete event</a></p>
-{% endif %}
-{% else %}
-{% if event_rsvp %}
-<p class='alpha two columns'>
-{% if back %}
-<a href='{% url 'events:event_rsvp_remove' event.id %}?back={{ current_path }}'>remove rsvp</a></p>
-{% else %}
-<a href='{% url 'events:event_rsvp_remove' event.id %}'>remove rsvp</a></p>
-{% endif %}
-{% else %}
-{% if back %}
-<p class='alpha two columns'><a href='{% url 'events:event_rsvp' event.id %}?back={{ current_path }}'>rsvp</a></p>
-{% else %}
-<p class='alpha two columns'><a href='{% url 'events:event_rsvp' event.id %}'>rsvp</a></p>
-{% endif %}
-{% endif %}
-{% endif %}
+
+<hr />
+
+<div class='lesser_emphasis row clearfix'>
+    <!-- back --!>
+    {% if back %}
+    <p class='alpha two columns'><a href='{{ back }}'>Back</a></p>
+    {% else %}
+    <p class='alpha two columns'><a href='{% url 'events:event_list' %}'>Back to list</a></p>
+    {% endif %}
+
+    <!-- user IS event_owner --!>
+    {% if event_owner %}
+    <!-- back exists --!>
+    <p class='alpha two columns'><a href='{% url 'events:event_update' event.id %}?back={{ current_path }}'>Update event</a></p>
+    {% if back %}
+    <p class='alpha two columns'><a href='{% url 'events:event_delete' event.id %}?back={{ back }}'>Delete event</a></p>
+
+    {% else %}
+    <!-- back DO NOT exists --!>
+    <p class='alpha two columns'><a href='{% url 'events:event_delete' event.id %}?back={% url 'events:event_list' %}'>Delete event</a></p>
+    {% endif %}
+
+    <!-- user is NOT event_owner --!>
+    {% else %}
+
+    {% if event_rsvp %}
+    <!-- rsvp exists --!>
+    <p class='alpha two columns'>
+    {% if back %}
+    <!-- back exists --!>
+    <a href='{% url 'events:event_rsvp_remove' event.id %}?back={{ current_path }}'>Remove RSVP</a></p>
+    {% else %}
+    <!-- back DO NOT exists --!>
+    <a href='{% url 'events:event_rsvp_remove' event.id %}'>Remove RSVP</a></p>
+    {% endif %}
+
+    {% else %}
+    <!-- rsvp DO NOT exists --!>
+    {% if back %}
+    <!-- back exists --!>
+    <p class='alpha two columns'><a href='{% url 'events:event_rsvp' event.id %}?back={{ current_path }}'>RSVP</a></p>
+    {% else %}
+    <!-- back DO NOT exists --!>
+    <p class='alpha two columns'><a href='{% url 'events:event_rsvp' event.id %}'>RSVP</a></p>
+    {% endif %}
+    {% endif %}
+    {% endif %}
 </div>
 {% endblock %}

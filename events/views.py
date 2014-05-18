@@ -35,10 +35,13 @@ class EventDetailView(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super(EventDetailView, self).get_context_data(**kwargs)
         c_event = Event.objects.get(pk=self.kwargs['pk'])
+        context['comment_list'] = EventComment.objects.filter(fk_event=c_event.id).order_by('-comment_post_time')
+                
         if (self.request.user) :
+#            import pdb;pdb.set_trace()
             context['event_owner'] = c_event.is_owner(self.request.user)
             context['event_rsvp'] = c_event.rsvp(self.request.user)
-#        import pdb;pdb.set_trace()
+
         if self.request.GET.get('back'):
             context['back'] = self.request.GET.get('back')
         context['current_path'] = self.request.get_full_path()
@@ -155,23 +158,33 @@ def event_rsvp_remove(request, pk):
         return HttpResponseRedirect(reverse('events:event_detail', args=(pk,)))
 
 class EventCommentCreateView(generic.CreateView):
+    model = EventComment
     form_class=EventCommentCreateForm
+    template_name = 'events/event_comment_create.html'
 
     def post(self, request, *args, **kwargs):
         self.object = None
-        form = self.get_form(request.POST)
+        form = self.get_form(self.form_class)
 
-        import pdb
-        pdb.set_trace()
-        # let fk_event_poster_user = current login user
-        form.instance.fk_event_poster_user = request.user
-        # form.instance.fk_event_image=UserImage.objects.get(path=form.instance.event_image_name)
-
+        form.instance.fk_comment_poster_user = request.user
+        form.instance.fk_event = Event.objects.get(pk=self.kwargs['pk'])
 
         if form.is_valid():
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
+
+    def get_success_url(self):
+            return self.request.POST.get('back')
+
+    def get_context_data(self, **kwargs):
+        context = super(EventCommentCreateView, self).get_context_data(**kwargs)
+        context['pk'] = self.kwargs['pk']
+        if self.request.GET.get('back'):
+            context['back'] = self.request.GET.get('back')
+
+#        import pdb;pdb.set_trace()
+        return context
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):

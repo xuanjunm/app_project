@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block h1 %}Create Address{% endblock %}
+
+{% block main %}
+<div class='form_wrapper'>
+    {% if form.non_field_errors %}
+    <ul class='form_errors'>
+        {% for error in form.non_field_errors %}
+        <li>{{ error }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <form id='address_update_form' action='{% url 'basal:address_create' %}?back={{ back }}' class='alpha clearfix' method='post'>
+        <input type='hidden' name='back' value='{{ back }}'>
+        {% csrf_token %}
+        {{ form }}
+        <input name='form' type='submit' value='Create Address' />
+        <br />
+        <a href='{{ back }}'>Back</a>
+    </form>
+</div>
+{% endblock %}

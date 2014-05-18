@@ -1,27 +1,29 @@
 {% extends 'base.html' %}
-{% block head %}
-{% load staticfiles %}
-<link rel='stylesheet' type='text/css' 
-href='{% static 'basal/css/create_user.css' %}' />
-{% endblock %}
-
-{% block title %}Registration{% endblock %}
-{% block h1 %}Registration{% endblock %}
+{% block h1 %}Join Us{% endblock %}
+{% block h4 %}Yes! Join us today. You would love it here.{% endblock %}
 
 {% block main %}
-<div id='form_container'>
-    <form id='form' method='post' action='{% url 'basal:user_create' %}'>
+<div class='form_wrapper'>
+    {% if form.non_field_errors %}
+    <ul class='form_errors'>
+        {% for error in form.non_field_errors %}
+        <li>{{ error }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <form id='user_create_form' action='{% url 'basal:user_create' %}?back={{ back }}' class='alpha clearfix' method='post'>
+        <input type='hidden' name='back' value='{{ back }}'>
         {% csrf_token %}
         {% for field in form %}
-        <div class='field_wrapper'>
-            <div class='labelname'>{{ field.label_tag }}</div>
-            <div class='error'><strong>{{ field.errors }}</strong></div>
-            <div class='field'>{{ field }}</div>
-            <p>{{ field.help_text }}</p>
-        </div>
+            {{ field.label_tag }}
+            {{ field.errors }}
+            {{ field }}
+            <p class='italic'>{{ field.help_text }}</p>
         {% endfor %}
 
-        <input id='button' type='submit' value='Submit'/>
+        <input name='form' type='submit' value='Join us' />
+        <br />
+        <a href='{{ back }}'>Back</a>
     </form>
 </div>
 {% endblock %}

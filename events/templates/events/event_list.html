@@ -10,7 +10,7 @@
         <h6 class='italic_span'>{{ event.event_date }}</h6>
         <p>{{ event.fk_address.address_region }}, {{ event.fk_address.address_city }}</p>
         <a href='{% url 'events:event_detail' event.id %}'>
-            Details<a>
+            Details</a>
         <hr />
     </div></li>
     {% endfor %}

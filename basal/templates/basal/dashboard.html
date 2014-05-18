@@ -5,6 +5,8 @@
 {% block sub_nav %}
 <li><a class='nav_b' href='#my_addresses'>My Addresses</a></li>
 <li><a class='nav_b' href='#my_events'>My Events</a></li>
+<li><a class='nav_b' href='#my_rsvps'>My RSVPs</a></li>
+<li><a class='nav_b' href='#my_tags'>My Tags</a></li>
 {% endblock %}
 
 {% block main %}
@@ -12,21 +14,23 @@
     <h3>Profile</h3>
     <div class='row'>
         <div class='alpha five columns'>
-            <p class='form_label'>Username</p>
+            <p class='form_label'>Username:</p>
             <p class='form_detail'>{{ user.username }}</p>
-            <p class='form_label'>Email</p>
+            <p class='form_label'>Email:</p>
             <p class='form_detail'>{{ user.email }}</p>
-            <p class='form_label'>First name</p>
+            <p class='form_label'>First name:</p>
             <p class='form_detail'>{{ user.user_frst_name }}</p>
-            <p class='form_label'>Last name</p>
+            <p class='form_label'>Last name:</p>
             <p class='form_detail'>{{ user.user_last_name }}</p>
         </div>
         <div class='five columns'>
-            <p class='form_label'>Nickname</p>
+            <p class='form_label'>Nickname:</p>
             <p class='form_detail'>{{ user.user_nickname }}</p>
-            <p class='form_label'>Gender</p>
+            <p class='form_label'>Gender:</p>
             <p class='form_detail'>{{ user.user_gender }}</p>
-            <p class='form_label'>Description</p>
+            <p class='form_label'>Location:</p>
+            <p class='form_detail'>{{ user.user_location }}</p>
+            <p class='form_label'>Description:</p>
             <p class='form_detail'>{{ user.user_description }}</p>
         </div>
     </div>
@@ -36,9 +40,10 @@
 
 {% include 'basal/dashboard_address.html' %}
 {% include 'basal/dashboard_event.html' %}
+{% include 'basal/dashboard_rsvp.html' %}
+{% include 'basal/dashboard_tag.html' %}
 
 <div class='row'>
     <a href='{% url 'basal:user_image_list' %}'>Manage user image</a>
-    <a href='{% url 'basal:my_events' %}'>My events</a>
 </div>
 {% endblock %}

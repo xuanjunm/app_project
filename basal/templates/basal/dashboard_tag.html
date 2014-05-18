@@ -1,0 +1,19 @@
+<div class='tag_list_wrapper row'>
+    <h3 id='my_tags'>My Tags</h3>
+    {% if tag_list %}
+    <p>
+    {% for tag in tag_list %}
+    <span class='tag_wrapper'>{{ tag.tag }} <strong><a href='{% url 'basal:user_tag_delete' tag.id %}?back={{ current_path }}'>x</a></strong></span>
+    {% endfor %}
+    </p>
+    {% else %}
+    <p class='italic'>No Tags are set.</p>
+    {% endif %}
+
+    <form id='user_tag_form' action='{% url 'basal:user_tag_create' %}?back={{ current_path }}' class='alpha clearfix' method='post'>
+        {% csrf_token %}
+        <input name='tag_input' type='text'>
+        <input name='form' type='submit' value='Add tag' />
+    </form>
+    <hr class='half-bottom' />
+</div>

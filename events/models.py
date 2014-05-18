@@ -87,7 +87,7 @@ class EventComment(models.Model):
     fk_comment_poster_user = models.ForeignKey(CustomUser)
 
     def __unicode__(self):
-        return self.fk_comment_poster_user
+        return u'%s' % self.fk_event
 
 class Tag(models.Model):
     tag_name = models.CharField(unique=True, max_length=255)

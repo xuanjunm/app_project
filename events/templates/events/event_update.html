@@ -1,28 +1,33 @@
 {% extends 'base.html' %}
-{% block head %}
+{% block extra_head %}
 {% load staticfiles %}
-<script type='text/javascript' 
-    src='{% static 'events/js/event_form.js' %}'></script>
+<script type='text/javascript' src='{% static 'events/js/event_form.js' %}'></script>
 {% endblock %}
-{% block h2 %}Update Event{% endblock %}
+
+{% block h1 %}Update Event{% endblock %}
 {% block main %}
-<form action='{% url 'events:event_update' event.id %}?back={{ back }}' 
-    class='seven columns alpha' method='post'>
-    {% csrf_token %}
-    <input type='hidden' name='back' value='{{ back }}'>
-    <div class='row alpha'>
+<div class='form_wrapper'>
+    {% if form.non_field_errors %}
+    <ul class='form_errors'>
+        {% for error in form.non_field_errors %}
+        <li>{{ error }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <form id='event_update_form' action='{% url 'events:event_update' event.id %}?back={{ back }}' class='alpha clearfix' method='post'>
+        <input type='hidden' name='back' value='{{ back }}'>
+        {% csrf_token %}
         {{ form }}
-        <a class='alpha two columns' 
-            href='{% url 'basal:address_create' %}?back={{ current_path }}'>create address</a>
-        <div id='address_holder' 
-            data-url='{% url 'basal:address_detail' pk=999 %}?back={{ current_path }}'> 
+
+        <div class='row'>
+            <div id='address_holder' data-url='{% url 'basal:address_detail' pk=1357924680 %}?back={{ current_path }}'> 
+            </div>
+            <a href='{% url 'basal:address_create' %}?back={{ current_path }}'>create address</a>
         </div>
-    </div>
-    <div class='row alpha'>
-        <div class='three columns alpha'>
-            <input name='form' type='submit' value='Update Event' />
-            <a href='{{ back }}'>Back</a>
-        </div>
-    </div>
-</form>
+
+        <input name='form' type='submit' value='Update Event' />
+        <br />
+        <a href='{{ back }}'>Back</a>
+    </form>
+</div>
 {% endblock %}
