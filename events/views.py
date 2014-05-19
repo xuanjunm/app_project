@@ -18,7 +18,7 @@ from .forms import *
 # use models from basal
 from basal.models import UserImage
 
-class EventList(generic.ListView):
+class EventListView(generic.ListView):
     template_name = 'events/event_list.html'
     context_object_name = "event_list"
 
@@ -27,6 +27,11 @@ class EventList(generic.ListView):
         temp = Event.objects.filter(event_date__gt=today)
 #        import pdb;pdb.set_trace()
         return temp.order_by('-event_time')
+
+#    def get_context_data(self, **kwargs):
+#        context = super(EventListView, self).get_context_data(**kwargs)
+#
+#        return context
 
 class EventDetailView(generic.DetailView):
     model = Event

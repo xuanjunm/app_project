@@ -130,19 +130,19 @@ def authorized_to_update_address_decorator(fn):
 #    def dispatch(self, *args, **kwargs):
 #        return super(AddressListView, self).dispatch(*args, **kwargs)
 
-#class AddressDetailView(generic.DetailView):
-#    template_name = 'basal/address_detail.html'
-#    model = Address
-#
-#    def get_context_data(self, **kwargs):
-#        context = super(AddressDetailView, self).get_context_data(**kwargs)
-#        if self.request.GET.get('back'):
-#            context['back'] = self.request.GET.get('back')
-#        return context
-#
-#    @method_decorator(authorized_to_update_address_decorator)
-#    def dispatch(self, *args, **kwargs):
-#        return super(AddressDetailView, self).dispatch(*args, **kwargs)
+class AddressDetailView(generic.DetailView):
+    template_name = 'basal/address_detail.html'
+    model = Address
+
+    def get_context_data(self, **kwargs):
+        context = super(AddressDetailView, self).get_context_data(**kwargs)
+        if self.request.GET.get('back'):
+            context['back'] = self.request.GET.get('back')
+        return context
+
+    @method_decorator(authorized_to_update_address_decorator)
+    def dispatch(self, *args, **kwargs):
+        return super(AddressDetailView, self).dispatch(*args, **kwargs)
 
 class AddressCreateView(generic.CreateView):
     template_name = 'basal/address_create.html'

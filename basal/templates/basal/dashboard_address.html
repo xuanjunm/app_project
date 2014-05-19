@@ -12,8 +12,8 @@
                 <br />{{ address.address_country }} 
                 {{ address.address_postal_code }}</p>
                 <div class='row'>
-                    <a class='' href='{% url 'basal:address_update' address.id %}?back={{ current_path }}'>Update</a>
-                    <a class='' href='{% url 'basal:address_delete' address.id %}?back={{ current_path }}'>Delete</a>
+                    <a class='' href='{% url 'basal:address_update' address.id %}?back={{ current_path }}#my_addresses'>Update</a>
+                    <a class='' href='{% url 'basal:address_delete' address.id %}?back={{ current_path }}#my_addresses'>Delete</a>
                 </div>
             </div>
                 <hr />
@@ -24,6 +24,6 @@
     <p class='italic'>No Address are available.</p>
     {% endif %}
 
-    <a class='row lesser_emphasis' href='{% url 'basal:address_create' %}?back={{ current_path }}' title='create address link'>Create a new address</a>
+    <a class='row lesser_emphasis' href='{% url 'basal:address_create' %}?back={{ current_path }}#my_addresses' title='create address link'>Create a new address</a>
     <hr class='half-bottom' />
 </div>

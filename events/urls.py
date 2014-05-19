@@ -2,7 +2,7 @@ from django.conf.urls import patterns, url, include
 from . import views
 
 urlpatterns = patterns('',
-    url(r'^$', views.EventList.as_view(), name='event_list'),
+    url(r'^$', views.EventListView.as_view(), name='event_list'),
     url(r'^(?P<pk>\d+)/$', views.EventDetailView.as_view(), 
         name='event_detail'),
     url(r'^event_create/$', views.EventCreateView.as_view(), 

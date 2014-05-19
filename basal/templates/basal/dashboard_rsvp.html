@@ -5,7 +5,7 @@
         {% for rsvp in rsvp_list %}
         <div class='row'>
             <div class='alpha nine columns rsvp_wrapper'>
-                <p><span class='five columns'>- {{ rsvp.fk_event.event_title }}</span> <a class='' href='{% url 'events:event_rsvp_remove' rsvp.fk_event.id %}?back={{ current_path }}'>Remove RSVP</a>
+                <p><span class='five columns'>- {{ rsvp.fk_event.event_title }}</span> <a class='' href='{% url 'events:event_rsvp_remove' rsvp.fk_event.id %}?back={{ current_path }}#my_rsvps'>Remove RSVP</a>
                     </p>
             </div>
         </div>
