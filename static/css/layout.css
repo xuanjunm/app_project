@@ -176,6 +176,23 @@ form textarea {
     display: inline;
 }
 
+.is_owner_tag, .rsvp_tag {
+    padding: 0.8em;
+    background: #070;
+    margin-left: 1em;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    font-size: 10px;
+    font-weight: 700;
+    color: #fff;
+    vertical-align: top;
+}
+
+.is_owner_tag {
+    background: #700;
+}
+
 /* #event_detail.html
 --------------------*/ 
 .rsvp_list_wrapper ul li {

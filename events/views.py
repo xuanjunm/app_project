@@ -18,20 +18,31 @@ from .forms import *
 # use models from basal
 from basal.models import UserImage
 
-class EventListView(generic.ListView):
+class EventListView(generic.TemplateView):
     template_name = 'events/event_list.html'
-    context_object_name = "event_list"
 
-    def get_queryset(self):
+    def get_context_data(self, **kwargs):
+        context = super(EventListView, self).get_context_data(**kwargs)
+
         today = timezone.now()
         temp = Event.objects.filter(event_date__gt=today)
 #        import pdb;pdb.set_trace()
-        return temp.order_by('-event_time')
+        temp = temp.order_by('-event_time')
+        context['event_list'] = {}
+        context['current_path'] = self.request.get_full_path()
 
-#    def get_context_data(self, **kwargs):
-#        context = super(EventListView, self).get_context_data(**kwargs)
-#
-#        return context
+        for i in range(0, temp.count()):
+            event_owner = False
+            event_rsvp = False
+            if (temp[i].is_owner(self.request.user)):
+                event_owner = True
+            elif (temp[i].rsvp(self.request.user)):
+                event_rsvp = True
+
+            context['event_list'][temp[i].id] = temp[i]
+            context['event_list'][temp[i].id].event_owner = event_owner 
+            context['event_list'][temp[i].id].event_rsvp = event_rsvp
+        return context
 
 class EventDetailView(generic.DetailView):
     model = Event

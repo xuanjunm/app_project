@@ -220,6 +220,32 @@ def authorized_to_update_user_image_decorator(fn):
             return HttpResponseRedirect(reverse('basal:user_login'))
     return decorator
 
+class UserDetailView(generic.TemplateView):
+    template_name = 'basal/user_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(UserDetailView, self).get_context_data(**kwargs)
+
+        t_user = CustomUser.objects.get(id=kwargs['pk'])
+        context['t_user'] = t_user
+
+        temp = Event.objects.filter(fk_event_poster_user=t_user)
+        context['event_list'] = temp
+
+        temp = EventRSVP.objects.filter(fk_user=t_user)
+        context['rsvp_list'] = temp
+
+        temp = UserTag.objects.filter(fk_user=t_user)
+        context['tag_list'] = temp
+
+        context['current_path'] = self.request.get_full_path()
+
+        return context
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(UserDetailView, self).dispatch(*args, **kwargs)
+
 class UserImageListView(generic.ListView):
     template_name = 'basal/user_image_list.html'
     model = UserImage

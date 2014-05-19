@@ -3,7 +3,14 @@
 
 {% block main %}
 <div class='event_wrapper row'>
-    <h3>{{ event.event_title }}</h3>
+    <h3>{{ event.event_title }}
+        {% if event_rsvp %}
+        <span class='rsvp_tag'>RSVPed</span>
+        {% endif %}
+        {% if event_owner %}
+        <span class='is_owner_tag'>My Event</span>
+        {% endif %}
+    </h3>
     <div class='row'>
         <div class='alpha five columns'>
             <p class='form_label'>Status:</p>
@@ -15,7 +22,7 @@
             <p class='form_label'>Likes:</p>
             <p class='form_detail'>{{ event.event_like }}</p>
             <p class='form_label'>Organizer:</p>
-            <p class='form_detail'>{{ event.fk_event_poster_user.user_first_name }} {{ event.fk_event_poster_user.user_last_name }}</p>
+            <p class='form_detail'><a href='{% url 'basal:user_detail' event.fk_event_poster_user.id %}'>{{ event.fk_event_poster_user.user_first_name }} {{ event.fk_event_poster_user.user_last_name }}</a></p>
         </div>
         <div class='five columns'>
             <p class='form_label'>Time:</p>
@@ -40,7 +47,9 @@
     <h3>RSVPs</h3>
     <ul class='clearfix add-bottom'>
         {% for rsvp in event.eventrsvp_set.all %}
-        <li class='alpha five columns'>- {{ rsvp.fk_user.username }}</li>
+        <li class='alpha five columns'>- 
+        <a href='{% url 'basal:user_detail' rsvp.fk_user.id %}'>
+            {{ rsvp.fk_user.username }}</a></li>
         {% endfor %}
     </ul>
     <p class='row'>Total: {{ event.eventrsvp_set.all.count }}</p>
@@ -50,15 +59,16 @@
 
 <div class='row comment_list_wrapper clearfix'>
     <h3>Comments</h3>
-        {% for comment in comment_list %}
-        <div class='comment_wrapper alpha clearfix'>
-            <p>{{ comment.comment_detail }}</p>
-            <p class='small'>{{ comment.fk_comment_poster_user.user_first_name }}
-            <span class='small italic'>{{ comment.comment_post_time }}
-            </span></p>
-        </div>
-        {% endfor %}
-        <p><a class='row lesser_emphasis' href='{% url 'events:event_comment_create' event.id %}?back={{ current_path }}' title='create event comment link'>Create a new comment</a></p>
+    {% for comment in comment_list %}
+    <div class='comment_wrapper alpha clearfix'>
+        <p>{{ comment.comment_detail }}</p>
+        <p class='small'>
+        <a href='{% url 'basal:user_detail' comment.fk_comment_poster_user.id %}'>{{ comment.fk_comment_poster_user.user_first_name }}</a>
+        <span class='small italic'>{{ comment.comment_post_time }}
+        </span></p>
+    </div>
+    {% endfor %}
+    <p><a class='row lesser_emphasis' href='{% url 'events:event_comment_create' event.id %}?back={{ current_path }}' title='create event comment link'>Create a new comment</a></p>
 </div>
 
 <hr />

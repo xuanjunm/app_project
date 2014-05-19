@@ -1,0 +1,14 @@
+<div class='tag_list_wrapper row'>
+    <h3 id='user_tags'>Tags</h3>
+    {% if tag_list %}
+    <p>
+    {% for tag in tag_list %}
+    <span class='tag_wrapper'>{{ tag.tag }}<strong></span>
+    {% endfor %}
+    </p>
+    {% else %}
+    <p class='italic'>No Tags are set.</p>
+    {% endif %}
+
+    <hr class='half-bottom' />
+</div>
