@@ -77,7 +77,7 @@ class UserImage(models.Model):
     path = models.ImageField(upload_to='user_image', 
                              help_text='help text',      
                              blank=True)
-    fk_user = models.ForeignKey(CustomUser)
+    fk_user = models.ForeignKey(CustomUser, related_name='user_image')
 
     def is_owner(self, user):
         return self.fk_user == user
@@ -94,7 +94,7 @@ class Address(models.Model):
     address_country = models.CharField(blank=True, 
                                        max_length=255, 
                                        default='Canada')
-    fk_user = models.ForeignKey(CustomUser)
+    fk_user = models.ForeignKey(CustomUser, related_name='address')
 
     def is_owner(self, user):
         return self.fk_user == user
@@ -111,10 +111,11 @@ class UserFriendAttribute(models.Model):
 
 class UserTag(models.Model):
     tag = models.CharField(max_length=255)
-    fk_user = models.ForeignKey(CustomUser)
+    fk_user = models.ForeignKey(CustomUser, related_name='user_tag')
 
     def __unicode__(self):
         return u'%s %s' % (self.fk_user, self.tag)
+
 #def create_user_image(sender, **kwargs):        
 #    """
 #    A Signal for hooking up automatic 'UserImage' creation.

@@ -15,8 +15,8 @@ class Event(models.Model):
 
     event_title = models.CharField(max_length=255)
     event_type = models.CharField(max_length=255,
-                            choices=EVENT_TYPE_CHOICES,
-                            default='public')
+                                 choices=EVENT_TYPE_CHOICES,
+                                 default='public')
     event_status = models.CharField(max_length=255,
                                     choices=EVENT_STATUS_CHOICES,
                                     default='active')
@@ -26,10 +26,7 @@ class Event(models.Model):
     event_detail = models.TextField(blank=True)
     event_view_count = models.PositiveSmallIntegerField(default=0)
     event_capacity = models.PositiveSmallIntegerField(blank=True, null=True)
-    event_rsvp = models.PositiveSmallIntegerField(default=0)
-    event_like = models.PositiveSmallIntegerField(default=0)
     event_recent_update = models.DateTimeField(auto_now=True)
-    fk_event_image = models.ForeignKey(UserImage, blank=True, null=True, related_name='event_image')
     fk_event_poster_user = models.ForeignKey(CustomUser, 
                                              verbose_name='Event Poster')
     fk_address = models.ForeignKey(Address,
@@ -46,6 +43,14 @@ class Event(models.Model):
             return False
         else:
             return True
+
+    def get_event_rsvp_count(self):
+#        import pdb;pdb.set_trace()
+        return EventRSVP.objects.filter(fk_event=self).count() 
+
+    def get_event_like_count(self):
+#        import pdb;pdb.set_trace()
+        return EventLike.objects.filter(fk_event=self).count() 
 
     def __unicode__(self):
         return self.event_title
@@ -83,7 +88,7 @@ class EventLike(models.Model):
 class EventComment(models.Model):
     comment_detail = models.TextField()
     comment_post_time = models.DateTimeField(auto_now_add=True)
-    fk_event = models.ForeignKey(Event)
+    fk_event = models.ForeignKey(Event, related_name='event_comment')
     fk_comment_poster_user = models.ForeignKey(CustomUser)
 
     def __unicode__(self):
@@ -101,3 +106,12 @@ class TagEventAttribute(models.Model):
 
     def __unicode__(self):
         return self.fk_tag
+
+class EventImage(models.Model):
+    path = models.ImageField(upload_to='event_image', 
+                             help_text='help text',      
+                             blank=True)
+    fk_event = models.ForeignKey(Event, related_name='event_image')
+
+    def __unicode__(self):
+        return u'%s' % self.path

@@ -50,14 +50,9 @@ class CustomAuthentication(ApiKeyAuthentication):
 
         return True
 
-class UserCustomAuthorization(Authorization):
-    '''
-    used by UserResource
-    '''
-
+class CustomAuthorization(Authorization):
     def create_list(self, object_list, bundle):
         return Unauthorized('Disabled')
-#        return True
 
     def read_list(self, object_list, bundle):
         return object_list
@@ -80,7 +75,11 @@ class UserCustomAuthorization(Authorization):
     def delete_detail(self, object_list, bundle):
         return Unauthorized('Disabled')
 
-class PropertiesCustomAuthorization(UserCustomAuthorization):
+
+class UserCustomAuthorization(CustomAuthorization):
+    pass
+    
+class PropertiesCustomAuthorization(CustomAuthorization):
     '''
     used by  UserImageResource, AddressResource
     '''
@@ -108,10 +107,27 @@ class UserImageResource(ModelResource):
         queryset = UserImage.objects.all()
         authentication = CustomAuthentication()
         authorization = PropertiesCustomAuthorization()
-        filtering = { 'fk_user': ALL,
-                        'path': ALL},
+        excludes = ['id']
+
+class AddressResource(ModelResource):
+    class Meta:
+        queryset = Address.objects.all()
+        authentication = CustomAuthentication()
+        authorization = PropertiesCustomAuthorization()
+        excludes = ['id']
+
+class UserTagResource(ModelResource):
+    class Meta:
+        queryset = UserTag.objects.all()
+        authentication = CustomAuthentication()
+        authorization = PropertiesCustomAuthorization()
+        excludes = ['id']
 
 class UserResource(ModelResource):
+    user_image = fields.ToManyField(UserImageResource, 'user_image',full=True, null=True)
+    address = fields.ToManyField(AddressResource, 'address', full=True, null=True)
+    user_tag = fields.ToManyField(UserTagResource, 'user_tag', full=True, null=True)
+
     fk_user_image = fields.ForeignKey(UserImageResource,
                                       'fk_user_image',
                                       full=True, null=True)
@@ -128,39 +144,28 @@ class UserResource(ModelResource):
         filtering = { 'username': ALL }
 
     def dehydrate(self, bundle):
-        self.fields['username'].use_in = u'detail'
         self.fields['email'].use_in = u'detail'
         self.fields['date_joined'].use_in = u'detail'
         self.fields['last_login'].use_in = u'detail'
-#        self.fields['id'].use_in = u'detail'
         return bundle
 
-    def obj_create(self, bundle, **kwargs):
-        try:
-            bundle = super(UserResource, self).obj_create(bundle, **kwargs)
-            bundle.obj.set_password(bundle.data.get('password'))
-            # import pdb
-            # pdb.set_trace()
-            if 'profile_image_name' in bundle.data:
-                bundle.obj.fk_user_image=UserImage.objects.get(path=bundle.data['profile_image_name'])
-            bundle.obj.save() 
-        except IntegrityError:
-
-            usernamelist=[user.username for user in CustomUser.objects.all()]
-            if bundle.data['username'] in usernamelist:
-                raise BadRequest('Username -'+bundle.data['username']+'- has been used.')
-            emaillist=[user.email for user in CustomUser.objects.all()]
-            if bundle.data['email'] in emaillist:
-                raise BadRequest('Email -'+bundle.data['email']+'- has been used.')
-        return bundle
-
-class AddressResource(ModelResource):
-    fk_user = fields.ForeignKey(UserResource,
-                                 'fk_user')
-    class Meta:
-        queryset = Address.objects.all()
-        authentication = CustomAuthentication()
-        authorization = PropertiesCustomAuthorization()
+#    def obj_create(self, bundle, **kwargs):
+#        try:
+#            bundle = super(UserResource, self).obj_create(bundle, **kwargs)
+#            bundle.obj.set_password(bundle.data.get('password'))
+#            # import pdb; pdb.set_trace()
+#            if 'profile_image_name' in bundle.data:
+#                bundle.obj.fk_user_image=UserImage.objects.get(path=bundle.data['profile_image_name'])
+#            bundle.obj.save() 
+#        except IntegrityError:
+##
+#            usernamelist=[user.username for user in CustomUser.objects.all()]
+#            if bundle.data['username'] in usernamelist:
+#                raise BadRequest('Username -'+bundle.data['username']+'- has been used.')
+#            emaillist=[user.email for user in CustomUser.objects.all()]
+#            if bundle.data['email'] in emaillist:
+#                raise BadRequest('Email -'+bundle.data['email']+'- has been used.')
+#        return bundle
 
 class ApiTokenResource(ModelResource):
     user = fields.ForeignKey(UserResource,
