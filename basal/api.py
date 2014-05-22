@@ -75,6 +75,7 @@ class CustomAuthorization(Authorization):
     def delete_detail(self, object_list, bundle):
         return Unauthorized('Disabled')
 
+
 class UserCustomAuthorization(CustomAuthorization):
     pass
     
@@ -115,29 +116,17 @@ class AddressResource(ModelResource):
         authorization = PropertiesCustomAuthorization()
         excludes = ['id']
 
-class UserFavouriteAddressAttributeResource(ModelResource):
-    fk_address = fields.ForeignKey(AddressResource,
-                                   'fk_address',
-                                   full=True)
-
+class UserTagResource(ModelResource):
     class Meta:
-        queryset = UserFavouriteAddressAttribute.objects.all()
-        authentication = CustomAuthentication()
-        authorization = PropertiesCustomAuthorization()
-        excludes = ['id']
-
-class UserTagAttributeResource(ModelResource):
-    class Meta:
-        queryset = UserTagAttribute.objects.all()
+        queryset = UserTag.objects.all()
         authentication = CustomAuthentication()
         authorization = PropertiesCustomAuthorization()
         excludes = ['id']
 
 class UserResource(ModelResource):
     user_image = fields.ToManyField(UserImageResource, 'user_image',full=True, null=True)
-    user_favourite_address = fields.ToManyField(UserFavouriteAddressAttributeResource, 
-                                                'user_favourite_address', full=True, null=True)
-    user_tag = fields.ToManyField(UserTagAttributeResource, 'user_tag', full=True, null=True)
+    address = fields.ToManyField(AddressResource, 'address', full=True, null=True)
+    user_tag = fields.ToManyField(UserTagResource, 'user_tag', full=True, null=True)
 
     fk_user_image = fields.ForeignKey(UserImageResource,
                                       'fk_user_image',

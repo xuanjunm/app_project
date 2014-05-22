@@ -19,8 +19,7 @@ v01_api.register(EventImageResource())
 v01_api.register(EventLikeResource())
 v01_api.register(UserResource())
 v01_api.register(UserImageResource())
-v01_api.register(UserTagAttributeResource())
-v01_api.register(UserFavouriteAddressAttributeResource())
+v01_api.register(UserTagResource())
 v01_api.register(ApiTokenResource())
 
 urlpatterns = patterns('',

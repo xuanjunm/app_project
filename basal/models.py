@@ -94,20 +94,13 @@ class Address(models.Model):
     address_country = models.CharField(blank=True, 
                                        max_length=255, 
                                        default='Canada')
+    fk_user = models.ForeignKey(CustomUser, related_name='address')
 
     def is_owner(self, user):
         return self.fk_user == user
 
     def __unicode__(self):
         return u'%s' % (self.address_title)
-
-class UserFavouriteAddressAttribute(models.Model):
-    fk_user = models.ForeignKey(CustomUser, related_name='user_favourite_address')
-    fk_address = models.ForeignKey(Address, related_name='user_favourite_address')
-
-    def __unicode__(self):
-        return u'%s %s' % (self.fk_user, self.fk_address)
-
 
 class UserFriendAttribute(models.Model):
     fk_friend_a_user = models.ForeignKey(CustomUser, related_name='friend_a')
@@ -116,7 +109,7 @@ class UserFriendAttribute(models.Model):
     def __unicode__(self):
         return '%s - %s' % (self.fk_friend_a_user, self.fk_friend_b_user)
 
-class UserTagAttribute(models.Model):
+class UserTag(models.Model):
     tag = models.CharField(max_length=255)
     fk_user = models.ForeignKey(CustomUser, related_name='user_tag')
 
