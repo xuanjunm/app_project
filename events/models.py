@@ -59,6 +59,9 @@ class EventRSVP(models.Model):
     fk_user = models.ForeignKey(CustomUser)
     fk_event = models.ForeignKey(Event)
 
+    class Meta:
+        unique_together = ('fk_user', 'fk_event',)
+
     def __unicode__(self):
         return self.fk_user.username+" rsvps "+self.fk_event.event_title
 
@@ -75,15 +78,11 @@ class EventLike(models.Model):
         else:
             return True
 
-    def save(self):
-        if not self.exists():
-            super(EventLike, self).save()
+    class Meta:
+        unique_together = ('fk_user', 'fk_event',)
 
     def __unicode__(self):
         return self.fk_user.username+" likes "+self.fk_event.event_title
-# if similar EventLike object exists, then it wouldn't be saved
-#        else:
-#            raise OperationalError
 
 class EventComment(models.Model):
     comment_detail = models.TextField()
