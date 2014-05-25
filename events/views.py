@@ -29,7 +29,6 @@ class EventListView(generic.TemplateView):
 #        import pdb;pdb.set_trace()
         temp = temp.order_by('-event_time')
         context['event_list'] = {}
-        context['current_path'] = self.request.get_full_path()
 
         for i in range(0, temp.count()):
             event_owner = False
@@ -58,9 +57,6 @@ class EventDetailView(generic.DetailView):
             context['event_owner'] = c_event.is_owner(self.request.user)
             context['event_rsvp'] = c_event.rsvp(self.request.user)
 
-        if self.request.GET.get('back'):
-            context['back'] = self.request.GET.get('back')
-        context['current_path'] = self.request.get_full_path()
         return context
 
 class EventCreateView(generic.CreateView):
@@ -80,12 +76,6 @@ class EventCreateView(generic.CreateView):
 
     def get_success_url(self):
         return reverse('events:event_list')
-
-    def get_form(self, form_class):
-        form = super(EventCreateView, self).get_form(form_class)
-        c_address = Address.objects.filter(fk_user=self.request.user)
-        form.fields['fk_address'].queryset = c_address 
-        return form
 
     def get_context_data(self, **kwargs):
         context = super(EventCreateView, self).get_context_data(**kwargs)
@@ -112,21 +102,7 @@ class EventUpdateView(generic.UpdateView):
     template_name = 'events/event_update.html'
 
     def get_success_url(self):
-        return self.request.POST.get('back')
-
-    def get_form(self, form_class):
-        form = super(EventUpdateView, self).get_form(form_class)
-        c_address = Address.objects.filter(fk_user=self.request.user)
-        form.fields['fk_address'].queryset = c_address 
-        return form
-
-    def get_context_data(self, **kwargs):
-        context = super(EventUpdateView, self).get_context_data(**kwargs)
-        if self.request.GET.get('back'):
-            context['back'] = self.request.GET.get('back')
-        context['current_path'] = self.request.get_full_path() 
-#        import pdb;pdb.set_trace()
-        return context
+        return reverse('events:event_detail', args=(self.kwargs['pk'],))
 
     @method_decorator(authorized_to_update_event_decorator)
     def dispatch(self, *args, **kwargs):
@@ -137,19 +113,11 @@ class EventDeleteView(generic.DeleteView):
     template_name = 'events/event_delete.html'
 
     def get_success_url(self):
-        return self.request.POST.get('back')
+        return reverse('events:event_list')
 
     @method_decorator(authorized_to_update_event_decorator)
     def dispatch(self, *args, **kwargs):
         return super(EventDeleteView, self).dispatch(*args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        context = super(EventDeleteView, self).get_context_data(**kwargs)
-        if self.request.GET.get('back'):
-            context['back'] = self.request.GET.get('back')
-#        import pdb;pdb.set_trace()
-        return context
-
 
 @login_required
 def event_rsvp(request, pk):
@@ -157,10 +125,7 @@ def event_rsvp(request, pk):
     c_event = Event.objects.get(pk=pk)
     new_rsvp = EventRSVP(fk_user=request.user, fk_event=c_event)
     new_rsvp.save()
-    if request.GET.get('back'):
-        return HttpResponseRedirect(request.GET.get('back'))
-    else:
-        return HttpResponseRedirect(reverse('events:event_detail', args=(pk,)))
+    return HttpResponseRedirect(reverse('events:event_detail', args=(pk,)))
 
 @login_required
 def event_rsvp_remove(request, pk):
@@ -168,40 +133,14 @@ def event_rsvp_remove(request, pk):
     c_rsvp = EventRSVP.objects.filter(
                 fk_user=request.user).get(fk_event=c_event)
     c_rsvp.delete()
-    if request.GET.get('back'):
-        return HttpResponseRedirect(request.GET.get('back'))
-    else:
-        return HttpResponseRedirect(reverse('events:event_detail', args=(pk,)))
+    return HttpResponseRedirect(reverse('events:event_detail', args=(pk,)))
 
-class EventCommentCreateView(generic.CreateView):
-    model = EventComment
-    form_class=EventCommentCreateForm
-    template_name = 'events/event_comment_create.html'
-
-    def post(self, request, *args, **kwargs):
-        self.object = None
-        form = self.get_form(self.form_class)
-
-        form.instance.fk_comment_poster_user = request.user
-        form.instance.fk_event = Event.objects.get(pk=self.kwargs['pk'])
-
-        if form.is_valid():
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
-
-    def get_success_url(self):
-            return self.request.POST.get('back')
-
-    def get_context_data(self, **kwargs):
-        context = super(EventCommentCreateView, self).get_context_data(**kwargs)
-        context['pk'] = self.kwargs['pk']
-        if self.request.GET.get('back'):
-            context['back'] = self.request.GET.get('back')
-
-#        import pdb;pdb.set_trace()
-        return context
-
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(EventCommentCreateView, self).dispatch(*args, **kwargs)
+@login_required
+def event_comment_create(request, pk):
+#    import pdb;pdb.set_trace()
+    temp = request.POST.get('comment')
+    if temp != '':
+        c_event = Event.objects.get(pk=pk)
+        new_comment = EventComment(fk_comment_poster_user=request.user, comment_detail=temp, fk_event=c_event)
+        new_comment.save()
+    return HttpResponseRedirect(reverse('events:event_detail', args=(pk,)))

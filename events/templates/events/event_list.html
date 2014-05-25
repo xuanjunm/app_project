@@ -1,42 +1,118 @@
-{% extends 'base.html' %}
-{% block h1 %}The Events{% endblock %}
-{% block h4 %}Latest events. Upcoming events.{% endblock %}
-{% block main %}
-{% if event_list %}
-<ul>
-    {% for key, event in event_list.items %}
-    <li><div class='event_wrapper'>
-        <h3>{{ event.event_title }} 
-            {% if event.event_rsvp %}
-            <span class='rsvp_tag'>RSVPed</span>
-            {% endif %}
-            {% if event.event_owner %}
-            <span class='is_owner_tag'>My Event</span>
-            {% endif %}
-        </h3>
-        <h6 class='italic_span'>{{ event.event_date }}</h6>
-        <p>{{ event.fk_address.address_region }}, {{ event.fk_address.address_city }}</p>
-        <div class='row'>
-            <a href='{% url 'events:event_detail' event.id %}'>Details</a>
-            {% if event.event_rsvp %}
-            <a href='{% url 'events:event_rsvp_remove' event.id %}?back={{ current_path }}'>Remove RSVP</a>
+{% extends 'base_with_breadcrumb.html' %}
+
+{% block 'page_header' %}The Events{% endblock %}
+
+{% block 'page_header_small' %}Latest events. Upcoming events.{% endblock %}
+
+{% block 'breadcrumb' %}
+<li><a href='{% url 'basal:main' %}'>Home</a></li>
+<li class='active'>Event List</li>
+{% endblock %}
+
+{% block 'main_with_breadcrumb' %}
+<div class='container'>
+
+    <div class='row'>
+
+        <div class='col-lg-12'>
+
+            <table class='table table-hover table-condensed'>
+                {% if event_list %}
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Date</th>
+                        <th>Location</th>
+                        <th>Organizer</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <!-- /table header -->
+
+                {% for key, event in event_list.items %}
+                <tr
+                    {% if event.event_owner %}
+                    class='warning'
+                    {% elif event.event_rsvp %}
+                    class='success'
+                    {% endif %}
+                    >
+                    <td>{{ event.event_title }}</td>
+                    <td>{{ event.event_date }}</td>
+                    <td>{{ event.fk_address.address_region }}, {{ event.fk_address.address_city }}</td>
+                    <td>{{ event.fk_event_poster_user }}</td>
+                    <td><a href='{% url 'events:event_detail' event.id %}'>Details</a></td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>No event are available.</tr>
+                {% endif %}
+            </table>
+
+        </div>
+
+    </div>
+    <!-- /row -->
+
+    <br />
+
+    <!-- glossary -->
+    <div class='row'>
+
+        <div class='col-lg-12'>
+
+            <div class='panel panel-default'>
+
+                <div class='panel-body'>
+
+                    <div class='col-xs-5'>
+
+                        <div class='row'>
+                            <div class='col-xs-1'>
+                                <div class='table_glossary success'></div>
+                            </div>
+                            <div class='col-xs-4'>
+                                RSVPed
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class='col-xs-5'>
+                        <div class='row'>
+                            <div class='col-xs-1'>
+                                <div class='table_glossary warning'></div>
+                            </div>
+                            <div class='col-xs-4'>
+                                My Event
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /panel-body -->
+
+            </div>
+            <!-- /panel -->
+
+        </div>
+    </div>
+    <!-- /row -->
+
+</div>
+<!-- /container -->
+
+<div class='container'>
+    <div class='row'>
+        <div class='col-xs-12'>
+            {% if user.username %}
+            <a class='btn btn-default' href='{% url 'events:event_create' %}' title='create event link'>
+                Create a new event</a>
+            {% else %}
+            <a class='btn btn-primary' href='{% url 'basal:user_login' %}'>Sign in</a> to create a new 
+            event. Or <a class='btn btn-success' href='{% url 'basal:user_create' %}'>Join us</a> today!
             {% endif %}
         </div>
-        <hr />
-    </div></li>
-    {% endfor %}
-</ul>
-{% else %}
-<p>No event are available.</p>
-{% endif %}
-
-<p class='lesser_emphasis'>
-{% if user.username %}
-<a href='{% url 'events:event_create' %}' title='create event link'>
-    Create a new event</a>
-{% else %}
-<a href='{% url 'basal:user_login' %}'>Sign in</a> to create a new 
-event. Or <a href='{% url 'basal:user_create' %}'>Join us</a> today!
-{% endif %}
-</p>
+    </div>
+</div>
+<!-- /container -->
 {% endblock %}

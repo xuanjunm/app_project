@@ -1,34 +1,110 @@
-{% extends 'base.html' %}
-{% block h1 %}User Detail{% endblock %}
+{% extends 'base_with_breadcrumb.html' %}
+{% block 'page_header' %}User Detail{% endblock %}
 
-{% block main %}
-<div class='dashboard_wrapper row'>
-    <h3>Profile</h3>
+{% block 'breadcrumb' %}
+<li><a href='{% url 'basal:main' %}'>Home</a></li>
+<li class='active'>User Detail</li>
+{% endblock %}
+
+
+{% block 'main_with_breadcrumb' %}
+<div class='container'>
+
     <div class='row'>
-        <div class='alpha five columns'>
-            <p class='form_label'>Username:</p>
-            <p class='form_detail'>{{ t_user.username }}</p>
-            <p class='form_label'>Email:</p>
-            <p class='form_detail'>{{ t_user.email }}</p>
-            <p class='form_label'>First name:</p>
-            <p class='form_detail'>{{ t_user.user_frst_name }}</p>
-            <p class='form_label'>Last name:</p>
-            <p class='form_detail'>{{ t_user.user_last_name }}</p>
+
+        <div class='col-xs-12'>
+            <div class='panel panel-default'>
+                <div class='panel-heading'>
+                    <h3>User Profile</h3>
+                </div>
+                <!-- /panel-heading -->
+
+                <div class='panel-body'>
+
+                    <div class='row'>
+
+                        <!-- left col -->
+                        <div class='col-sm-6'>
+                            <div class="panel panel-default">
+                                <div class="panel-heading"><strong>Username</strong></div>
+                                <div class="panel-body">
+                                    {{ t_user.username }}
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading"><strong>Email</strong></div>
+                                <div class="panel-body">
+                                    {{ t_user.email }}
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading"><strong>First name</strong></div>
+                                <div class="panel-body">
+                                    {{ t_user.user_first_name }}
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading"><strong>Last name</strong></div>
+                                <div class="panel-body">
+                                    {{ t_user.user_last_name }}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /left col -->
+
+                        <!-- right col -->
+                        <div class='col-sm-6'>
+                            <div class="panel panel-default">
+                                <div class="panel-heading"><strong>Nickname</strong></div>
+                                <div class="panel-body">
+                                    {{ t_user.user_nickname }}
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading"><strong>Gender</strong></div>
+                                <div class="panel-body">
+                                    {{ t_user.user_gender }}
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading"><strong>Location</strong></div>
+                                <div class="panel-body">
+                                    {{ t_user.user_location }}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /right col -->
+                    </div>
+                    <!-- /row -->
+
+                    <div class='row'>
+                        <div class='col-xs-12'>
+                            <div class="panel panel-default">
+                                <div class="panel-heading"><strong>Description</strong></div>
+                                <div class="panel-body">
+                                    {{ t_user.user_description }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /row -->
+
+                </div>
+                <!-- /panel-body -->
+
+            </div>
+            <!-- /panel -->
+
         </div>
-        <div class='five columns'>
-            <p class='form_label'>Nickname:</p>
-            <p class='form_detail'>{{ t_user.user_nickname }}</p>
-            <p class='form_label'>Gender:</p>
-            <p class='form_detail'>{{ t_user.user_gender }}</p>
-            <p class='form_label'>Location:</p>
-            <p class='form_detail'>{{ t_user.user_location }}</p>
-            <p class='form_label'>Description:</p>
-            <p class='form_detail'>{{ t_user.user_description }}</p>
-        </div>
+
     </div>
-    <hr class='half-bottom' />
+    <!-- /row -->
+
 </div>
+<!-- /container -->
+
 {% include 'basal/user_detail_event.html' %}
 {% include 'basal/user_detail_rsvp.html' %}
 {% include 'basal/user_detail_tag.html' %}
+
 {% endblock %}

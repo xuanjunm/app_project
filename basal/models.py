@@ -86,28 +86,21 @@ class UserImage(models.Model):
         return u'%s' % self.path 
 
 class Address(models.Model):
+    fk_user = models.ForeignKey(CustomUser, related_name='address')
     address_title = models.CharField(max_length=255)
-    address_detail = models.TextField()
-    address_postal_code = models.CharField(blank=True, max_length=255)
+    address_detail = models.CharField(max_length=255)
     address_city = models.CharField(blank=True, max_length=255)
     address_region = models.CharField(blank=True, max_length=255)
     address_country = models.CharField(blank=True, 
                                        max_length=255, 
                                        default='Canada')
+    address_postal_code = models.CharField(blank=True, max_length=255)
 
     def is_owner(self, user):
         return self.fk_user == user
 
     def __unicode__(self):
         return u'%s' % (self.address_title)
-
-class UserFavouriteAddressAttribute(models.Model):
-    fk_user = models.ForeignKey(CustomUser, related_name='user_favourite_address')
-    fk_address = models.ForeignKey(Address, related_name='user_favourite_address')
-
-    def __unicode__(self):
-        return u'%s %s' % (self.fk_user, self.fk_address)
-
 
 class UserFriendAttribute(models.Model):
     fk_friend_a_user = models.ForeignKey(CustomUser, related_name='friend_a')

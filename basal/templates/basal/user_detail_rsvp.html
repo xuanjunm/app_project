@@ -1,19 +1,47 @@
-<div class='rsvp_list_wrapper row'>
-    <h3 id='user_rsvps'>RSVPs</h3>
-    {% if rsvp_list %}
-    <ul>
-        {% for rsvp in rsvp_list %}
-        <div class='row'>
-            <div class='alpha nine columns rsvp_wrapper'>
-                <p><span class='five columns'>- <a href='{% url 'events:event_detail' rsvp.fk_event.id %}'>{{ rsvp.fk_event.event_title }}</a></span>
-                </p>
-            </div>
-        </div>
-        {% endfor %}
-    </ul>
-    {% else %}
-    <p class='italic'>No RSVPs are available.</p>
-    {% endif %}
+<div class='container'>
 
-    <hr class='half-bottom' />
+    <div class='row'>
+
+        <div class='col-xs-12'>
+
+            <div class='panel panel-default'>
+
+                <div class='panel-heading'>
+                    <h4>User RSVPs</h4>
+                </div>
+                <!-- /panel-heading -->
+
+                <div class='panel-body'>
+
+                    <div class='row'>
+
+                        {% if rsvp_list %}
+                        <div class='col-xs-12'>
+                            <div class='list-group'>
+                                {% for rsvp in rsvp_list %}
+                                <a href='{% url 'events:event_detail' rsvp.fk_event.id %}' class='list-group-item'>{{ rsvp.fk_event.event_title }}</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class='col-xs-12'>
+                            <p>No RSVP any event.</p>
+                        </div>
+                        {% endif %}
+
+                    </div>
+                    <!-- /row -->
+
+                </div>
+                <!-- /panel-body -->
+
+            </div>
+            <!-- /panel -->
+
+        </div>
+
+    </div>
+    <!-- /row -->
+
 </div>
+<!-- /container -->

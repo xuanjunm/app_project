@@ -1,14 +1,45 @@
-<div class='tag_list_wrapper row'>
-    <h3 id='user_tags'>Tags</h3>
-    {% if tag_list %}
-    <p>
-    {% for tag in tag_list %}
-    <span class='tag_wrapper'>{{ tag.tag }}<strong></span>
-    {% endfor %}
-    </p>
-    {% else %}
-    <p class='italic'>No Tags are set.</p>
-    {% endif %}
+<div class='container'>
 
-    <hr class='half-bottom' />
+    <div class='row'>
+
+        <div class='col-xs-12'>
+
+            <div class='panel panel-default'>
+
+                <div class='panel-heading'>
+                    <h4>User Tags</h4>
+                </div>
+                <!-- /panel-heading -->
+
+                <div class='panel-body'>
+
+                    <div class='row'>
+
+                        {% if tag_list %}
+                        <div class='col-xs-12'>
+                                {% for tag in tag_list %}
+                                <span class='label label-default'>{{ tag.tag }}</span>
+                                {% endfor %}
+                        </div>
+                        {% else %}
+                        <div class='col-xs-12'>
+                            <p>No tags are set.</p>
+                        </div>
+                        {% endif %}
+
+                    </div>
+                    <!-- /row -->
+
+                </div>
+                <!-- /panel-body -->
+
+            </div>
+            <!-- /panel -->
+
+        </div>
+
+    </div>
+    <!-- /row -->
+
 </div>
+<!-- /container -->

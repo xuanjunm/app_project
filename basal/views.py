@@ -28,6 +28,7 @@ class DashboardView(generic.TemplateView):
         context = super(DashboardView, self).get_context_data(**kwargs)
 
         temp = Address.objects.filter(fk_user=self.request.user)
+#        import pdb;pdb.set_trace()
         context['address_list'] = temp
 
         temp = Event.objects.filter(fk_event_poster_user=self.request.user)
@@ -36,7 +37,7 @@ class DashboardView(generic.TemplateView):
         temp = EventRSVP.objects.filter(fk_user=self.request.user)
         context['rsvp_list'] = temp
 
-        temp = UserTag.objects.filter(fk_user=self.request.user)
+        temp = UserTagAttribute.objects.filter(fk_user=self.request.user)
         context['tag_list'] = temp
 
         context['current_path'] = self.request.get_full_path()
@@ -73,38 +74,6 @@ class UserUpdateView(generic.UpdateView):
     def dispatch(self, *args, **kwargs):
         return super(UserUpdateView, self).dispatch(*args, **kwargs)
 
-#class MyRSVPsView(generic.ListView):
-#    template_name = 'basal/my_rsvps.html'
-#    model = EventRSVP
-#
-#    def get_queryset(self):
-#        return EventRSVP.objects.filter(fk_user=self.request.user)
-#
-#    def get_context_data(self, **kwargs):
-#        context = super(myrsvpsview, self).get_context_data(**kwargs)
-#        context['current_path'] = self.request.get_full_path()
-#        return context
-#
-#    @method_decorator(login_required)
-#    def dispatch(self, *args, **kwargs):
-#        return super(MyRSVPsView, self).dispatch(*args, **kwargs)
-
-class MyEventsView(generic.ListView):
-    template_name = 'basal/my_events.html'
-    model = Event
-
-    def get_queryset(self):
-        return Event.objects.filter(fk_event_poster_user=self.request.user)
-
-    def get_context_data(self, **kwargs):
-        context = super(MyEventsView, self).get_context_data(**kwargs)
-        context['current_path'] = self.request.get_full_path()
-        return context
-
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(MyEventsView, self).dispatch(*args, **kwargs)
-
 def authorized_to_update_address_decorator(fn):
     # a decorator to check login_user is the owner of an address
     def decorator(request, *args, **kwargs):
@@ -114,40 +83,9 @@ def authorized_to_update_address_decorator(fn):
             return HttpResponseRedirect(reverse('basal:user_login'))
     return decorator
 
-#class AddressListView(generic.ListView):
-#    template_name = 'basal/address_list.html'
-#    model = Address
-#
-#    def get_queryset(self):
-#        return Address.objects.filter(fk_user=self.request.user)
-#
-#    def get_context_data(self, **kwargs):
-#        context = super(AddressListView, self).get_context_data(**kwargs)
-#        context['current_path'] = self.request.get_full_path()
-#        return context
-#
-#    @method_decorator(login_required)
-#    def dispatch(self, *args, **kwargs):
-#        return super(AddressListView, self).dispatch(*args, **kwargs)
-
-class AddressDetailView(generic.DetailView):
-    template_name = 'basal/address_detail.html'
-    model = Address
-
-    def get_context_data(self, **kwargs):
-        context = super(AddressDetailView, self).get_context_data(**kwargs)
-        if self.request.GET.get('back'):
-            context['back'] = self.request.GET.get('back')
-        return context
-
-    @method_decorator(authorized_to_update_address_decorator)
-    def dispatch(self, *args, **kwargs):
-        return super(AddressDetailView, self).dispatch(*args, **kwargs)
-
 class AddressCreateView(generic.CreateView):
     template_name = 'basal/address_create.html'
     model = Address
-
     form_class = AddressForm
 
     def post(self, request, *args, **kwargs):
@@ -163,14 +101,8 @@ class AddressCreateView(generic.CreateView):
             return self.form_invalid(form)
 
     def get_success_url(self):
-        return self.request.POST.get('back')
-
-    def get_context_data(self, **kwargs):
-        context = super(AddressCreateView, self).get_context_data(**kwargs)
-        if self.request.GET.get('back'):
-            context['back'] = self.request.GET.get('back')
-        return context
-
+        return reverse('basal:dashboard')  + self.request.GET.get('anchor')
+    
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(AddressCreateView, self).dispatch(*args, **kwargs)
@@ -182,13 +114,7 @@ class AddressUpdateView(generic.UpdateView):
     form_class = AddressForm
 
     def get_success_url(self):
-        return self.request.POST.get('back')
-
-    def get_context_data(self, **kwargs):
-        context = super(AddressUpdateView, self).get_context_data(**kwargs)
-        if self.request.GET.get('back'):
-            context['back'] = self.request.GET.get('back')
-        return context
+        return reverse('basal:dashboard') + self.request.GET.get('anchor')
 
     @method_decorator(authorized_to_update_address_decorator)
     def dispatch(self, *args, **kwargs):
@@ -199,13 +125,7 @@ class AddressDeleteView(generic.DeleteView):
     model = Address
 
     def get_success_url(self):
-        return self.request.POST.get('back')
-
-    def get_context_data(self, **kwargs):
-        context = super(AddressDeleteView, self).get_context_data(**kwargs)
-        if self.request.GET.get('back'):
-            context['back'] = self.request.GET.get('back')
-        return context
+        return reverse('basal:dashboard')
 
     @method_decorator(authorized_to_update_address_decorator)
     def dispatch(self, *args, **kwargs):
@@ -235,7 +155,7 @@ class UserDetailView(generic.TemplateView):
         temp = EventRSVP.objects.filter(fk_user=t_user)
         context['rsvp_list'] = temp
 
-        temp = UserTag.objects.filter(fk_user=t_user)
+        temp = UserTagAttribute.objects.filter(fk_user=t_user)
         context['tag_list'] = temp
 
         context['current_path'] = self.request.get_full_path()
@@ -374,22 +294,17 @@ class UserImageDeleteView(generic.DeleteView):
 
 @login_required
 def user_tag_delete(request, pk):
-#    import pdb;pdb.set_trace()
-    user_tag = UserTag.objects.get(pk=pk)
+    user_tag = UserTagAttribute.objects.get(pk=pk)
     user_tag.delete()
-    if request.GET.get('back'):
-        return HttpResponseRedirect(request.GET.get('back'))
-    else:
-        return HttpResponseRedirect(reverse('basal:dashboard'))
+
+    return HttpResponseRedirect(reverse('basal:dashboard') + request.GET.get('anchor'))
 
 @login_required
 def user_tag_create(request):
     temp = request.POST.get('tag_input')
+#    import pdb;pdb.set_trace()
     if temp != '':
-        user_tag = UserTag(fk_user=request.user, tag=temp)
+        user_tag = UserTagAttribute(fk_user=request.user, tag=temp)
         user_tag.save()
 
-    if request.GET.get('back'):
-        return HttpResponseRedirect(request.GET.get('back'))
-    else:
-        return HttpResponseRedirect(reverse('basal:dashboard'))
+    return HttpResponseRedirect(reverse('basal:dashboard') + request.GET.get('anchor'))

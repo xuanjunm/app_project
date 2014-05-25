@@ -1,93 +1,81 @@
 <!DOCTYPE html>
-<!--[if lt IE 7 ]><html class='ie ie6' lang='en'> <![endif]-->
-<!--[if IE 7 ]><html class='ie ie7' lang='en'> <![endif]-->
-<!--[if IE 8 ]><html class='ie ie8' lang='en'> <![endif]-->
-<!--[if (gte IE 9)|!(IE)]><!--><html lang='en'> <!--<![endif]-->
+<html lang='en'>
+
 <head>
-    <!-- Basic Page Needs
-    ================================================== -->
     <meta charset='utf-8'>
-    <title>{% block title %}App{% endblock %}</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <meta name='description' content=''>
     <meta name='author' content=''>
 
-    <!-- Mobile Specific Metas
-    ================================================== -->
-    <meta name='viewport' 
-    content='width=device-width, initial-scale=1, maximum-scale=1'>
+    <title>Event App</title>
 
-    <!-- CSS
-    ================================================== -->
     {% load staticfiles %}
-    <link rel='stylesheet' href='{% static 'css/base.css' %}'>
-    <link rel='stylesheet' href='{% static 'css/skeleton.css' %}'>
-    <link rel='stylesheet' href='{% static 'css/layout.css' %}'>
-    <link rel='stylesheet' 
-    href='{% static 'css/jquery-ui-1.10.3.custom.min.css' %}'>
-    <link rel='stylesheet' 
-    href='{% static 'css/jquery.ui.timepicker.css' %}'>
+    <!-- Bootstrap core CSS -->
+    <link href='{% static 'css/bootstrap.css' %}'  rel='stylesheet'>
 
-    <script type='text/javascript' 
-        src='{% static 'js/jquery-1.10.2.min.js' %}'></script>
-    <script type='text/javascript' 
-        src='{% static 'js/jquery-ui-1.10.3.custom.min.js' %}'></script>
-    <script type='text/javascript' 
-        src='{% static 'js/jquery.ui.timepicker.js' %}'></script>
-    {% block extra_head %}{% endblock %}
-
-    <!--[if lt IE 9]>
-    <script src='http://html5shim.googlecode.com/svn/trunk/html5.js'>
-    </script>
-    <![endif]-->
-
-    <!-- Favicons
-    ================================================== -->
-    <link rel='shortcut icon' href='{% static 'img/favicon.ico' %}'>
-    <link rel='apple-touch-icon' 
-    href='{% static 'img/apple-touch-icon.png' %}'>
-    <link rel='apple-touch-icon' sizes='72x72' 
-    href='{% static 'img/apple-touch-icon-72x72.png' %}'>
-    <link rel='apple-touch-icon' sizes='114x114' 
-    href='{% static 'images/apple-touch-icon-114x114.png' %}'>
+    <!-- Add custom CSS here -->
+    <link href='{% static 'css/base.css' %}'  rel='stylesheet'>
 </head>
 
 <body>
-    <div class='container'>
-        <div class='side_bar clearfix three columns'>
-            <h3>The App</h3>
-            <nav>
-            <ul>
-                <li><a id='nav_a' href='{% url 'basal:main' %}'>What's Up?</a></li>
-                <li><a href='{% url 'events:event_list' %}'>The Events</a></li>
-                <li><a href=#>Contact Us</a></li>
-            </ul>
-            <hr id='nav_hr' />
-            <ul>
-                {% if user.username %}
-                <li><a class='nav_b' href='{% url 'basal:dashboard' %}'>My Dashboard</a></li>
-                <div class='anchor_nav'>
-                    {% block sub_nav %}{% endblock %}
-                </div>
-                <li>
-                <a href='{% url 'basal:logout' %}?next={% url 'basal:main' %}'>Sign Out</a></li>
-                {% else %}
-                <li><a href='{% url 'basal:user_login' %}'>Sign In</a></li>
-                <li><a href='{% url 'basal:user_create' %}'>Join Us</a></li>
-                {% endif %}
-            </ul>
-            </nav>
-            &nbsp;
-        </div>
+    <nav class='navbar navbar-inverse navbar-fixed-top' role='navigation'>
+        <div class='container'>
+            <div class='navbar-header'>
+                <button type='button' class='navbar-toggle' data-toggle='collapse' data-target='.navbar-ex1-collapse'>
+                    <span class='sr-only'>Toggle navigation</span>
+                    <span class='icon-bar'></span>
+                    <span class='icon-bar'></span>
+                    <span class='icon-bar'></span>
+                </button>
+                <!-- You'll want to use a responsive image option so this logo looks good on devices - I recommend using something like retina.js (do a quick Google search for it and you'll find it) -->
+                <a class='navbar-brand' href='{% url 'basal:main' %}'>Event App</a>
+            </div>
 
-        <div class='main_wrapper clearfix twelve columns offset-by-four'>
-            <header>
-            <h1>{% block h1 %}{% endblock %}</h1>
-            <h4>{% block h4 %}{% endblock %}</h4>
-            </header>
-            <main>
-            {% block main %}{% endblock %}
-            </main>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class='collapse navbar-collapse navbar-ex1-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                    <li><a href='{% url 'basal:main' %}'>Home</a></li>
+                    <li class='dropdown'>
+                        <a href='#' class='dropdown-toggle' data-toggle='dropdown'>Event <b class='caret'></b></a>
+                        <ul class='dropdown-menu'>
+                            <li><a href='{% url 'events:event_list' %}'>Event List</a></li>
+                            {% if user %}
+                            <li><a href='{% url 'events:event_create' %}'>Create Event</a></li>
+                            {% endif %}
+                        </ul>
+                    </li>
+                    <li><a href='#'>Contact</a></li>
+                    {% if user.is_authenticated %}
+                    <li><a href='{% url 'basal:dashboard' %}'>Dashboard</a></li>
+                    <li><a href='{% url 'basal:logout' %}'>Sign out</a></li>
+                    {% else %}
+                    <li><a href='{% url 'basal:user_login' %}'>Sign in</a></li>
+                    <li><a href='{% url 'basal:user_create' %}'>Sign up</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
         </div>
-    </div><!-- container -->
+        <!-- /.container -->
+    </nav>
+
+    <main>
+    {% block 'main' %}{% endblock %}
+    </main>
+
+    <footer>
+    <div class='container'>
+        <hr />
+        <p>Copyright &copy; Company 2013</p>
+    </div>
+    </footer>
+    <!-- /.container -->
+
+    <!-- JavaScript -->
+    <script src='{% static 'js/jquery-1.10.2.js' %}'></script>
+    <script src='{% static 'js/bootstrap.js' %}'></script>
+    <script src='{% static 'js/base.js' %}'></script>
+    {% block 'extra_static' %}{% endblock %}
 </body>
-    </html>
+
+</html>

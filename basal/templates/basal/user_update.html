@@ -1,29 +1,38 @@
-{% extends 'base.html' %}
-{% block extra_head %}
-{% load staticfiles %}
-<script type='text/javascript' 
-    src='{% static 'events/js/event_form.js' %}'></script>
+{% extends 'base_with_breadcrumb.html' %}
+{% block 'page_header' %}Update Profile{% endblock %}
+{% block 'page_header_small' %}Change your name, change your email, change your everything.{% endblock %}
+
+{% block 'breadcrumb' %}
+<li><a href='{% url 'basal:main' %}'>Home</a></li>
+<li><a href='{% url 'basal:dashboard' %}'>Dashboard</a></li>
+<li class='active'>Update Profile</li>
 {% endblock %}
 
-{% block h1 %}Update Profile{% endblock %}
-{% block h4 %}Change you name, change your email, change your everything.{% endblock %}
+{% block 'main_with_breadcrumb' %}
+<div class='container'>
+    <div class='row'>
+        <div class='col-sm-8 col-lg-8 center_this'>
+            {% if form.non_field_errors %}
+            <ul class='form_errors'>
+                {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            <form action='{% url 'basal:user_update' %}' method='post'>
+                {% csrf_token %}
+                {% for field in form %}
+                <div class='form-group'
+                    {{ field.label_tag }}
+                    {{ field.errors }}
+                    {{ field }}
+                    <p class='help-block'>{{ field.help_text }}</p>
+                </div>
+                {% endfor %}
+                <button class='btn btn-primary' type='submit'>Update Profile</button>
+            </form>
 
-{% block main %}
-<div class='form_wrapper'>
-    {% if form.non_field_errors %}
-    <ul class='form_errors'>
-        {% for error in form.non_field_errors %}
-        <li>{{ error }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-    <form id='user_update_form' class='alpha clearfix' action='{% url 'basal:user_update' %}' method='post'>
-        {% csrf_token %}
-        {{ form }}
-
-        <input name='form' type='submit' value='Update Profile' />
-        <br />
-        <a href='{% url 'basal:dashboard' %}'>Back</a>
-    </form>
+        </div>
+    </div>
 </div>
 {% endblock %}

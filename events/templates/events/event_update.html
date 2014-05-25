@@ -1,33 +1,54 @@
-{% extends 'base.html' %}
-{% block extra_head %}
+{% extends 'base_with_breadcrumb.html' %}
+{% block 'page_header' %}Update Event{% endblock %}
+
+{% block 'extra_static' %}
 {% load staticfiles %}
-<script type='text/javascript' src='{% static 'events/js/event_form.js' %}'></script>
+<link href='{% static 'css/jquery-ui-1.10.3.custom.min.css' %}' rel='stylesheet'>
+<link href='{% static 'css/jquery.ui.timepicker.css' %}' rel='stylesheet'>
+<script src='{% static 'js/jquery-ui-1.10.3.custom.min.js' %}'></script>
+<script src='{% static 'js/jquery.ui.timepicker.js' %}'></script>
+<script src='{% static 'events/js/event_form.js' %}'></script>
 {% endblock %}
 
-{% block h1 %}Update Event{% endblock %}
-{% block main %}
-<div class='form_wrapper'>
-    {% if form.non_field_errors %}
-    <ul class='form_errors'>
-        {% for error in form.non_field_errors %}
-        <li>{{ error }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-    <form id='event_update_form' action='{% url 'events:event_update' event.id %}?back={{ back }}' class='alpha clearfix' method='post'>
-        <input type='hidden' name='back' value='{{ back }}'>
-        {% csrf_token %}
-        {{ form }}
+{% block 'breadcrumb' %}
+<li><a href='{% url 'basal:main' %}'>Home</a></li>
+<li><a href='{% url 'events:event_list' %}'>Event List</a></li>
+<li><a href='{% url 'events:event_detail' event.id %}'>Event Detail</a></li>
+<li class='active'>Update Event</li>
+{% endblock %}
 
-        <div class='row'>
-            <div id='address_holder' data-url='{% url 'basal:address_detail' pk=1357924680 %}?back={{ current_path }}'> 
-            </div>
-            <a href='{% url 'basal:address_create' %}?back={{ current_path }}'>create address</a>
+{% block 'main_with_breadcrumb' %}
+<div class='container'>
+    <div class='row'>
+        <div class='col-sm-8 col-lg-8 center_this'>
+            {% if form.non_field_errors %}
+            <ul class='form_errors'>
+                {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            <form action='{% url 'events:event_update' event.id %}' method='post'>
+                {% csrf_token %}
+                {% for field in form %}
+                <div class='form-group'
+                    {{ field.label_tag }}
+                    {{ field.errors }}
+                    {{ field }}
+                    <p class='help-block'>{{ field.help_text }}</p>
+                </div>
+                {% endfor %}
+                <button class='btn btn-primary' type='submit'>Update Event</button>
+            </form>
+
         </div>
-
-        <input name='form' type='submit' value='Update Event' />
-        <br />
-        <a href='{{ back }}'>Back</a>
-    </form>
+    </div>
 </div>
 {% endblock %}
+
+
+<div class='row'>
+    <div id='address_holder' data-url='{% url 'basal:address_detail' pk=1357924680 %}?back={{ current_path }}'> 
+    </div>
+    <a href='{% url 'basal:address_create' %}?back={{ current_path }}'>create address</a>
+</div>
