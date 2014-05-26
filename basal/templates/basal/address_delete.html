@@ -9,16 +9,25 @@
 
 {% block 'main_with_breadcrumb' %}
 <div class='container'>
+
     <div class='row'>
+
         <div class='col-sm-8 col-lg-8'>
+
             <form action='{% url 'basal:address_delete' address.id %}' method='post'>
                 {% csrf_token %}
 
                 <p>Are you really going to remove {{ address.address_title }}?</p>
-                <a class='btn btn-default' href='{% url 'basal:dashboard' %}'>Back</a>
+                <a class='btn btn-default' href='{% url 'basal:dashboard' %}#addresses'>Back</a>
                 <button class='btn btn-danger ' type='submit'>Yes</button>
             </form>
+
         </div>
+        <!-- /col-sm-8 col-lg-8 -->
+
     </div>
+    <!-- /row -->
+
 </div>
+<!-- /container -->
 {% endblock %}

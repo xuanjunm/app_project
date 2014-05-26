@@ -36,11 +36,11 @@
                 {% for field in form %}
                 <div class='form-group'>
                     {{ field.label_tag }}
-                    {% if field.field.required %}
-                    <small class='required_tag'><span class='glyphicon glyphicon-edit'></span>
-                        required</small>
-                    {% endif %}
                     {{ field }}
+
+                    {% if field.field.required %}
+                    <script type="text/javascript">formGroupWithRequired('#{{ field.id_for_label }}');</script>
+                    {% endif %}
 
                     {% if field.errors %}
                     <script type="text/javascript">formGroupWithError('#{{ field.id_for_label }}');</script>

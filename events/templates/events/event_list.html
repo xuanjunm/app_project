@@ -40,7 +40,7 @@
                     <td>{{ event.event_title }}</td>
                     <td>{{ event.event_date }}</td>
                     <td>{{ event.address_city }}, {{ event.address_region }}</td>
-                    <td>{{ event.fk_event_poster_user }}</td>
+                    <td><a href='{% url 'basal:user_detail' event.fk_event_poster_user.id %}'>{{ event.fk_event_poster_user }}</a></td>
                     <td><a href='{% url 'events:event_detail' event.id %}'>Details</a></td>
                 </tr>
                 {% endfor %}

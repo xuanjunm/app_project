@@ -65,14 +65,9 @@ class EventCreateView(generic.CreateView):
 
     def post(self, request, *args, **kwargs):
         self.object = None
-        form = self.form_class
+        form = self.get_form(self.form_class)
 
 #        import pdb;pdb.set_trace()
-        post_values = request.POST.copy()
-        temp = post_values['event_time'].split()
-        post_values['event_time'] = temp[0]
-#        post_values['fk_event_poster_user'] = request.user
-        form = self.form_class(post_values) 
         form.instance.fk_event_poster_user = request.user
 
         if form.is_valid():
@@ -82,12 +77,6 @@ class EventCreateView(generic.CreateView):
 
     def get_success_url(self):
         return reverse('events:event_list')
-
-    def get_context_data(self, **kwargs):
-        context = super(EventCreateView, self).get_context_data(**kwargs)
-        context['current_path'] = self.request.get_full_path()
-#        import pdb;pdb.set_trace()
-        return context
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
@@ -131,7 +120,7 @@ def event_rsvp(request, pk):
     c_event = Event.objects.get(pk=pk)
     new_rsvp = EventRSVP(fk_user=request.user, fk_event=c_event)
     new_rsvp.save()
-    return HttpResponseRedirect(reverse('events:event_detail', args=(pk,)))
+    return HttpResponseRedirect(reverse('events:event_detail', args=(pk,)) + '#rsvps')
 
 @login_required
 def event_rsvp_remove(request, pk):
@@ -139,7 +128,7 @@ def event_rsvp_remove(request, pk):
     c_rsvp = EventRSVP.objects.filter(
                 fk_user=request.user).get(fk_event=c_event)
     c_rsvp.delete()
-    return HttpResponseRedirect(reverse('events:event_detail', args=(pk,)))
+    return HttpResponseRedirect(reverse('events:event_detail', args=(pk,)) + '#rsvps')
 
 @login_required
 def event_comment_create(request, pk):
@@ -149,4 +138,4 @@ def event_comment_create(request, pk):
         c_event = Event.objects.get(pk=pk)
         new_comment = EventComment(fk_comment_poster_user=request.user, comment_detail=temp, fk_event=c_event)
         new_comment.save()
-    return HttpResponseRedirect(reverse('events:event_detail', args=(pk,)))
+    return HttpResponseRedirect(reverse('events:event_detail', args=(pk,)) + '#comments')

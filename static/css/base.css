@@ -35,6 +35,11 @@ footer {
     color: #aaa;
 }
 
+.anchor_offset {
+    position: relative;
+    top: -150px;
+}
+
 /* FORMS
  * ------------------------------ */ 
 .errorlist, .form_errors, .errorlist li, .form_errors li {

@@ -8,6 +8,7 @@
 
                 <div class='panel-heading'>
                     <h4>My Event</h4>
+                    <div class='anchor_offset' id='events'></div>
                 </div>
                 <!-- /panel-heading -->
 
@@ -19,7 +20,9 @@
                         <div class='col-xs-12'>
                             <div class='list-group'>
                                 {% for event in event_list %}
-                                <a href='{% url 'events:event_detail' event.id %}' class='list-group-item'>{{ event.event_title }}</a>
+                                <a href='{% url 'events:event_detail' event.id %}' class='list-group-item'>{{ event.event_title }}
+                                    <span class='badge'>{{ event.get_event_rsvp_count }}</span> 
+                                </a>
                                 {% endfor %}
                             </div>
                         </div>
@@ -48,6 +51,7 @@
             <!-- /panel -->
 
         </div>
+        <!-- /col-xs-12 -->
 
     </div>
     <!-- /row -->

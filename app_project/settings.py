@@ -171,3 +171,9 @@ LOGGING = {
 LOGIN_REDIRECT_URL = 'basal:dashboard'
 LOGIN_URL = 'basal:user_login'
 AUTH_USER_MODEL = 'basal.CustomUser'
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'sillygrubs@gmail.com'
+EMAIL_HOST_PASSWORD = 'ggj12345'

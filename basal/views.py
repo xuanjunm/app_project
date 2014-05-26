@@ -101,7 +101,7 @@ class AddressCreateView(generic.CreateView):
             return self.form_invalid(form)
 
     def get_success_url(self):
-        return reverse('basal:dashboard')  + self.request.GET.get('anchor')
+        return reverse('basal:dashboard') + '#addresses'
     
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
@@ -114,7 +114,7 @@ class AddressUpdateView(generic.UpdateView):
     form_class = AddressForm
 
     def get_success_url(self):
-        return reverse('basal:dashboard') + self.request.GET.get('anchor')
+        return reverse('basal:dashboard') + '#addresses' 
 
     @method_decorator(authorized_to_update_address_decorator)
     def dispatch(self, *args, **kwargs):
@@ -125,7 +125,7 @@ class AddressDeleteView(generic.DeleteView):
     model = Address
 
     def get_success_url(self):
-        return reverse('basal:dashboard')
+        return reverse('basal:dashboard') + '#addresses'
 
     @method_decorator(authorized_to_update_address_decorator)
     def dispatch(self, *args, **kwargs):
@@ -149,16 +149,39 @@ class UserDetailView(generic.TemplateView):
         t_user = CustomUser.objects.get(id=kwargs['pk'])
         context['t_user'] = t_user
 
-        temp = Event.objects.filter(fk_event_poster_user=t_user)
-        context['event_list'] = temp
-
         temp = EventRSVP.objects.filter(fk_user=t_user)
-        context['rsvp_list'] = temp
+        context['rsvp_list'] = {}
+
+        for i in range(0, temp.count()):
+            event_owner = False
+            event_rsvp = False
+            if (temp[i].fk_event.is_owner(self.request.user)):
+                event_owner = True
+            elif (temp[i].fk_event.rsvp(self.request.user)):
+                event_rsvp = True
+
+            context['rsvp_list'][temp[i].id] = temp[i]
+            context['rsvp_list'][temp[i].id].event_owner = event_owner 
+            context['rsvp_list'][temp[i].id].event_rsvp = event_rsvp
 
         temp = UserTagAttribute.objects.filter(fk_user=t_user)
         context['tag_list'] = temp
 
-        context['current_path'] = self.request.get_full_path()
+        temp = Event.objects.filter(fk_event_poster_user=t_user)
+        context['event_list'] = {}
+#        import pdb;pdb.set_trace()
+
+        for i in range(0, temp.count()):
+            event_owner = False
+            event_rsvp = False
+            if (temp[i].is_owner(self.request.user)):
+                event_owner = True
+            elif (temp[i].rsvp(self.request.user)):
+                event_rsvp = True
+
+            context['event_list'][temp[i].id] = temp[i]
+            context['event_list'][temp[i].id].event_owner = event_owner 
+            context['event_list'][temp[i].id].event_rsvp = event_rsvp
 
         return context
 
@@ -297,7 +320,7 @@ def user_tag_delete(request, pk):
     user_tag = UserTagAttribute.objects.get(pk=pk)
     user_tag.delete()
 
-    return HttpResponseRedirect(reverse('basal:dashboard') + request.GET.get('anchor'))
+    return HttpResponseRedirect(reverse('basal:dashboard') + '#tags')
 
 @login_required
 def user_tag_create(request):
@@ -307,4 +330,4 @@ def user_tag_create(request):
         user_tag = UserTagAttribute(fk_user=request.user, tag=temp)
         user_tag.save()
 
-    return HttpResponseRedirect(reverse('basal:dashboard') + request.GET.get('anchor'))
+    return HttpResponseRedirect(reverse('basal:dashboard') + '#tags')

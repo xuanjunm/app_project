@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block main %}
+<div class='three columns'>
+    <h3 id='back_btn'><a href='{% url 'basal:main' %}'>&lt; Back</a></h3>
+</div>
+
+<div class='thirteen columns'>
+    <h3>Contact Us</h3>
+    <hr class='half-bottom'>
+    <form action='.' method='POST' id='contact_form' class='clearfix'>
+        {% csrf_token %}
+        <div class='alpha'>
+            {{ form }}
+            <input class='half-bottom' type='submit' value='Send'>
+            <input id='reset_btn' type='reset' value='Reset'>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+
+

@@ -17,9 +17,19 @@
 
                         {% if rsvp_list %}
                         <div class='col-xs-12'>
+
                             <div class='list-group'>
-                                {% for rsvp in rsvp_list %}
-                                <a href='{% url 'events:event_detail' rsvp.fk_event.id %}' class='list-group-item'>{{ rsvp.fk_event.event_title }}</a>
+                                {% for key, rsvp in rsvp_list.items %}
+                                <a href='{% url 'events:event_detail' rsvp.fk_event.id %}'
+                                    {% if rsvp.event_owner %}
+                                    class='list-group-item list-group-item-warning'
+                                    {% elif rsvp.event_rsvp %}
+                                    class='list-group-item list-group-item-success'
+                                    {% else %}
+                                    class='list-group-item'
+                                    {% endif %}
+                                    >
+                                    {{ rsvp.fk_event.event_title }}</a>
                                 {% endfor %}
                             </div>
                         </div>
@@ -39,6 +49,7 @@
             <!-- /panel -->
 
         </div>
+        <!-- /col-xs-12 -->
 
     </div>
     <!-- /row -->

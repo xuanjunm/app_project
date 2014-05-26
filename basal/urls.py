@@ -1,5 +1,6 @@
 from django.conf.urls import patterns, include, url
 from django.views.generic import TemplateView
+from .forms import MyAuthenticationForm
 
 from . import views
 
@@ -7,7 +8,8 @@ urlpatterns = patterns('',
     url(r'^$', TemplateView.as_view(template_name='basal/main.html'), 
         name='main'),
     url(r'^user_login/$', 'django.contrib.auth.views.login',
-        {'template_name': 'basal/login.html'}, name='user_login'),
+        {'template_name': 'basal/login.html',
+         'authentication_form': MyAuthenticationForm}, name='user_login'),
     url(r'^logout/$', 'django.contrib.auth.views.logout',
          {'next_page': '/'}, name='logout'),
     url(r'^user_create/$', views.UserCreateView.as_view(), 

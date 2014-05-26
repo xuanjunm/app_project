@@ -7,7 +7,8 @@
             <div class='panel panel-default'>
 
                 <div class='panel-heading'>
-                    <h4 id='my_tags'>My Tags</h4>
+                    <h4>My Tags</h4>
+                    <div class='anchor_offset' id='tags'></div>
                 </div>
                 <!-- /panel-heading -->
 
@@ -19,7 +20,7 @@
                         <div class='col-xs-12'>
                                 {% for tag in tag_list %}
                                 <span class='label label-default'>{{ tag.tag }}</span>
-                                <strong><a class='user_tag_cancel' href='{% url 'basal:user_tag_delete' tag.id %}?anchor=#my_tags'>x</a></strong>
+                                <strong><a class='user_tag_cancel' href='{% url 'basal:user_tag_delete' tag.id %}'>x</a></strong>
                                 {% endfor %}
                         </div>
                         {% else %}
@@ -35,7 +36,7 @@
 
                     <div class='row'>
                         <div class='col-xs-12'>
-                            <form class='form-inline' role='form' action='{% url 'basal:user_tag_create' %}?anchor=#my_tags' method='post'>
+                            <form class='form-inline' role='form' action='{% url 'basal:user_tag_create' %}?' method='post'>
                                 {% csrf_token %}
                                 <div class='form-group'>
                                     <label class='sr-only' for='tag_input'>Tag</label>
@@ -54,6 +55,7 @@
             <!-- /panel -->
 
         </div>
+        <!-- /col-xs-12 -->
 
     </div>
     <!-- /row -->

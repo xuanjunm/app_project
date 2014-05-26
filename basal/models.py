@@ -41,7 +41,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(default=timezone.now)
     user_gender = models.CharField(max_length=255,
                                    choices=USER_GENDER_CHOICES,
-                                   blank=True)
+                                   blank=True, null=True)
     user_description = models.TextField(blank=True)
     user_nickname = models.CharField(max_length=255, blank=True)
     user_location = models.CharField(max_length=255, blank=True)

@@ -1,20 +1,14 @@
 $(document).ready( function() {
     /* event form date and time picker */
-    /*$('#id_event_date').datepicker({
-        format: "yyyy-mm-dd",
-        startDate: "+0d",
-        autoclose: true,
-        todayHighlight: true,
-    });
-*/
-
     $('#id_event_date').datetimepicker({
         pickTime: false,
         dateFormat: 'yyyy-mm-dd',
     });
 
     $('#id_event_time').datetimepicker({
+        format: 'HH:mm:ss',
         pickDate: false,
+        pick12HourFormat: false
     });
 
     $('#id_event_date').data('DateTimePicker').setMinDate(new Date());
@@ -22,7 +16,8 @@ $(document).ready( function() {
 });
 
 function formGroupWithError(target) {
-    var exception_array = ['#id_event_type_0', '#id_event_type_1'];
+    var exception_array = ['#id_event_type_0', '#id_event_type_1',
+                           '#id_user_gender_0', '#id_user_gender_1'];
 
     $(target).parent().addClass('has-error');
     
@@ -33,3 +28,6 @@ function formGroupWithError(target) {
     }
 }
 
+function formGroupWithRequired(target) {
+    $(target).attr('placeholder', 'Required');
+}
