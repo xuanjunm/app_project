@@ -2,6 +2,13 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from .models import *
 from django import forms
 
+class metaForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(metaForm, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+
+
 class CustomUserCreationForm(UserCreationForm):
     """
     A form that creates a user, with no privileges, from the given email and
@@ -21,6 +28,11 @@ class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = CustomUser
         fields = ['username', 'email', 'password1', 'password2']
+
+    def __init__(self, *args, **kwargs):
+        super(CustomUserCreationForm, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
 
 class CustomUserChangeForm(UserChangeForm):
     """

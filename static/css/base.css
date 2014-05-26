@@ -31,6 +31,10 @@ footer {
     margin: 0 auto;
 }
 
+.required_tag {
+    color: #aaa;
+}
+
 /* FORMS
  * ------------------------------ */ 
 .errorlist, .form_errors, .errorlist li, .form_errors li {

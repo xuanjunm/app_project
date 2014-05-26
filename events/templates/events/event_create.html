@@ -3,11 +3,9 @@
 
 {% block 'extra_static' %}
 {% load staticfiles %}
- <link href='{% static 'css/jquery-ui-1.10.3.custom.min.css' %}' rel='stylesheet'>
- <link href='{% static 'css/jquery.ui.timepicker.css' %}' rel='stylesheet'>
- <script src='{% static 'js/jquery-ui-1.10.3.custom.min.js' %}'></script>
- <script src='{% static 'js/jquery.ui.timepicker.js' %}'></script>
- <script src='{% static 'events/js/event_form.js' %}'></script>
+ <link href='{% static 'css/bootstrap-datetimepicker.min.css' %}' rel='stylesheet'>
+ <script src='{% static 'js/moment.min.js' %}'></script>
+ <script src='{% static 'js/bootstrap-datetimepicker.min.js' %}'></script>
 {% endblock %}
 
 {% block 'breadcrumb' %}
@@ -18,8 +16,11 @@
 
 {% block 'main_with_breadcrumb' %}
 <div class='container'>
+
     <div class='row'>
+
         <div class='col-sm-8 col-lg-8 center_this'>
+
             {% if form.non_field_errors %}
             <ul class='form_errors'>
                 {% for error in form.non_field_errors %}
@@ -27,21 +28,37 @@
                 {% endfor %}
             </ul>
             {% endif %}
+            <!-- /form_errors -->
 
-            <form action='{% url 'events:event_create' %}' method='post'>
+            <form role='form' action='{% url 'events:event_create' %}' method='post'>
                 {% csrf_token %}
+
                 {% for field in form %}
-                <div class='form-group'
+                <div class='form-group'>
                     {{ field.label_tag }}
-                    {{ field.errors }}
+                    {% if field.field.required %}
+                    <small class='required_tag'><span class='glyphicon glyphicon-edit'></span>
+                        required</small>
+                    {% endif %}
                     {{ field }}
+
+                    {% if field.errors %}
+                    <script type="text/javascript">formGroupWithError('#{{ field.id_for_label }}');</script>
+                    {{ field.errors }}
+                    {% endif %}
+
                     <p class='help-block'>{{ field.help_text }}</p>
                 </div>
                 {% endfor %}
-                <button class='btn btn-primary' type='submit'>Submit</button>
+                <button class='btn btn-primary' type='submit'>Create</button>
             </form>
 
         </div>
+        <!-- /col-sm-8 col-lg-8 -->
+
     </div>
+    <!-- /row -->
+
 </div>
+<!-- /container -->
 {% endblock %}

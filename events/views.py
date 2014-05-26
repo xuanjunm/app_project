@@ -65,8 +65,14 @@ class EventCreateView(generic.CreateView):
 
     def post(self, request, *args, **kwargs):
         self.object = None
-        form = self.get_form(self.form_class)
+        form = self.form_class
 
+#        import pdb;pdb.set_trace()
+        post_values = request.POST.copy()
+        temp = post_values['event_time'].split()
+        post_values['event_time'] = temp[0]
+#        post_values['fk_event_poster_user'] = request.user
+        form = self.form_class(post_values) 
         form.instance.fk_event_poster_user = request.user
 
         if form.is_valid():

@@ -39,7 +39,7 @@
                     >
                     <td>{{ event.event_title }}</td>
                     <td>{{ event.event_date }}</td>
-                    <td>{{ event.fk_address.address_region }}, {{ event.fk_address.address_city }}</td>
+                    <td>{{ event.address_city }}, {{ event.address_region }}</td>
                     <td>{{ event.fk_event_poster_user }}</td>
                     <td><a href='{% url 'events:event_detail' event.id %}'>Details</a></td>
                 </tr>
@@ -50,13 +50,14 @@
             </table>
 
         </div>
+        <!-- /col-lg-12 -->
 
     </div>
     <!-- /row -->
 
     <br />
 
-    <!-- glossary -->
+    <!-- start glossary -->
     <div class='row'>
 
         <div class='col-lg-12'>
@@ -66,7 +67,6 @@
                 <div class='panel-body'>
 
                     <div class='col-xs-5'>
-
                         <div class='row'>
                             <div class='col-xs-1'>
                                 <div class='table_glossary success'></div>
@@ -76,6 +76,7 @@
                             </div>
                         </div>
                     </div>
+                    <!-- /col-xs-5 -->
 
                     <div class='col-xs-5'>
                         <div class='row'>
@@ -87,6 +88,7 @@
                             </div>
                         </div>
                     </div>
+                    <!-- /col-xs-5 -->
 
                 </div>
                 <!-- /panel-body -->
@@ -95,6 +97,8 @@
             <!-- /panel -->
 
         </div>
+        <!-- /col-lg-12 -->
+
     </div>
     <!-- /row -->
 
@@ -102,17 +106,21 @@
 <!-- /container -->
 
 <div class='container'>
+
     <div class='row'>
+
         <div class='col-xs-12'>
             {% if user.username %}
-            <a class='btn btn-default' href='{% url 'events:event_create' %}' title='create event link'>
-                Create a new event</a>
+            <a class='btn btn-primary' href='{% url 'events:event_create' %}' title='create event link'>Create a new event</a>
             {% else %}
-            <a class='btn btn-primary' href='{% url 'basal:user_login' %}'>Sign in</a> to create a new 
-            event. Or <a class='btn btn-success' href='{% url 'basal:user_create' %}'>Join us</a> today!
+            <a class='btn btn-primary' href='{% url 'basal:user_login' %}'>Sign in</a> to create a new event. Or <a class='btn btn-success' href='{% url 'basal:user_create' %}'>Join us</a> today!
             {% endif %}
         </div>
+<!-- /col-xs-12 -->
+
     </div>
+<!-- /row -->
+
 </div>
 <!-- /container -->
 {% endblock %}
