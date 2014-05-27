@@ -14,9 +14,9 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3', 
-        'NAME': os.path.join(PROJECT_ROOT, 'sqlite3.db'),               
-#        'NAME': 'app_project_mysql',               
+        'ENGINE': 'django.db.backends.mysql', 
+#        'NAME': os.path.join(PROJECT_ROOT, 'sqlite3.db'),               
+        'NAME': 'app_project_mysql',               
         'USER': 'sean',                 
         'PASSWORD': 'abcde12345',          
         'HOST': '',                    
@@ -69,7 +69,7 @@ STATIC_ROOT = os.path.join(PROJECT_ROOT, '_static')
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
-STATIC_URL = '/app_project/_static/'
+STATIC_URL = '/_static/'
 #STATIC_URL = "/users/seansu/dropbox/studies/cmpt_470/svn/personal_svn/app_project/static_root/"
 
 # Additional locations of static files
