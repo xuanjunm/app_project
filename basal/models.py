@@ -108,7 +108,7 @@ class UserFriendAttribute(models.Model):
     def __unicode__(self):
         return '%s - %s' % (self.fk_friend_a_user, self.fk_friend_b_user)
 
-class UserTag(models.Model):
+class UserTagAttribute(models.Model):
     tag = models.CharField(max_length=255)
     fk_user = models.ForeignKey(CustomUser, related_name='user_tag')
 
