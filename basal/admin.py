@@ -46,4 +46,4 @@ class CustomUserAdmin(UserAdmin):
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(Address)
 admin.site.register(UserImage)
-admin.site.register(UserTag)
+admin.site.register(UserTagAttribute)

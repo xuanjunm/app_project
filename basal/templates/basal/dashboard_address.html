@@ -1,29 +1,70 @@
-<div class='address_list_wrapper row'>
-    <h3 id='my_addresses'>Address</h3>
-    {% if address_list %}
-    <ul>
-        {% for address in address_list %}
-        <div class='row'>
-            <div class='alpha nine columns address_wrapper'>
-                <h5 class='lesser_emphasis'>{{ address.address_title }}</h5>
-                <p class='italic'>{{ address.address_detail }}</p>
-                <p>{{ address.address_city }}, 
-                {{ address.address_region }}
-                <br />{{ address.address_country }} 
-                {{ address.address_postal_code }}</p>
-                <div class='row'>
-                    <a class='' href='{% url 'basal:address_update' address.id %}?back={{ current_path }}#my_addresses'>Update</a>
-                    <a class='' href='{% url 'basal:address_delete' address.id %}?back={{ current_path }}#my_addresses'>Delete</a>
-                </div>
-            </div>
-                <hr />
-        </div>
-        {% endfor %}
-    </ul>
-    {% else %}
-    <p class='italic'>No Address are available.</p>
-    {% endif %}
+<div class='container'>
 
-    <a class='row lesser_emphasis' href='{% url 'basal:address_create' %}?back={{ current_path }}#my_addresses' title='create address link'>Create a new address</a>
-    <hr class='half-bottom' />
+    <div class='row'>
+
+        <div class='col-xs-12'>
+            <div class='panel panel-default'>
+
+                <div class='panel-heading'>
+                    <h4>Addresses</h4>
+                    <div class='anchor_offset' id='addresses'></div>
+                </div>
+                <!-- /panel-heading -->
+
+                <div class='panel-body'>
+
+                    <div class='row'>
+
+                        {% if address_list %}
+                        {% for address in address_list %}
+                        <div class='col-sm-6'>
+                            <div class='panel panel-default'>
+                                <div class='panel-body'>
+                                    <address>
+                                        <strong>{{ address.address_title }}</strong><br>
+                                        {{ address.address_detail }}<br>
+                                        {{ address.address_city }}<br>
+                                        {{ address.address_region }}<br>
+                                        {{ address.address_country }} 
+                                        {{ address.address_postal_code }}
+                                    </address>
+                                    <a class='btn btn-warning' href='{% url 'basal:address_update' address.id %}'>Update</a>
+                                    <a class='btn btn-danger' href='{% url 'basal:address_delete' address.id %}'>Delete</a>
+                                </div>
+                                <!-- /panel-body -->
+
+                            </div>
+                            </!-- /panel -->
+                        </div>
+                        {% endfor %}
+                        {% else %}
+                        <div class='col-xs-12'>
+                            <p>No Address are available.</p>
+                        </div>
+                        {% endif %}
+
+                    </div>
+                    <!-- /row -->
+
+                    <hr />
+
+                    <div class='row'>
+                        <div class='col-xs-12'>
+                            <a class='btn btn-primary' href='{% url 'basal:address_create' %}' title='create address link'>Create a new address</a>
+                        </div>
+                    </div>
+                    <!-- /row -->
+
+                </div>
+                <!-- /panel-body -->
+
+            </div>
+            <!-- /panel -->
+
+        </div>
+
+    </div>
+    <!-- /row -->
+
 </div>
+<!-- /container -->

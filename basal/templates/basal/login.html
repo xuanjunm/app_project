@@ -1,28 +1,69 @@
-{% extends 'base.html' %}
-{% block h1 %}Sign In{% endblock %}
-{% block h4 %}Update profile. Change avatar image. Create events. Join events.{% endblock %}
-{% block main %}
-<div class='form_wrapper'>
-    {% if form.non_field_errors %}
-    <ul class='form_errors'>
-        {% for error in form.non_field_errors %}
-        <li>{{ error }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-    <form id='login_form' method='post' action='{% url 'basal:user_login' %}'>
-        {% csrf_token %}
-        {% for field in form %}
-        <div class='field_wrapper'>
-            <div class='labelname'>{{ field.label_tag }}</div>
-            <div class='error'>{{ field.errors }}</div>
-            <div class='field'>{{ field }}</div>
-            <p>{{ field.help_text }}</p>
-        </div>
-        {% endfor %}
-        <input id='button' type='submit'/>
-    </form>
-</div>
+{% extends 'base_with_breadcrumb.html' %}
+{% block 'page_header' %}Sign In{% endblock %}
+{% block 'page_header_small' %}Update profile. Change avatar image. Create events. Join events.{% endblock %}
+
+{% block 'breadcrumb' %}
+<li><a href='{% url 'basal:main' %}'>Home</a></li>
+<li class='active'>Sign in</li>
 {% endblock %}
 
+{% block 'main_with_breadcrumb' %}
+<div class='container'>
 
+    <div class='row'>
+
+        <div class='col-sm-8 col-lg-8 center_this'>
+
+            {% if form.non_field_errors %}
+            <ul class='form_errors'>
+                {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            <!-- /form_errors -->
+
+            <form role='form' method='post' action='{% url 'basal:user_login' %}'>
+                {% csrf_token %}
+
+                {% for field in form %}
+                <div class='form-group'>
+                    {{ field.label_tag }}
+                    {{ field }}
+
+                    {% if field.field.required %}
+                    <script type="text/javascript">formGroupWithRequired('#{{ field.id_for_label }}');</script>
+                    {% endif %}
+
+                    {% if field.errors %}
+                    <script type="text/javascript">formGroupWithError('#{{ field.id_for_label }}');</script>
+                    {{ field.errors }}
+                    {% endif %}
+
+                    <p class='help-block'>{{ field.help_text }}</p>
+                </div>
+                {% endfor %}
+                <button class='btn btn-primary' type='submit'>Submit</button>
+            </form>
+            
+        </div>
+        <!-- /col-sm-8 col-lg-8 -->
+
+    </div>
+    <!-- /row -->
+
+    <br />
+
+    <div class='row'>
+
+        <div class='col-sm-8 col-lg-8 center_this'>
+            <a href='{% url 'basal:password_reset' %}'>Forgot Password</a>
+        </div>
+        <!-- /col-sm-8 col-lg-8 -->
+
+    </div>
+    <!-- /row -->
+
+</div>
+<!-- /container -->
+{% endblock %}

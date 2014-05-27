@@ -29,9 +29,15 @@ class Event(models.Model):
     event_recent_update = models.DateTimeField(auto_now=True)
     fk_event_poster_user = models.ForeignKey(CustomUser, 
                                              verbose_name='Event Poster')
-    fk_address = models.ForeignKey(Address,
-                                   verbose_name='Event Location',
-                                   unique=False)
+
+# event address
+    address_detail = models.CharField(max_length=255)
+    address_city = models.CharField(blank=True, max_length=255)
+    address_region = models.CharField(blank=True, max_length=255)
+    address_country = models.CharField(blank=True, 
+                                       max_length=255, 
+                                       default='Canada')
+    address_postal_code = models.CharField(blank=True, max_length=255)
 
     def is_owner(self, user):
         return self.fk_event_poster_user == user
@@ -109,8 +115,7 @@ class TagEventAttribute(models.Model):
 
 class EventImage(models.Model):
     path = models.ImageField(upload_to='event_image', 
-                             help_text='help text',      
-                             blank=True)
+                             help_text='help text')
     fk_event = models.ForeignKey(Event, related_name='event_image')
 
     def __unicode__(self):

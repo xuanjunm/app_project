@@ -1,0 +1,33 @@
+{% extends 'base_with_breadcrumb.html' %}
+{% block 'page_header'%}Delete Image{% endblock %}
+
+{% block 'breadcrumb' %}
+<li><a href='{% url 'basal:main' %}'>Home</a></li>
+<li><a href='{% url 'events:event_detail' eventimage.fk_event.id %}'>Event Detail</a></li>
+<li class='active'>Delete Image</li>
+{% endblock %}
+
+{% block 'main_with_breadcrumb' %}
+<div class='container'>
+
+    <div class='row'>
+
+        <div class='col-sm-8 col-lg-8'>
+
+            <form role='form' action='{% url 'events:event_image_delete' eventimage.id %}' method='post'>
+                {% csrf_token %}
+
+                <p>Are you really going to remove <img class=' img-thumbnail img-responsive' src='{{ MEDIA_URL }}{{ eventimage.path }}' />?</p>
+                <a class='btn btn-default' href='{% url 'events:event_detail' eventimage.fk_event.id %}#images'>Back</a>
+                <button class='btn btn-danger ' type='submit'>Yes</button>
+            </form>
+
+        </div>
+        <!-- /col-sm-8 col-lg-8 -->
+
+    </div>
+    <!-- /row -->
+
+</div>
+<!-- /container -->
+{% endblock %}

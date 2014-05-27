@@ -1,29 +1,53 @@
-{% extends 'base.html' %}
-{% block h1 %}Join Us{% endblock %}
-{% block h4 %}Yes! Join us today. You would love it here.{% endblock %}
+{% extends 'base_with_breadcrumb.html' %}
+{% block 'page_header' %}Sign Up{% endblock %}
+{% block 'page_header_small' %}Yes! Join us today. You would love it here.{% endblock %}
 
-{% block main %}
-<div class='form_wrapper'>
-    {% if form.non_field_errors %}
-    <ul class='form_errors'>
-        {% for error in form.non_field_errors %}
-        <li>{{ error }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-    <form id='user_create_form' action='{% url 'basal:user_create' %}?back={{ back }}' class='alpha clearfix' method='post'>
-        <input type='hidden' name='back' value='{{ back }}'>
-        {% csrf_token %}
-        {% for field in form %}
-            {{ field.label_tag }}
-            {{ field.errors }}
-            {{ field }}
-            <p class='italic'>{{ field.help_text }}</p>
-        {% endfor %}
+{% block 'breadcrumb' %}
+<li><a href='{% url 'basal:main' %}'>Home</a></li>
+<li class='active'>Sign Up</li>
+{% endblock %}
 
-        <input name='form' type='submit' value='Join us' />
-        <br />
-        <a href='{{ back }}'>Back</a>
-    </form>
+{% block 'main_with_breadcrumb' %}
+<div class='container'>
+
+    <div class='row'>
+
+        <div class='col-sm-8 col-lg-8 center_this'>
+
+            {% if form.non_field_errors %}
+            <ul class='form_errors'>
+                {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            <!-- /form_errors -->
+
+            <form role='form' action='{% url 'basal:user_create' %}' method='post'>
+                {% csrf_token %}
+
+                {% for field in form %}
+                <div class='form-group'>
+                    {{ field.label_tag }}
+                    {{ field }}
+
+                    {% if field.errors %}
+                    <script type="text/javascript">formGroupWithError('#{{ field.id_for_label }}');</script>
+                    {{ field.errors }}
+                    {% endif %}
+
+                    <p class='help-block'>{{ field.help_text }}</p>
+                </div>
+                {% endfor %}
+                <button class='btn btn-primary' type='submit'>Sign up</button>
+            </form>
+
+        </div>
+        <!-- /col-sm-8 col-lg-8 -->
+
+    </div>
+    <!-- /row -->
+
 </div>
+<!-- /container -->
 {% endblock %}

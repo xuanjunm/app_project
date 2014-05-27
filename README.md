@@ -10,6 +10,7 @@ This is the website/web-service for app_project.
     -   sudo pip install pytz
     -   sudo pip install django-tastypie
     -   sudo pip install python-dateutil
+    -   sudo pip install easy-thumbnails
     -   django dependencies
     -   there might be a few more I have missed out..
     

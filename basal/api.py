@@ -116,7 +116,7 @@ class AddressResource(ModelResource):
         authorization = PropertiesCustomAuthorization()
         excludes = ['id']
 
-class UserTagResource(ModelResource):
+class UserTagAttributeResource(ModelResource):
     class Meta:
         queryset = UserTag.objects.all()
         authentication = CustomAuthentication()
@@ -126,7 +126,7 @@ class UserTagResource(ModelResource):
 class UserResource(ModelResource):
     user_image = fields.ToManyField(UserImageResource, 'user_image',full=True, null=True)
     address = fields.ToManyField(AddressResource, 'address', full=True, null=True)
-    user_tag = fields.ToManyField(UserTagResource, 'user_tag', full=True, null=True)
+    user_tag = fields.ToManyField(UserTagAttributeResource, 'user_tag', full=True, null=True)
 
     fk_user_image = fields.ForeignKey(UserImageResource,
                                       'fk_user_image',

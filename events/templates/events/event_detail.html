@@ -1,122 +1,325 @@
-{% extends 'base.html' %}
-{% block h1 %}Event Details{% endblock %}
+{% extends 'base_with_breadcrumb.html' %}
+{% block 'page_header' %}Event Details{% endblock %}
 
-{% block main %}
-<div class='event_wrapper row'>
-    <h3>{{ event.event_title }}
-        {% if event_rsvp %}
-        <span class='rsvp_tag'>RSVPed</span>
-        {% endif %}
-        {% if event_owner %}
-        <span class='is_owner_tag'>My Event</span>
-        {% endif %}
-    </h3>
+{% block 'breadcrumb' %}
+<li><a href='{% url 'basal:main' %}'>Home</a></li>
+<li><a href='{% url 'events:event_list' %}'>Event List</a></li>
+<li class='active'>Event Detail</li>
+{% endblock %}
+
+{% block 'main_with_breadcrumb' %}
+{% load thumbnail %}
+<div class='container'>
+
     <div class='row'>
-        <div class='alpha five columns'>
-            <p class='form_label'>Status:</p>
-            <p class='form_detail'>{{ event.event_status }}</p>
-            <p class='form_label'>Capacity:</p>
-            <p class='form_detail'>{{ event.event_capacity }}</p>
-            <p class='form_label'>View count:</p>
-            <p class='form_detail'>{{ event.event_view_count }}</p>
-            <p class='form_label'>Likes:</p>
-            <p class='form_detail'>{{ event.event_like }}</p>
-            <p class='form_label'>Organizer:</p>
-            <p class='form_detail'><a href='{% url 'basal:user_detail' event.fk_event_poster_user.id %}'>{{ event.fk_event_poster_user.user_first_name }} {{ event.fk_event_poster_user.user_last_name }}</a></p>
-        </div>
-        <div class='five columns'>
-            <p class='form_label'>Time:</p>
-            <p class='form_detail'>{{ event.event_time }}</p>
-            <p class='form_label'>Location:</p>
-            <div class='address_wrapper'>
-                <h5 class='lesser_emphasis'>{{ event.fk_address.address_title }}</h5>
-                <p>{{ event.fk_address.address_city }}, 
-                {{ event.fk_address.address_region }}
-                <br />{{ event.fk_address.address_country }} 
-                {{ event.fk_address.address_postal_code }}</p>
+
+        <div class='col-sm-12'>
+
+            <div class='panel panel-default'>
+
+                <div class='panel-body'>
+
+                    <div class='row'>
+                        <div class='col-sm-12'>
+                            <h2>{{ event.event_title }}
+                                <small>
+                                    {% if event_rsvp %}
+                                    <span class='label label-success'>RSVPed</span>
+                                    {% endif %}
+                                    {% if event_owner %}
+                                    <span class='label label-warning'>My Event</span>
+                                    {% endif %}
+                                </span>
+                            </h2>
+                            <hr />
+                        </div>
+                    </div>
+                    <!-- /row -->
+
+                    <div class='row'>
+                        <div class='col-xs-12'>
+                            {% if image_list %}
+                            {% for image in image_list %}
+                            <div class='col-sm-3 col-md-2 col-xs-4'>
+                                <a href='{{ MEDIA_URL }}{{ image.path }}' target=_blank>
+                                    <img src='{{ image.path|thumbnail_url:'thumb' }}' class='img-thumbnail img-responsive' /></a>
+                                <br />
+                            </div>
+                            {% endfor %}
+                            {% endif %}
+
+                        </div>
+                    </div>
+                    <!-- /row -->
+
+                    <div class='row'>
+
+                        <div class='col-sm-12'>
+                            <hr />
+                        </div>
+
+                        <div class='col-sm-6'>
+                            <div class="panel panel-default">
+                                <div class="panel-heading"><strong>Status</strong></div>
+                                <div class="panel-body">
+                                    {{ event.event_status }}
+                                </div>
+                            </div>
+
+                            <div class="panel panel-default">
+                                <div class="panel-heading"><strong>Capacity</strong></div>
+                                <div class="panel-body">
+                                    {{ event.event_capacity }}
+                                </div>
+                            </div>
+
+                            <div class="panel panel-default">
+                                <div class="panel-heading"><strong>View count</strong></div>
+                                <div class="panel-body">
+                                    {{ event.event_view_count }}
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading"><strong>Likes</strong></div>
+                                <div class="panel-body">
+                                    {{ event.get_event_like_count }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class='col-sm-6'>
+                            <div class="panel panel-default">
+                                <div class="panel-heading"><strong>Organizer</strong></div>
+                                <div class="panel-body">
+                                    <a href='{% url 'basal:user_detail' event.fk_event_poster_user.id %}'>{{ event.fk_event_poster_user.username }}</a>
+                                </div>
+                            </div>
+
+                            <div class="panel panel-default">
+                                <div class="panel-heading"><strong>Time</strong></div>
+                                <div class="panel-body">
+                                    {{ event.event_time }}
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading"><strong>Time</strong></div>
+                                <div class="panel-body">
+                                    {{ event.event_time }}
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading"><strong>Location</strong></div>
+                                <div class="panel-body">
+                                    {{ event.address_detail }}<br>
+                                    {{ event.address_city }}, 
+                                    {{ event.address_region }}<br>
+                                    {{ eve.address_country }} 
+                                    {{ event.address_postal_code }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /row -->
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><strong>Description</strong></div>
+                        <div class="panel-body">
+                            {{ event.event_detail }}
+                        </div>
+                    </div>
+
+                    {% if event_owner %}
+                    <a class='btn btn-warning' href='{% url 'events:event_update' event.id %}'>Update event</a>
+                    <a class='btn btn-danger' href='{% url 'events:event_delete' event.id %}'>Delete event</a>
+                    {% else %}
+
+                    {% if event_rsvp %}
+                    <a class='btn btn-warning' href='{% url 'events:event_rsvp_remove' event.id %}'>Remove RSVP</a>
+                    {% else %}
+                    <a class='btn btn-primary' href='{% url 'events:event_rsvp' event.id %}'>RSVP</a>
+                    {% endif %}
+                    {% endif %}
+
+                </div>
+                <!-- panel-body -->
+
             </div>
-            <p class='form_label'>Description:</p>
-            <p class='form_detail'>{{ event.event_detail }}</p>
+            <!-- panel -->
+
         </div>
+        <!-- col-sm-12 -->
+
     </div>
+    <!-- row -->
+
 </div>
+<!-- container -->
 
-<hr />
+<!-- IMAGE -->
+{% if event_owner %}
+<div class='container'>
 
-<div class='row rsvp_list_wrapper clearfix'>
-    <h3>RSVPs</h3>
-    <ul class='clearfix add-bottom'>
-        {% for rsvp in event.eventrsvp_set.all %}
-        <li class='alpha five columns'>- 
-        <a href='{% url 'basal:user_detail' rsvp.fk_user.id %}'>
-            {{ rsvp.fk_user.username }}</a></li>
-        {% endfor %}
-    </ul>
-    <p class='row'>Total: {{ event.eventrsvp_set.all.count }}</p>
-</div>
+    <div class='row'>
 
-<hr />
+        <div class='col-xs-12'>
 
-<div class='row comment_list_wrapper clearfix'>
-    <h3>Comments</h3>
-    {% for comment in comment_list %}
-    <div class='comment_wrapper alpha clearfix'>
-        <p>{{ comment.comment_detail }}</p>
-        <p class='small'>
-        <a href='{% url 'basal:user_detail' comment.fk_comment_poster_user.id %}'>{{ comment.fk_comment_poster_user.user_first_name }}</a>
-        <span class='small italic'>{{ comment.comment_post_time }}
-        </span></p>
+            <div class='panel panel-default'>
+
+                <div class='panel-heading'>
+                    <h3>Images</h3>
+                    <div class='anchor_offset' id='images'></div>
+                </div>
+                <!-- /panel-heading -->
+
+                <div class='panel-body'>
+
+                    <div class='row'>
+                        {% if image_list %}
+                        {% for image in image_list %}
+                        <div class='col-sm-3 col-md-2 col-xs-6'>
+                            <a href='{{ MEDIA_URL }}{{ image.path }}' target=_blank>
+                                <img src='{{ image.path|thumbnail_url:'small' }}' class='img-thumbnail img-responsive' /></a>
+                            <br />
+                            <a class='btn btn-danger' href='{% url 'events:event_image_delete' image.id %}'>Delete</a>
+                        </div>
+                        {% endfor %}
+                        {% else %}
+                        <div class='col-xs-12'>
+                            <p>No image are available.</p>
+                        </div>
+                        {% endif %}
+
+                    </div>
+                    <!-- /row -->
+
+                    <hr />
+
+                    <form class='form-inline' enctype='multipart/form-data' role='form' action='{% url 'events:event_image_create' event.id %}' method='post'>
+                        {% csrf_token %}
+                        <div class='row'>
+                            <div class='col-xs-12'>
+                                <div class='form-group'>
+                                    <label class='sr-only' for='event_image_input'>Event Image</label>
+                                    <input name='event_image_input' type='file' placeholder='Upload and image'>
+                                </div>
+
+                                <br />
+                                <br />
+
+                                <button class='btn btn-primary' type='submit'>Add Image</button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+                <!-- panel-body -->
+
+            </div>
+            <!-- panel -->
+
+        </div>
+        <!-- col-sm-12 -->
+
     </div>
-    {% endfor %}
-    <p><a class='row lesser_emphasis' href='{% url 'events:event_comment_create' event.id %}?back={{ current_path }}' title='create event comment link'>Create a new comment</a></p>
+    <!-- row -->
+
 </div>
+<!-- container -->
+{% endif %}
+<!-- /IMAGES -->
 
-<hr />
 
-<div class='lesser_emphasis row clearfix'>
-    <!-- back --!>
-    {% if back %}
-    <p class='alpha two columns'><a href='{{ back }}'>Back</a></p>
-    {% else %}
-    <p class='alpha two columns'><a href='{% url 'events:event_list' %}'>Back to list</a></p>
-    {% endif %}
 
-    <!-- user IS event_owner --!>
-    {% if event_owner %}
-    <!-- back exists --!>
-    <p class='alpha two columns'><a href='{% url 'events:event_update' event.id %}?back={{ current_path }}'>Update event</a></p>
-    {% if back %}
-    <p class='alpha two columns'><a href='{% url 'events:event_delete' event.id %}?back={{ back }}'>Delete event</a></p>
+<div class='container'>
 
-    {% else %}
-    <!-- back DO NOT exists --!>
-    <p class='alpha two columns'><a href='{% url 'events:event_delete' event.id %}?back={% url 'events:event_list' %}'>Delete event</a></p>
-    {% endif %}
+    <div class='row'>
 
-    <!-- user is NOT event_owner --!>
-    {% else %}
+        <div class='col-xs-12'>
 
-    {% if event_rsvp %}
-    <!-- rsvp exists --!>
-    <p class='alpha two columns'>
-    {% if back %}
-    <!-- back exists --!>
-    <a href='{% url 'events:event_rsvp_remove' event.id %}?back={{ current_path }}'>Remove RSVP</a></p>
-    {% else %}
-    <!-- back DO NOT exists --!>
-    <a href='{% url 'events:event_rsvp_remove' event.id %}'>Remove RSVP</a></p>
-    {% endif %}
+            <div class='panel panel-default'>
 
-    {% else %}
-    <!-- rsvp DO NOT exists --!>
-    {% if back %}
-    <!-- back exists --!>
-    <p class='alpha two columns'><a href='{% url 'events:event_rsvp' event.id %}?back={{ current_path }}'>RSVP</a></p>
-    {% else %}
-    <!-- back DO NOT exists --!>
-    <p class='alpha two columns'><a href='{% url 'events:event_rsvp' event.id %}'>RSVP</a></p>
-    {% endif %}
-    {% endif %}
-    {% endif %}
+                <div class='panel-heading'>
+                    <h3>RSVPs <span class='badge'>{{ event.get_event_rsvp_count }}</span></h3>
+                    <div class='anchor_offset' id='rsvps'></div>
+                </div>
+                <!-- /panel-heading -->
+
+                <div class='panel-body'>
+                    <ol>
+                        {% for rsvp in event.eventrsvp_set.all %}
+                        <li> 
+                        <a href='{% url 'basal:user_detail' rsvp.fk_user.id %}'>
+                            {{ rsvp.fk_user.username }}</a></li>
+                        {% endfor %}
+                    </ol>
+                </div>
+                <!-- /panel-body -->
+
+            </div>
+            <!-- /panel -->
+
+        </div>
+        <!-- /col-xs-12 -->
+
+    </div>
+    <!-- /row -->
+
 </div>
+<!-- /container -->
+
+<div class='container'>
+
+    <div class='row'>
+
+        <div class='col-xs-12'>
+
+            <div class='panel panel-default'>
+
+                <div class='panel-heading'>
+                    <h3>Comments</h3>
+                    <div class='anchor_offset' id='comments'></div>
+                </div>
+                <!-- /panel-heading -->
+
+                <div class='panel-body'>
+
+                    {% for comment in comment_list %}
+                    <div class='well'>
+                        <p>{{ comment.comment_detail }}</p>
+                        <a href='{% url 'basal:user_detail' comment.fk_comment_poster_user.id %}'>{{ comment.fk_comment_poster_user.user_first_name }}</a>
+                        <small>{{ comment.comment_post_time }}</small>
+                    </div>
+                    {% endfor %}
+
+                    <hr />
+
+                    <div class='row'>
+                        <div class='col-xs-12'>
+                            <h5>New Comment</h5>
+                            <form class='form' role='form' action='{% url 'events:event_comment_create' event.id %}?anchor=#comments' method='post'>
+                                {% csrf_token %}
+                                <div class='form-group'>
+                                    <label class='sr-only' for='comment'>Comment</label>
+                                    <textarea class='form-control' name='comment' type='text'>
+                                    </textarea>
+                                </div>
+                                <button class='btn btn-primary' type='submit'>Add Comment</button>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- /row -->
+
+                </div>
+                <!-- /panel-body -->
+
+            </div>
+            <!-- /panel -->
+
+        </div>
+        <!-- /col-xs-12 -->
+
+    </div>
+    <!-- /row -->
+
+</div>
+<!-- /container -->
 {% endblock %}

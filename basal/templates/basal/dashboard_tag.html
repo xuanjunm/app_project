@@ -1,19 +1,64 @@
-<div class='tag_list_wrapper row'>
-    <h3 id='my_tags'>My Tags</h3>
-    {% if tag_list %}
-    <p>
-    {% for tag in tag_list %}
-    <span class='tag_wrapper'>{{ tag.tag }} <strong><a href='{% url 'basal:user_tag_delete' tag.id %}?back={{ current_path }}#my_tags'>x</a></strong></span>
-    {% endfor %}
-    </p>
-    {% else %}
-    <p class='italic'>No Tags are set.</p>
-    {% endif %}
+<div class='container'>
 
-    <form id='user_tag_form' action='{% url 'basal:user_tag_create' %}?back={{ current_path }}#my_tags' class='alpha clearfix' method='post'>
-        {% csrf_token %}
-        <input name='tag_input' type='text'>
-        <input name='form' type='submit' value='Add tag' />
-    </form>
-    <hr class='half-bottom' />
+    <div class='row'>
+
+        <div class='col-xs-12'>
+
+            <div class='panel panel-default'>
+
+                <div class='panel-heading'>
+                    <h4>My Tags</h4>
+                    <div class='anchor_offset' id='tags'></div>
+                </div>
+                <!-- /panel-heading -->
+
+                <div class='panel-body'>
+
+                    <div class='row'>
+
+                        {% if tag_list %}
+                        <div class='col-xs-12'>
+                                {% for tag in tag_list %}
+                                <span class='label label-default'>{{ tag.tag }}</span>
+                                <strong><a class='user_tag_cancel' href='{% url 'basal:user_tag_delete' tag.id %}'>x</a></strong>
+                                {% endfor %}
+                        </div>
+                        {% else %}
+                        <div class='col-xs-12'>
+                            <p>No tags are set.</p>
+                        </div>
+                        {% endif %}
+
+                    </div>
+                    <!-- /row -->
+
+                    <hr />
+
+                    <div class='row'>
+                        <div class='col-xs-12'>
+                            <form class='form-inline' role='form' action='{% url 'basal:user_tag_create' %}?' method='post'>
+                                {% csrf_token %}
+                                <div class='form-group'>
+                                    <label class='sr-only' for='tag_input'>Tag</label>
+                                    <input class='form-control' name='tag_input' type='text' placeholder='Enter a new tag'>
+                                </div>
+                                <button class='btn btn-primary' type='submit'>Add Tag</button>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- /row -->
+
+                </div>
+                <!-- /panel-body -->
+
+            </div>
+            <!-- /panel -->
+
+        </div>
+        <!-- /col-xs-12 -->
+
+    </div>
+    <!-- /row -->
+
 </div>
+<!-- /container -->

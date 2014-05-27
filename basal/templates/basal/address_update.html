@@ -1,22 +1,58 @@
-{% extends 'base.html' %}
-{% block h1 %}Update Address{% endblock %}
+{% extends 'base_with_breadcrumb.html' %}
+{% block 'page_header' %}Update Address{% endblock %}
 
-{% block main %}
-<div class='form_wrapper'>
-    {% if form.non_field_errors %}
-    <ul class='form_errors'>
-        {% for error in form.non_field_errors %}
-        <li>{{ error }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-    <form id='address_update_form' action='{% url 'basal:address_update' address.id %}?back={{ back }}' class='alpha clearfix' method='post'>
-        <input type='hidden' name='back' value='{{ back }}'>
-        {% csrf_token %}
-        {{ form }}
-        <input name='form' type='submit' value='Update Address' />
-        <br />
-        <a class='back_btn' href='{{ back }}'>Back</a>
-    </form>
+{% block 'breadcrumb' %}
+<li><a href='{% url 'basal:main' %}'>Home</a></li>
+<li><a href='{% url 'basal:dashboard' %}'>Dashboard</a></li>
+<li class='active'>Update Address</li>
+{% endblock %}
+
+{% block 'main_with_breadcrumb' %}
+<div class='container'>
+
+    <div class='row'>
+
+        <div class='col-sm-8 col-lg-8 center_this'>
+
+            {% if form.non_field_errors %}
+            <ul class='form_errors'>
+                {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            <!-- /form_errors -->
+
+            <form role='form' action='{% url 'basal:address_update' address.id %}?anchor=#my_addresses' method='post'>
+                {% csrf_token %}
+
+                {% for field in form %}
+                <div class='form-group'>
+                    {{ field.label_tag }}
+                    {{ field }}
+
+                    {% if field.field.required %}
+                    <script type="text/javascript">formGroupWithRequired('#{{ field.id_for_label }}');</script>
+                    {% endif %}
+
+                    {% if field.errors %}
+                    <script type="text/javascript">formGroupWithError('#{{ field.id_for_label }}');</script>
+                    {{ field.errors }}
+                    {% endif %}
+
+                    <p class='help-block'>{{ field.help_text }}</p>
+                </div>
+                {% endfor %}
+                <a class='btn btn-default' href='{% url 'basal:dashboard' %}#addresses'>Back</a>
+                <button class='btn btn-primary' type='submit'>Update</button>
+            </form>
+
+        </div>
+        <!-- /col-sm-8 col-lg-8 -->
+
+    </div>
+    <!-- /row -->
+
 </div>
+<!-- /container -->
 {% endblock %}

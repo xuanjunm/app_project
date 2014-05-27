@@ -1,49 +1,123 @@
-{% extends 'base.html' %}
-{% block h1 %}My Dashboard{% endblock %}
-{% block h4 %}Create an address, add some images, update your profile.{% endblock %}
+{% extends 'base_with_breadcrumb.html' %}
+{% block 'page_header' %}My Dashboard{% endblock %}
 
-{% block sub_nav %}
-<li><a class='nav_b' href='#my_addresses'>My Addresses</a></li>
-<li><a class='nav_b' href='#my_events'>My Events</a></li>
-<li><a class='nav_b' href='#my_rsvps'>My RSVPs</a></li>
-<li><a class='nav_b' href='#my_tags'>My Tags</a></li>
+{% block 'breadcrumb' %}
+<li><a href='{% url 'basal:main' %}'>Home</a></li>
+<li class='active'>Dashboard</li>
 {% endblock %}
 
-{% block main %}
-<div class='dashboard_wrapper row'>
-    <h3>Profile</h3>
+
+{% block 'main_with_breadcrumb' %}
+<div class='container'>
+
     <div class='row'>
-        <div class='alpha five columns'>
-            <p class='form_label'>Username:</p>
-            <p class='form_detail'>{{ user.username }}</p>
-            <p class='form_label'>Email:</p>
-            <p class='form_detail'>{{ user.email }}</p>
-            <p class='form_label'>First name:</p>
-            <p class='form_detail'>{{ user.user_frst_name }}</p>
-            <p class='form_label'>Last name:</p>
-            <p class='form_detail'>{{ user.user_last_name }}</p>
+
+        <div class='col-xs-12'>
+
+            <div class='panel panel-default'>
+
+                <div class='panel-heading'>
+                    <h3>My Profile</h3>
+                </div>
+                <!-- /panel-heading -->
+
+                <div class='panel-body'>
+
+                    <div class='row'>
+
+                        <!-- left col -->
+                        <div class='col-sm-6'>
+                            <div class="panel panel-default">
+                                <div class="panel-heading"><strong>Username</strong></div>
+                                <div class="panel-body">
+                                    {{ user.username }}
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading"><strong>Email</strong></div>
+                                <div class="panel-body">
+                                    {{ user.email }}
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading"><strong>First name</strong></div>
+                                <div class="panel-body">
+                                    {{ user.user_first_name }}
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading"><strong>Last name</strong></div>
+                                <div class="panel-body">
+                                    {{ user.user_last_name }}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /left col -->
+
+                        <!-- right col -->
+                        <div class='col-sm-6'>
+                            <div class="panel panel-default">
+                                <div class="panel-heading"><strong>Nickname</strong></div>
+                                <div class="panel-body">
+                                    {{ user.user_nickname }}
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading"><strong>Gender</strong></div>
+                                <div class="panel-body">
+                                    {{ user.user_gender }}
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading"><strong>Location</strong></div>
+                                <div class="panel-body">
+                                    {{ user.user_location }}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /right col -->
+                    </div>
+                    <!-- /row -->
+
+                    <div class='row'>
+                        <div class='col-xs-12'>
+                            <div class="panel panel-default">
+                                <div class="panel-heading"><strong>Description</strong></div>
+                                <div class="panel-body">
+                                    {{ user.user_description }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /row -->
+
+                    <hr />
+
+                    <div class='row'>
+                        <div class='col-xs-12'>
+                            <a class='btn btn-warning' href='{% url 'basal:user_update' %}'>Update profile</a>
+                        </div>
+                    </div>
+                    <!-- /row -->
+
+                </div>
+                <!-- /panel-body -->
+
+            </div>
+            <!-- /panel -->
+
         </div>
-        <div class='five columns'>
-            <p class='form_label'>Nickname:</p>
-            <p class='form_detail'>{{ user.user_nickname }}</p>
-            <p class='form_label'>Gender:</p>
-            <p class='form_detail'>{{ user.user_gender }}</p>
-            <p class='form_label'>Location:</p>
-            <p class='form_detail'>{{ user.user_location }}</p>
-            <p class='form_label'>Description:</p>
-            <p class='form_detail'>{{ user.user_description }}</p>
-        </div>
+        <!-- /col-xs-12 -->
+
     </div>
-    <a class='row lesser_emphasis' href='{% url 'basal:user_update' %}'>Update profile</a>
-    <hr class='half-bottom' />
+    <!-- /row -->
+
 </div>
+<!-- /container -->
 
 {% include 'basal/dashboard_address.html' %}
 {% include 'basal/dashboard_event.html' %}
 {% include 'basal/dashboard_rsvp.html' %}
 {% include 'basal/dashboard_tag.html' %}
-
-<div class='row'>
-    <a href='{% url 'basal:user_image_list' %}'>Manage user image</a>
-</div>
+{% include 'basal/dashboard_image.html' %}
 {% endblock %}

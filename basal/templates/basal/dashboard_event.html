@@ -1,27 +1,60 @@
-<div class='event_list_wrapper row'>
-    <h3 id='my_events'>Event</h3>
-    {% if event_list %}
-    <ul>
-        {% for event in event_list %}
-        <div class='row'>
-            <div class='alpha nine columns event_wrapper'>
-                <h5 class='lesser_emphasis'>{{ event.event_title }}</h5>
-                <p>{{ event.event_status }}, 
-                {{ event.event_time }},
-                <br />{{ event.event_location.address_region }} 
-                {{ event.event_location.address_city }}</p>
-                <div class='row'>
-                    <a class='' href='{% url 'events:event_update' event.id %}?back={{ current_path }}#my_events'>Update</a>
-                    <a class='' href='{% url 'events:event_delete' event.id %}?back={{ current_path }}#my_events'>Delete</a>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
-    </ul>
-    {% else %}
-    <p class='italic'>No Event are available.</p>
-    {% endif %}
+<div class='container'>
 
-    <a class='row lesser_emphasis' href='{% url 'events:event_create' %}?back={{ current_path }}#my_events' title='create event link'>Create a new event</a>
-    <hr class='half-bottom' />
+    <div class='row'>
+
+        <div class='col-xs-12'>
+
+            <div class='panel panel-default'>
+
+                <div class='panel-heading'>
+                    <h4>My Event</h4>
+                    <div class='anchor_offset' id='events'></div>
+                </div>
+                <!-- /panel-heading -->
+
+                <div class='panel-body'>
+
+                    <div class='row'>
+
+                        {% if event_list %}
+                        <div class='col-xs-12'>
+                            <div class='list-group'>
+                                {% for event in event_list %}
+                                <a href='{% url 'events:event_detail' event.id %}' class='list-group-item'>{{ event.event_title }}
+                                    <span class='badge'>{{ event.get_event_rsvp_count }}</span> 
+                                </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class='col-xs-12'>
+                            <p>No Event are available.</p>
+                        </div>
+                        {% endif %}
+
+                    </div>
+                    <!-- /row -->
+
+                    <hr />
+
+                    <div class='row'>
+                        <div class='col-xs-12'>
+                            <a class='btn btn-primary' href='{% url 'events:event_create' %}' title='create event link'>Create a new event</a>
+                        </div>
+                    </div>
+                    <!-- /row -->
+
+                </div>
+                <!-- /panel-body -->
+
+            </div>
+            <!-- /panel -->
+
+        </div>
+        <!-- /col-xs-12 -->
+
+    </div>
+    <!-- /row -->
+
 </div>
+<!-- /container -->

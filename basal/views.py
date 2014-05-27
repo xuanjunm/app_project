@@ -1,4 +1,5 @@
 from django.views import generic
+from django.core.mail import send_mail
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
@@ -17,6 +18,9 @@ from django.contrib.auth import login, authenticate
 # UserUpdate
 from .forms import *
 
+# password_reset
+from django.contrib.auth.views import password_reset, password_reset_confirm
+
 # work around for image upload
 from django.views.decorators.csrf import csrf_exempt
 from tastypie.models import ApiKey
@@ -28,6 +32,7 @@ class DashboardView(generic.TemplateView):
         context = super(DashboardView, self).get_context_data(**kwargs)
 
         temp = Address.objects.filter(fk_user=self.request.user)
+#        import pdb;pdb.set_trace()
         context['address_list'] = temp
 
         temp = Event.objects.filter(fk_event_poster_user=self.request.user)
@@ -36,8 +41,11 @@ class DashboardView(generic.TemplateView):
         temp = EventRSVP.objects.filter(fk_user=self.request.user)
         context['rsvp_list'] = temp
 
-        temp = UserTag.objects.filter(fk_user=self.request.user)
+        temp = UserTagAttribute.objects.filter(fk_user=self.request.user)
         context['tag_list'] = temp
+
+        temp = UserImage.objects.filter(fk_user=self.request.user)
+        context['image_list'] = temp
 
         context['current_path'] = self.request.get_full_path()
 
@@ -73,38 +81,6 @@ class UserUpdateView(generic.UpdateView):
     def dispatch(self, *args, **kwargs):
         return super(UserUpdateView, self).dispatch(*args, **kwargs)
 
-#class MyRSVPsView(generic.ListView):
-#    template_name = 'basal/my_rsvps.html'
-#    model = EventRSVP
-#
-#    def get_queryset(self):
-#        return EventRSVP.objects.filter(fk_user=self.request.user)
-#
-#    def get_context_data(self, **kwargs):
-#        context = super(myrsvpsview, self).get_context_data(**kwargs)
-#        context['current_path'] = self.request.get_full_path()
-#        return context
-#
-#    @method_decorator(login_required)
-#    def dispatch(self, *args, **kwargs):
-#        return super(MyRSVPsView, self).dispatch(*args, **kwargs)
-
-class MyEventsView(generic.ListView):
-    template_name = 'basal/my_events.html'
-    model = Event
-
-    def get_queryset(self):
-        return Event.objects.filter(fk_event_poster_user=self.request.user)
-
-    def get_context_data(self, **kwargs):
-        context = super(MyEventsView, self).get_context_data(**kwargs)
-        context['current_path'] = self.request.get_full_path()
-        return context
-
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(MyEventsView, self).dispatch(*args, **kwargs)
-
 def authorized_to_update_address_decorator(fn):
     # a decorator to check login_user is the owner of an address
     def decorator(request, *args, **kwargs):
@@ -114,40 +90,9 @@ def authorized_to_update_address_decorator(fn):
             return HttpResponseRedirect(reverse('basal:user_login'))
     return decorator
 
-#class AddressListView(generic.ListView):
-#    template_name = 'basal/address_list.html'
-#    model = Address
-#
-#    def get_queryset(self):
-#        return Address.objects.filter(fk_user=self.request.user)
-#
-#    def get_context_data(self, **kwargs):
-#        context = super(AddressListView, self).get_context_data(**kwargs)
-#        context['current_path'] = self.request.get_full_path()
-#        return context
-#
-#    @method_decorator(login_required)
-#    def dispatch(self, *args, **kwargs):
-#        return super(AddressListView, self).dispatch(*args, **kwargs)
-
-class AddressDetailView(generic.DetailView):
-    template_name = 'basal/address_detail.html'
-    model = Address
-
-    def get_context_data(self, **kwargs):
-        context = super(AddressDetailView, self).get_context_data(**kwargs)
-        if self.request.GET.get('back'):
-            context['back'] = self.request.GET.get('back')
-        return context
-
-    @method_decorator(authorized_to_update_address_decorator)
-    def dispatch(self, *args, **kwargs):
-        return super(AddressDetailView, self).dispatch(*args, **kwargs)
-
 class AddressCreateView(generic.CreateView):
     template_name = 'basal/address_create.html'
     model = Address
-
     form_class = AddressForm
 
     def post(self, request, *args, **kwargs):
@@ -163,14 +108,8 @@ class AddressCreateView(generic.CreateView):
             return self.form_invalid(form)
 
     def get_success_url(self):
-        return self.request.POST.get('back')
-
-    def get_context_data(self, **kwargs):
-        context = super(AddressCreateView, self).get_context_data(**kwargs)
-        if self.request.GET.get('back'):
-            context['back'] = self.request.GET.get('back')
-        return context
-
+        return reverse('basal:dashboard') + '#addresses'
+    
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(AddressCreateView, self).dispatch(*args, **kwargs)
@@ -182,13 +121,7 @@ class AddressUpdateView(generic.UpdateView):
     form_class = AddressForm
 
     def get_success_url(self):
-        return self.request.POST.get('back')
-
-    def get_context_data(self, **kwargs):
-        context = super(AddressUpdateView, self).get_context_data(**kwargs)
-        if self.request.GET.get('back'):
-            context['back'] = self.request.GET.get('back')
-        return context
+        return reverse('basal:dashboard') + '#addresses' 
 
     @method_decorator(authorized_to_update_address_decorator)
     def dispatch(self, *args, **kwargs):
@@ -199,13 +132,7 @@ class AddressDeleteView(generic.DeleteView):
     model = Address
 
     def get_success_url(self):
-        return self.request.POST.get('back')
-
-    def get_context_data(self, **kwargs):
-        context = super(AddressDeleteView, self).get_context_data(**kwargs)
-        if self.request.GET.get('back'):
-            context['back'] = self.request.GET.get('back')
-        return context
+        return reverse('basal:dashboard') + '#addresses'
 
     @method_decorator(authorized_to_update_address_decorator)
     def dispatch(self, *args, **kwargs):
@@ -229,54 +156,49 @@ class UserDetailView(generic.TemplateView):
         t_user = CustomUser.objects.get(id=kwargs['pk'])
         context['t_user'] = t_user
 
-        temp = Event.objects.filter(fk_event_poster_user=t_user)
-        context['event_list'] = temp
-
-        temp = EventRSVP.objects.filter(fk_user=t_user)
-        context['rsvp_list'] = temp
-
-        temp = UserTag.objects.filter(fk_user=t_user)
+        temp = UserTagAttribute.objects.filter(fk_user=t_user)
         context['tag_list'] = temp
 
-        context['current_path'] = self.request.get_full_path()
+        temp = UserImage.objects.filter(fk_user=t_user)
+        temp = temp.exclude(id=t_user.fk_user_image.id)
+        context['image_list'] = temp
+
+        temp = EventRSVP.objects.filter(fk_user=t_user)
+        context['rsvp_list'] = {}
+
+        for i in range(0, temp.count()):
+            event_owner = False
+            event_rsvp = False
+            if (temp[i].fk_event.is_owner(self.request.user)):
+                event_owner = True
+            elif (temp[i].fk_event.rsvp(self.request.user)):
+                event_rsvp = True
+
+            context['rsvp_list'][temp[i].id] = temp[i]
+            context['rsvp_list'][temp[i].id].event_owner = event_owner 
+            context['rsvp_list'][temp[i].id].event_rsvp = event_rsvp
+
+        temp = Event.objects.filter(fk_event_poster_user=t_user)
+        context['event_list'] = {}
+#        import pdb;pdb.set_trace()
+
+        for i in range(0, temp.count()):
+            event_owner = False
+            event_rsvp = False
+            if (temp[i].is_owner(self.request.user)):
+                event_owner = True
+            elif (temp[i].rsvp(self.request.user)):
+                event_rsvp = True
+
+            context['event_list'][temp[i].id] = temp[i]
+            context['event_list'][temp[i].id].event_owner = event_owner 
+            context['event_list'][temp[i].id].event_rsvp = event_rsvp
 
         return context
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(UserDetailView, self).dispatch(*args, **kwargs)
-
-class UserImageListView(generic.ListView):
-    template_name = 'basal/user_image_list.html'
-    model = UserImage
-    context_object_name = "user_image_list"
-
-    def get_queryset(self):
-        return UserImage.objects.filter(fk_user=self.request.user)
-
-    def get_context_data(self, **kwargs):
-        context = super(UserImageListView, self).get_context_data(**kwargs)
-        context['current_path'] = self.request.get_full_path()
-       # import pdb;pdb.set_trace()
-        return context
-
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(UserImageListView, self).dispatch(*args, **kwargs)
-
-class UserImageDetailView(generic.DetailView):
-    template_name = 'basal/user_image_detail.html'
-    model = UserImage
-
-    def get_context_data(self, **kwargs):
-        context = super(UserImageDetailView, self).get_context_data(**kwargs)
-        if self.request.GET.get('back'):
-            context['back'] = self.request.GET.get('back')
-        return context
-
-    @method_decorator(authorized_to_update_user_image_decorator)
-    def dispatch(self, *args, **kwargs):
-        return super(UserImageDetailView, self).dispatch(*args, **kwargs)
 
 # work around solution for image upload, very insecure
 class UserImageCreateAPIView(generic.CreateView):
@@ -304,69 +226,22 @@ class UserImageCreateAPIView(generic.CreateView):
     def dispatch(self, *args, **kwargs):
         return super(UserImageCreateAPIView, self).dispatch(*args, **kwargs)
 
-class UserImageCreateView(generic.CreateView):
-    template_name = 'basal/user_image_create.html'
-    model = UserImage
+@login_required
+def user_image_create(request):
+    if request.method == 'POST':
+        if (request.FILES != {}):
+            user_image = UserImage(path = request.FILES['user_image_input'],
+                                   fk_user = request.user)
+            user_image.save()
 
-    form_class = UserImageForm
-
-    def post(self, request, *args, **kwargs):
-        self.object = None
-        form = self.get_form(self.form_class)
-
-        # let fk_user = current login user
-        form.instance.fk_user = request.user
-
-        if form.is_valid():
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
-
-    def get_success_url(self):
-        return self.request.POST.get('back')
-
-    def get_context_data(self, **kwargs):
-        context = super(UserImageCreateView, self).get_context_data(**kwargs)
-        if self.request.GET.get('back'):
-            context['back'] = self.request.GET.get('back')
-        return context
-
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(UserImageCreateView, self).dispatch(*args, **kwargs)
-
-class UserImageUpdateView(generic.UpdateView):
-    template_name = 'basal/user_image_update.html'
-    model = UserImage
-    form_class = UserImageForm
-    context_object_name = 'user_image'
-
-    def get_success_url(self):
-        return self.request.POST.get('back')
-
-    def get_context_data(self, **kwargs):
-        context = super(UserImageUpdateView, self).get_context_data(**kwargs)
-        if self.request.GET.get('back'):
-            context['back'] = self.request.GET.get('back')
-        return context
-
-    @method_decorator(authorized_to_update_user_image_decorator)
-    def dispatch(self, *args, **kwargs):
-        return super(UserImageUpdateView, self).dispatch(*args, **kwargs)
+        return HttpResponseRedirect(reverse('basal:dashboard') + '#images')
 
 class UserImageDeleteView(generic.DeleteView):
     template_name = 'basal/user_image_delete.html'
     model = UserImage
-    context_object_name = 'user_image'
 
     def get_success_url(self):
-        return self.request.POST.get('back')
-
-    def get_context_data(self, **kwargs):
-        context = super(UserImageDeleteView, self).get_context_data(**kwargs)
-        if self.request.GET.get('back'):
-            context['back'] = self.request.GET.get('back')
-        return context
+        return reverse('basal:dashboard') + '#images'
 
     @method_decorator(authorized_to_update_user_image_decorator)
     def dispatch(self, *args, **kwargs):
@@ -374,22 +249,64 @@ class UserImageDeleteView(generic.DeleteView):
 
 @login_required
 def user_tag_delete(request, pk):
-#    import pdb;pdb.set_trace()
-    user_tag = UserTag.objects.get(pk=pk)
+    user_tag = UserTagAttribute.objects.get(pk=pk)
     user_tag.delete()
-    if request.GET.get('back'):
-        return HttpResponseRedirect(request.GET.get('back'))
-    else:
-        return HttpResponseRedirect(reverse('basal:dashboard'))
+
+    return HttpResponseRedirect(reverse('basal:dashboard') + '#tags')
 
 @login_required
 def user_tag_create(request):
     temp = request.POST.get('tag_input')
+#    import pdb;pdb.set_trace()
     if temp != '':
-        user_tag = UserTag(fk_user=request.user, tag=temp)
+        user_tag = UserTagAttribute(fk_user=request.user, tag=temp)
         user_tag.save()
 
-    if request.GET.get('back'):
-        return HttpResponseRedirect(request.GET.get('back'))
-    else:
-        return HttpResponseRedirect(reverse('basal:dashboard'))
+    return HttpResponseRedirect(reverse('basal:dashboard') + '#tags')
+
+class ContactView(generic.FormView):
+    template_name = 'basal/contact.html'
+    form_class = EmailForm
+
+    def get_success_url(self):
+        return reverse('basal:main')
+
+    def form_valid(self, form):
+        subject = form.cleaned_data['subject']
+        sender = form.cleaned_data['sender']
+        message = form.cleaned_data['message'] + '\n\nfrom ' + sender
+        # import pdb;pdb.set_trace()
+        cc_myself = form.cleaned_data['cc_myself']
+        
+        recipients = ['sillygrubs@gmail.com']
+        if cc_myself:
+            recipients.append(sender)
+           
+        send_mail(subject, message, sender, recipients)
+        return super(ContactView, self).form_valid(form)
+
+def my_password_reset(request): 
+    post_reset_redirect_ = reverse('basal:main')
+    template_name_ = 'basal/password_reset.html'
+    email_template_name_ = 'basal/password_reset_email.html'
+
+    return password_reset(request, 
+            template_name = template_name_, 
+            post_reset_redirect = post_reset_redirect_,
+            email_template_name = email_template_name_)
+
+def my_password_reset_confirm(request): 
+    import pdb;pdb.set_trace()
+    post_reset_redirect_ = reverse('basal:main')
+
+    return password_reset_confirm(request, 
+            post_reset_redirect = post_reset_redirect_)
+
+@login_required
+def fk_user_image_set(request, pk):
+#    import pdb;pdb.set_trace()
+    temp = request.user
+    temp.fk_user_image = UserImage.objects.get(id=pk)
+    temp.save()
+
+    return HttpResponseRedirect(reverse('basal:dashboard') + '#images')

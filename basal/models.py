@@ -41,7 +41,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(default=timezone.now)
     user_gender = models.CharField(max_length=255,
                                    choices=USER_GENDER_CHOICES,
-                                   blank=True)
+                                   blank=True, null=True)
     user_description = models.TextField(blank=True)
     user_nickname = models.CharField(max_length=255, blank=True)
     user_location = models.CharField(max_length=255, blank=True)
@@ -75,8 +75,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 class UserImage(models.Model):
     path = models.ImageField(upload_to='user_image', 
-                             help_text='help text',      
-                             blank=True)
+                             help_text='help text')
     fk_user = models.ForeignKey(CustomUser, related_name='user_image')
 
     def is_owner(self, user):
@@ -86,15 +85,15 @@ class UserImage(models.Model):
         return u'%s' % self.path 
 
 class Address(models.Model):
+    fk_user = models.ForeignKey(CustomUser, related_name='address')
     address_title = models.CharField(max_length=255)
-    address_detail = models.TextField()
-    address_postal_code = models.CharField(blank=True, max_length=255)
+    address_detail = models.CharField(max_length=255)
     address_city = models.CharField(blank=True, max_length=255)
     address_region = models.CharField(blank=True, max_length=255)
     address_country = models.CharField(blank=True, 
                                        max_length=255, 
                                        default='Canada')
-    fk_user = models.ForeignKey(CustomUser, related_name='address')
+    address_postal_code = models.CharField(blank=True, max_length=255)
 
     def is_owner(self, user):
         return self.fk_user == user

@@ -16,6 +16,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', 
         'NAME': os.path.join(PROJECT_ROOT, 'sqlite3.db'),               
+#        'NAME': 'app_project_mysql',               
         'USER': 'sean',                 
         'PASSWORD': 'abcde12345',          
         'HOST': '',                    
@@ -126,7 +127,7 @@ INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    #'django.contrib.sites',
+#    'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Uncomment the next line to enable the admin:
@@ -136,7 +137,7 @@ INSTALLED_APPS = (
     'events',
     'basal',
     'tastypie',
-#    'south',
+    'easy_thumbnails',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -171,3 +172,18 @@ LOGGING = {
 LOGIN_REDIRECT_URL = 'basal:dashboard'
 LOGIN_URL = 'basal:user_login'
 AUTH_USER_MODEL = 'basal.CustomUser'
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'sillygrubs@gmail.com'
+EMAIL_HOST_PASSWORD = 'ggj12345'
+
+THUMBNAIL_DEBUG = True
+THUMBNAIL_ALIASES = {
+        '': {
+            'small': {'size': (200, 200), 'crop': True},
+            'thumb': {'size': (80, 80), 'crop': True},
+            'mid': {'size': (300, 300), 'crop': True},
+            },
+        }

@@ -1,34 +1,61 @@
-{% extends 'base.html' %}
-{% block extra_head %}
-{% load staticfiles %}
-<script type='text/javascript' src='{% static 'events/js/event_form.js' %}'></script>
+{% extends 'base_with_breadcrumb.html' %}
+{% block 'page_header' %}Create Event{% endblock %}
+
+{% block 'extra_static' %}
+<script src='{% static 'events/js/event_date_time.js' %}'></script>
 {% endblock %}
 
-{% block h1 %}Create Event{% endblock %}
-{% block h4 %}Organize something fun, meet more people, make more friends.{% endblock %}
+{% block 'breadcrumb' %}
+<li><a href='{% url 'basal:main' %}'>Home</a></li>
+<li><a href='{% url 'events:event_list' %}'>Event List</a></li>
+<li class='active'>Create Event</li>
+{% endblock %}
 
-{% block main %}
-<div class='form_wrapper'>
-    {% if form.non_field_errors %}
-    <ul class='form_errors'>
-        {% for error in form.non_field_errors %}
-        <li>{{ error }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-    <form id='event_create_form' action='{% url 'events:event_create' %}?back={{ back }}' class='alpha clearfix' method='post'>
-        {% csrf_token %}
-        {{ form }}
+{% block 'main_with_breadcrumb' %}
+<div class='container'>
 
-        <div class='row'>
-            <div id='address_holder' data-url='{% url 'basal:address_detail' pk=1357924680 %}?back={{ current_path }}'> 
-            </div>
-            <a href='{% url 'basal:address_create' %}?back={{ current_path }}'>create address</a>
+    <div class='row'>
+
+        <div class='col-sm-8 col-lg-8 center_this'>
+
+            {% if form.non_field_errors %}
+            <ul class='form_errors'>
+                {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            <!-- /form_errors -->
+
+            <form role='form' action='{% url 'events:event_create' %}' method='post'>
+                {% csrf_token %}
+
+                {% for field in form %}
+                <div class='form-group'>
+                    {{ field.label_tag }}
+                    {{ field }}
+
+                    {% if field.field.required %}
+                    <script type="text/javascript">formGroupWithRequired('#{{ field.id_for_label }}');</script>
+                    {% endif %}
+
+                    {% if field.errors %}
+                    <script type="text/javascript">formGroupWithError('#{{ field.id_for_label }}');</script>
+                    {{ field.errors }}
+                    {% endif %}
+
+                    <p class='help-block'>{{ field.help_text }}</p>
+                </div>
+                {% endfor %}
+                <button class='btn btn-primary' type='submit'>Create</button>
+            </form>
+
         </div>
+        <!-- /col-sm-8 col-lg-8 -->
 
-        <input name='form' type='submit' value='Create Event' />
-        <br />
-        <a href='{{ back }}'>Back</a>
-    </form>
+    </div>
+    <!-- /row -->
+
 </div>
+<!-- /container -->
 {% endblock %}

@@ -156,7 +156,6 @@ class EventCommentResource(ModelResource):
 
 class EventResource(ModelResource):
     fk_event_poster_user = fields.ForeignKey(UserResource, 'fk_event_poster_user')
-    fk_address = fields.ForeignKey(AddressResource, 'fk_address', full=True)
     event_image = fields.ToManyField(EventImageResource, 'event_image',full=True, null=True)
     event_comment = fields.ToManyField(EventCommentResource, 'event_comment',full=True, null=True)
 
