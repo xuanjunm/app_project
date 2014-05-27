@@ -4,4 +4,5 @@ media/user_image/*
 media/event_image/*
 basal/migration
 *.pyc
+static/_pre
 
