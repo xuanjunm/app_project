@@ -41,7 +41,7 @@ class DashboardView(generic.TemplateView):
         temp = EventRSVP.objects.filter(fk_user=self.request.user)
         context['rsvp_list'] = temp
 
-        temp = UserTagAttribute.objects.filter(fk_user=self.request.user)
+        temp = UserTag.objects.filter(fk_user=self.request.user)
         context['tag_list'] = temp
 
         temp = UserImage.objects.filter(fk_user=self.request.user)
@@ -156,11 +156,12 @@ class UserDetailView(generic.TemplateView):
         t_user = CustomUser.objects.get(id=kwargs['pk'])
         context['t_user'] = t_user
 
-        temp = UserTagAttribute.objects.filter(fk_user=t_user)
+        temp = UserTag.objects.filter(fk_user=t_user)
         context['tag_list'] = temp
 
         temp = UserImage.objects.filter(fk_user=t_user)
-        temp = temp.exclude(id=t_user.fk_user_image.id)
+        if t_user.fk_user_image:
+            temp = temp.exclude(id=t_user.fk_user_image.id)
         context['image_list'] = temp
 
         temp = EventRSVP.objects.filter(fk_user=t_user)
@@ -249,7 +250,7 @@ class UserImageDeleteView(generic.DeleteView):
 
 @login_required
 def user_tag_delete(request, pk):
-    user_tag = UserTagAttribute.objects.get(pk=pk)
+    user_tag = UserTag.objects.get(pk=pk)
     user_tag.delete()
 
     return HttpResponseRedirect(reverse('basal:dashboard') + '#tags')
@@ -259,7 +260,7 @@ def user_tag_create(request):
     temp = request.POST.get('tag_input')
 #    import pdb;pdb.set_trace()
     if temp != '':
-        user_tag = UserTagAttribute(fk_user=request.user, tag=temp)
+        user_tag = UserTag(fk_user=request.user, tag=temp)
         user_tag.save()
 
     return HttpResponseRedirect(reverse('basal:dashboard') + '#tags')
