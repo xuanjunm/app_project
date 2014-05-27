@@ -114,8 +114,7 @@ class TagEventAttribute(models.Model):
 
 class EventImage(models.Model):
     path = models.ImageField(upload_to='event_image', 
-                             help_text='help text',      
-                             blank=True)
+                             help_text='help text')
     fk_event = models.ForeignKey(Event, related_name='event_image')
 
     def __unicode__(self):

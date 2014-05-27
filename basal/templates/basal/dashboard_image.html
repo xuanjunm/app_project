@@ -1,0 +1,77 @@
+{% load thumbnail %}
+<div class='container'>
+
+    <div class='row'>
+
+        <div class='col-xs-12'>
+            <div class='panel panel-default'>
+
+                <div class='panel-heading'>
+                    <h4>Images</h4>
+                    <div class='anchor_offset' id='images'></div>
+                </div>
+                <!-- /panel-heading -->
+
+                <div class='panel-body'>
+
+                    <div class='row'>
+                        {% if image_list %}
+                        {% for image in image_list %}
+                        <div class='col-sm-3 col-md-2 col-xs-6'>
+                            <a href='{{ MEDIA_URL }}{{ image.path }}' target=_blank>
+                                <img src='{{ image.path|thumbnail_url:'small' }}' class='img-thumbnail img-responsive' /></a>
+                            <br />
+                            <a class='btn btn-danger' href='{% url 'basal:user_image_delete' image.id %}'>Delete</a>
+                            <a class='btn btn-warning' href='{% url 'basal:fk_user_image_set' image.id %}'>Set as profile</a>
+
+                        </div>
+                        {% endfor %}
+                        {% else %}
+                        <div class='col-xs-12'>
+                            <p>No image are available.</p>
+                        </div>
+                        {% endif %}
+
+                    </div>
+                    <!-- /row -->
+
+                    <hr />
+
+                    <div class='row'>
+                        <div class='col-xs-12'>
+
+                            <form class='form-inline' enctype='multipart/form-data' role='form' action='{% url 'basal:user_image_create' %}?' method='post'>
+                                {% csrf_token %}
+                                <div class='row'>
+                                    <div class='col-xs-12'>
+                                        <div class='form-group'>
+                                            <label class='sr-only' for='user_image_input'>User Image</label>
+                                            <input name='user_image_input' type='file' placeholder='Upload and image'>
+                                        </div>
+
+                                        <br />
+                                        <br />
+
+                                        <button class='btn btn-primary' type='submit'>Add Image</button>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+                        <!-- /col-xs-12 -->
+                    </div>
+                    <!-- /row -->
+
+                </div>
+                <!-- /panel-body -->
+
+            </div>
+            <!-- /panel -->
+
+        </div>
+
+    </div>
+    <!-- /row -->
+
+</div>
+<!-- /container -->

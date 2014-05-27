@@ -1,8 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.views.generic import TemplateView
 from .forms import MyAuthenticationForm
-
-from . import views
+from . import views 
 
 urlpatterns = patterns('',
     url(r'^$', TemplateView.as_view(template_name='basal/main.html'), 
@@ -29,16 +28,16 @@ urlpatterns = patterns('',
         name='address_update'),
     url(r'^address_delete/(?P<pk>\d+)/$', views.AddressDeleteView.as_view(), 
         name='address_delete'),
-    url(r'^user_image_list/$', views.UserImageListView.as_view(), 
-        name='user_image_list'),
-    url(r'^user_image_detail/(?P<pk>\d+)/$', 
-        views.UserImageDetailView.as_view(), name='user_image_detail'),
-    url(r'^user_image_create/$', views.UserImageCreateView.as_view(), 
+    url(r'^user_image_create/$', views.user_image_create, 
         name='user_image_create'),
-    url(r'^user_image_update/(?P<pk>\d+)/$', 
-        views.UserImageUpdateView.as_view(), name='user_image_update'),
     url(r'^user_image_delete/(?P<pk>\d+)/$', 
         views.UserImageDeleteView.as_view(), name='user_image_delete'),
     url(r'^user_image_create_api/$', views.UserImageCreateAPIView.as_view(), 
         name='user_image_create_api'),
-)
+    url(r'^contact/$', views.ContactView.as_view(), 
+        name='contact'),
+    url(r'^password_reset/$', views.my_password_reset, name='password_reset'),
+    url(r'^password_reset_confirm/(?P<uidb64>[0-9A-Za-z]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', views.password_reset_confirm, name='password_reset_confirm'),
+    url(r'^fk_user_image_set/(?P<pk>\d+)/$', 
+        views.fk_user_image_set, name='fk_user_image_set'),
+    )

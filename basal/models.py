@@ -75,8 +75,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 class UserImage(models.Model):
     path = models.ImageField(upload_to='user_image', 
-                             help_text='help text',      
-                             blank=True)
+                             help_text='help text')
     fk_user = models.ForeignKey(CustomUser, related_name='user_image')
 
     def is_owner(self, user):

@@ -83,22 +83,14 @@ class UserImageForm(forms.ModelForm):
         model = UserImage
         exclude = ['fk_user']
 
-class ContactView(generic.FormView):
-    template_name = 'basal/contact.html'
-    form_class = EmailForm
+class EmailForm(forms.Form):
+    subject = forms.CharField(max_length=100)
+    message = forms.CharField(widget=forms.Textarea)
+    sender = forms.EmailField()
+    cc_myself = forms.BooleanField(required=False)
 
-    def get_success_url(self):
-        return reverse('basal:main')
-
-    def form_valid(self, form):
-        subject = form.cleaned_data['subject']
-        sender = form.cleaned_data['sender']
-        message = form.cleaned_data['message'] + '\n\nfrom ' + sender
-        # import pdb;pdb.set_trace()
-        cc_myself = form.cleaned_data['cc_myself']
-        
-        recipients = ['sillygrubs@gmail.com']
-        if cc_myself:
-            recipients.append(sender)
-                                                                                                        send_mail(subject, message, sender, recipients)
-        return super(ContactView, self).form_valid(form)
+    def __init__(self, *args, **kwargs):
+        super(EmailForm, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+        self.fields['cc_myself'].widget.attrs['class'] = ''

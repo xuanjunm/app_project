@@ -44,3 +44,8 @@ class EventCommentCreateForm(forms.ModelForm):
 	class Meta:
 		model=EventComment
 		exclude=['fk_event', 'fk_comment_poster_user','comment_post_time']
+
+class EventImageForm(forms.ModelForm):
+    class Meta:
+        model = EventImage
+        exclude = ['fk_event']

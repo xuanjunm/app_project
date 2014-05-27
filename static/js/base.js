@@ -1,6 +1,6 @@
 $(document).ready( function() {
     /* event form date and time picker */
-    $('#id_event_date').datetimepicker({
+/*    $('#id_event_date').datetimepicker({
         pickTime: false,
         dateFormat: 'yyyy-mm-dd',
     });

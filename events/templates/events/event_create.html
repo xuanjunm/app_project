@@ -2,10 +2,7 @@
 {% block 'page_header' %}Create Event{% endblock %}
 
 {% block 'extra_static' %}
-{% load staticfiles %}
- <link href='{% static 'css/bootstrap-datetimepicker.min.css' %}' rel='stylesheet'>
- <script src='{% static 'js/moment.min.js' %}'></script>
- <script src='{% static 'js/bootstrap-datetimepicker.min.js' %}'></script>
+<script src='{% static 'events/js/event_date_time.js' %}'></script>
 {% endblock %}
 
 {% block 'breadcrumb' %}

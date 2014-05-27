@@ -8,6 +8,7 @@
 {% endblock %}
 
 {% block 'main_with_breadcrumb' %}
+{% load thumbnail %}
 <div class='container'>
 
     <div class='row'>
@@ -20,7 +21,7 @@
 
                     <div class='row'>
                         <div class='col-sm-12'>
-                            <h3>{{ event.event_title }}
+                            <h2>{{ event.event_title }}
                                 <small>
                                     {% if event_rsvp %}
                                     <span class='label label-success'>RSVPed</span>
@@ -29,13 +30,34 @@
                                     <span class='label label-warning'>My Event</span>
                                     {% endif %}
                                 </span>
-                            </h3>
+                            </h2>
                             <hr />
                         </div>
                     </div>
                     <!-- /row -->
 
                     <div class='row'>
+                        <div class='col-xs-12'>
+                            {% if image_list %}
+                            {% for image in image_list %}
+                            <div class='col-sm-3 col-md-2 col-xs-4'>
+                                <a href='{{ MEDIA_URL }}{{ image.path }}' target=_blank>
+                                    <img src='{{ image.path|thumbnail_url:'thumb' }}' class='img-thumbnail img-responsive' /></a>
+                                <br />
+                            </div>
+                            {% endfor %}
+                            {% endif %}
+
+                        </div>
+                    </div>
+                    <!-- /row -->
+
+                    <div class='row'>
+
+                        <div class='col-sm-12'>
+                            <hr />
+                        </div>
+
                         <div class='col-sm-6'>
                             <div class="panel panel-default">
                                 <div class="panel-heading"><strong>Status</strong></div>
@@ -60,7 +82,7 @@
                             <div class="panel panel-default">
                                 <div class="panel-heading"><strong>Likes</strong></div>
                                 <div class="panel-body">
-                                    {{ event.event_like }}
+                                    {{ event.get_event_like_count }}
                                 </div>
                             </div>
                         </div>
@@ -68,7 +90,7 @@
                             <div class="panel panel-default">
                                 <div class="panel-heading"><strong>Organizer</strong></div>
                                 <div class="panel-body">
-                                    <a href='{% url 'basal:user_detail' event.fk_event_poster_user.id %}'>{{ event.fk_event_poster_user.user_first_name }} {{ event.fk_event_poster_user.user_last_name }} </a>
+                                    <a href='{% url 'basal:user_detail' event.fk_event_poster_user.id %}'>{{ event.fk_event_poster_user.username }}</a>
                                 </div>
                             </div>
 
@@ -132,6 +154,8 @@
 </div>
 <!-- container -->
 
+<!-- IMAGE -->
+{% if event_owner %}
 <div class='container'>
 
     <div class='row'>
@@ -141,7 +165,80 @@
             <div class='panel panel-default'>
 
                 <div class='panel-heading'>
-                    <h3>RSVPs <span class='badge'>{{ event.eventrsvp_set.all.count }}</span></h3>
+                    <h3>Images</h3>
+                    <div class='anchor_offset' id='images'></div>
+                </div>
+                <!-- /panel-heading -->
+
+                <div class='panel-body'>
+
+                    <div class='row'>
+                        {% if image_list %}
+                        {% for image in image_list %}
+                        <div class='col-sm-3 col-md-2 col-xs-6'>
+                            <a href='{{ MEDIA_URL }}{{ image.path }}' target=_blank>
+                                <img src='{{ image.path|thumbnail_url:'small' }}' class='img-thumbnail img-responsive' /></a>
+                            <br />
+                            <a class='btn btn-danger' href='{% url 'events:event_image_delete' image.id %}'>Delete</a>
+                        </div>
+                        {% endfor %}
+                        {% else %}
+                        <div class='col-xs-12'>
+                            <p>No image are available.</p>
+                        </div>
+                        {% endif %}
+
+                    </div>
+                    <!-- /row -->
+
+                    <hr />
+
+                    <form class='form-inline' enctype='multipart/form-data' role='form' action='{% url 'events:event_image_create' event.id %}' method='post'>
+                        {% csrf_token %}
+                        <div class='row'>
+                            <div class='col-xs-12'>
+                                <div class='form-group'>
+                                    <label class='sr-only' for='event_image_input'>Event Image</label>
+                                    <input name='event_image_input' type='file' placeholder='Upload and image'>
+                                </div>
+
+                                <br />
+                                <br />
+
+                                <button class='btn btn-primary' type='submit'>Add Image</button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+                <!-- panel-body -->
+
+            </div>
+            <!-- panel -->
+
+        </div>
+        <!-- col-sm-12 -->
+
+    </div>
+    <!-- row -->
+
+</div>
+<!-- container -->
+{% endif %}
+<!-- /IMAGES -->
+
+
+
+<div class='container'>
+
+    <div class='row'>
+
+        <div class='col-xs-12'>
+
+            <div class='panel panel-default'>
+
+                <div class='panel-heading'>
+                    <h3>RSVPs <span class='badge'>{{ event.get_event_rsvp_count }}</span></h3>
                     <div class='anchor_offset' id='rsvps'></div>
                 </div>
                 <!-- /panel-heading -->

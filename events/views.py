@@ -51,9 +51,12 @@ class EventDetailView(generic.DetailView):
         context = super(EventDetailView, self).get_context_data(**kwargs)
         c_event = Event.objects.get(pk=self.kwargs['pk'])
         context['comment_list'] = EventComment.objects.filter(fk_event=c_event.id).order_by('-comment_post_time')
-                
+
+        temp = EventImage.objects.filter(fk_event_id=self.kwargs['pk'])
+        context['image_list'] = temp
+
         if (self.request.user) :
-#            import pdb;pdb.set_trace()
+            #            import pdb;pdb.set_trace()
             context['event_owner'] = c_event.is_owner(self.request.user)
             context['event_rsvp'] = c_event.rsvp(self.request.user)
 
@@ -116,7 +119,7 @@ class EventDeleteView(generic.DeleteView):
 
 @login_required
 def event_rsvp(request, pk):
-#    import pdb;pdb.set_trace()
+    #    import pdb;pdb.set_trace()
     c_event = Event.objects.get(pk=pk)
     new_rsvp = EventRSVP(fk_user=request.user, fk_event=c_event)
     new_rsvp.save()
@@ -126,16 +129,38 @@ def event_rsvp(request, pk):
 def event_rsvp_remove(request, pk):
     c_event = Event.objects.get(pk=pk)
     c_rsvp = EventRSVP.objects.filter(
-                fk_user=request.user).get(fk_event=c_event)
+            fk_user=request.user).get(fk_event=c_event)
     c_rsvp.delete()
     return HttpResponseRedirect(reverse('events:event_detail', args=(pk,)) + '#rsvps')
 
 @login_required
 def event_comment_create(request, pk):
-#    import pdb;pdb.set_trace()
+    #    import pdb;pdb.set_trace()
     temp = request.POST.get('comment')
     if temp != '':
         c_event = Event.objects.get(pk=pk)
         new_comment = EventComment(fk_comment_poster_user=request.user, comment_detail=temp, fk_event=c_event)
         new_comment.save()
     return HttpResponseRedirect(reverse('events:event_detail', args=(pk,)) + '#comments')
+
+@login_required
+def event_image_create(request, pk):
+    if request.method == 'POST':
+        if (request.FILES != {}):
+            event_image = EventImage(path = request.FILES['event_image_input'],
+                                     fk_event = Event.objects.get(id=pk))
+            event_image.save()
+
+        return HttpResponseRedirect(reverse('events:event_detail', args=(pk,)) + '#images')
+
+class EventImageDeleteView(generic.DeleteView):
+    template_name = 'events/event_image_delete.html'
+    model = EventImage
+
+    def get_success_url(self):
+#        import pdb;pdb.set_trace()
+        return reverse('events:event_detail', args=(self.kwargs['pk'],)) + '#images'
+
+    @method_decorator(authorized_to_update_event_decorator)
+    def dispatch(self, *args, **kwargs):
+        return super(EventImageDeleteView, self).dispatch(*args, **kwargs)
