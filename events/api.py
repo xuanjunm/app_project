@@ -176,4 +176,5 @@ class EventResource(ModelResource):
         bundle.data['event_rsvp_count'] = Event.objects.get(id=bundle.obj.id).get_event_rsvp_count()
         bundle.data['event_like_count'] = Event.objects.get(id=bundle.obj.id).get_event_like_count()
         bundle.data['fk_event_poster_user_name'] = bundle.obj.fk_event_poster_user.username
+        bundle.data['fk_event_poster_user_fk_user_image'] = bundle.obj.fk_event_poster_user.fk_user_image
         return bundle

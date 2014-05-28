@@ -31,6 +31,7 @@ class Event(models.Model):
                                              verbose_name='Event Poster')
 
 # event address
+    address_title = models.CharField(max_length=255)
     address_detail = models.CharField(max_length=255)
     address_city = models.CharField(blank=True, max_length=255)
     address_region = models.CharField(blank=True, max_length=255)

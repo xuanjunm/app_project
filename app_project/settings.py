@@ -138,6 +138,7 @@ INSTALLED_APPS = (
     'basal',
     'tastypie',
     'easy_thumbnails',
+    'south',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -187,3 +188,7 @@ THUMBNAIL_ALIASES = {
             'mid': {'size': (300, 300), 'crop': True},
             },
         }
+
+SOUTH_MIGRATION_MODULES = {
+        'easy_thumbnails': 'easy_thumbnails.south_migrations',
+    }
