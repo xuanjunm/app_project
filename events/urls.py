@@ -19,4 +19,5 @@ urlpatterns = patterns('',
         name='event_image_create'),
     url(r'^event_image_delete/(?P<pk>\d+)/$', 
         views.EventImageDeleteView.as_view(), name='event_image_delete'),
+    url(r'^recommand_event/$', views.RecommandEvent.as_view(),name='RecommandEventPage'),
 )

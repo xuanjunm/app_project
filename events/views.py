@@ -164,3 +164,14 @@ class EventImageDeleteView(generic.DeleteView):
     @method_decorator(authorized_to_update_event_decorator)
     def dispatch(self, *args, **kwargs):
         return super(EventImageDeleteView, self).dispatch(*args, **kwargs)
+
+
+class RecommandEvent(generic.TemplateView):
+    template_name='events/recommand_event.html'
+    model=Event
+    # def get_context_data(self, **kwargs):
+    #     context = super(EventListView, self).get_context_data(**kwargs)
+
+    #     context['event_list']=get_list_or_404(Event)
+
+
